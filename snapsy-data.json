@@ -6,7 +6,7 @@
       "name": "Nonna Marias Pasta",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "need-work",
       "startDate": "2026-06-25",
       "deadline": "2026-06-29",
       "notes": "",
@@ -60,6 +60,15 @@
       "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-06-28T22:51:32.871Z"
+    },
+    {
+      "id": "t_1782687269087",
+      "projId": "p_1782687247501",
+      "name": "Sign Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-06-28T22:54:29.087Z"
     }
   ],
   "files": [],
@@ -75,5 +84,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-28T22:54:09.003Z"
+  "_savedAt": "2026-06-28T22:54:30.597Z"
 }
