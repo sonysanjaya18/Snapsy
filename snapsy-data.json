@@ -1,11 +1,29 @@
 {
   "projects": [],
-  "clients": [],
+  "clients": [
+    {
+      "id": "c_1782686953431",
+      "name": "Gabriela",
+      "phone": "61410681428",
+      "email": "kaisser@bossmanexperiences.com.au",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-06-28T22:49:13.431Z"
+    }
+  ],
   "tasks": [],
   "files": [],
   "quotations": [],
   "cfg": {
-    "root": "Snapsy.Std"
+    "root": "Snapsy.Std",
+    "studio": "Snapsy Std.",
+    "owner": "Sony Sanjaya",
+    "phone": "",
+    "email": "",
+    "addr": "Tuban East Java - 69273, Indonesia",
+    "paymentInfo": "",
+    "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
+    "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-28T22:42:43.453Z"
+  "_savedAt": "2026-06-28T22:49:14.938Z"
 }
