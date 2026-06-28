@@ -66,7 +66,7 @@
       "projId": "p_1782687247501",
       "name": "Sign Design",
       "done": false,
-      "price": "",
+      "price": "20",
       "taskStatus": "todo",
       "createdAt": "2026-06-28T22:54:29.087Z"
     }
@@ -84,5 +84,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-28T22:54:30.597Z"
+  "_savedAt": "2026-06-28T22:54:34.270Z"
 }
