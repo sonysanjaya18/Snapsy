@@ -2,6 +2,15 @@
   "projects": [],
   "clients": [
     {
+      "id": "c_1782687000949",
+      "name": "George",
+      "phone": "61439000099",
+      "email": "",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-06-28T22:50:00.949Z"
+    },
+    {
       "id": "c_1782686953431",
       "name": "Gabriela",
       "phone": "61410681428",
@@ -25,5 +34,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-28T22:49:14.938Z"
+  "_savedAt": "2026-06-28T22:50:02.451Z"
 }
