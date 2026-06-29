@@ -2168,8 +2168,23 @@ function openLightbox(src) {
 }
 
 function openProjGallery(projId, startIdx) {
-  const imgs = _galleryRegistry[projId] || [];
-  if (!imgs.length) return;
+  const projFiles = files.filter(f => f.projId === projId && f.thumb);
+  if (!projFiles.length) return;
+
+  // Bangun array gambar: prioritas _raw (full res) → thumbFull → thumb
+  const imgs = projFiles.map(f => {
+    let src;
+    if (f._raw && f._raw instanceof File) {
+      // file masih di memori sesi ini — pakai aslinya, tajam sempurna
+      src = URL.createObjectURL(f._raw);
+    } else {
+      src = f.thumbFull || f.thumb;
+    }
+    return { src, name: f.name, isObjUrl: !!(f._raw && f._raw instanceof File) };
+  });
+
+  // simpan juga ke registry supaya _renderLb bisa akses
+  _galleryRegistry[projId] = imgs;
   openGallery(imgs, startIdx || 0);
 }
 
@@ -2228,6 +2243,8 @@ function closeLightbox() {
   document.getElementById('gallery-lb').classList.remove('show');
   document.getElementById('gallery-lb-img').src = '';
   document.body.style.overflow = '';
+  // revoke object URLs yang dibuat dari _raw supaya tidak bocor memori
+  _lbImages.forEach(img => { if (img.isObjUrl) URL.revokeObjectURL(img.src); });
   _lbImages = []; _lbIdx = 0;
 }
 
@@ -2301,6 +2318,19 @@ function completedCard(p) {
       </div>
     </div>
   </div>`;
+}
+
+function openFilePreview(fileId) {
+  const f = files.find(x => x.id === fileId);
+  if (!f) return;
+  let src, isObjUrl = false;
+  if (f._raw && f._raw instanceof File) {
+    src = URL.createObjectURL(f._raw);
+    isObjUrl = true;
+  } else {
+    src = f.thumbFull || f.thumb;
+  }
+  openGallery([{src, name: f.name, isObjUrl}], 0);
 }
 
 // ── TASKS & FILES ─────────────────────────────────────
@@ -3214,7 +3244,8 @@ function projCard(p) {
     const thumbHtml = visible.map(f => {
       const e = ext(f);
       if (f.thumb) {
-        return `<img class="pc-thumb" src="${f.thumb}" title="${f.name}" onclick="event.stopPropagation();openLightbox('${f.thumbFull||f.thumb}')" loading="lazy">`;
+        // onclick: cari file dari registry lalu buka gallery
+        return `<img class="pc-thumb" src="${f.thumb}" title="${f.name}" onclick="event.stopPropagation();openFilePreview('${f.id}')" loading="lazy">`;
       } else if (e === 'pdf') {
         return `<div class="pc-thumb-pdf" title="${f.name}" onclick="event.stopPropagation()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
