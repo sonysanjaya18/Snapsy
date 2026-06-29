@@ -175,6 +175,19 @@
       "driveId": "1ySQwSz3WqMcJe9PIApvixKzPLYEWG4XJ",
       "driveLink": "https://drive.google.com/file/d/1ySQwSz3WqMcJe9PIApvixKzPLYEWG4XJ/view?usp=drivesdk",
       "subfolderRef": "sf_1782711099771"
+    },
+    {
+      "id": "f_1782733737949sq29szazme",
+      "projId": "p_1782687247501",
+      "name": "R1-Nonna Maria Pasta Top Sign.pdf",
+      "size": 976890,
+      "type": "application/pdf",
+      "status": "pending",
+      "progress": 0,
+      "driveId": null,
+      "driveLink": null,
+      "subfolderRef": "",
+      "thumb": null
     }
   ],
   "quotations": [],
@@ -189,5 +202,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T11:38:07.124Z"
+  "_savedAt": "2026-06-29T11:48:59.452Z"
 }
