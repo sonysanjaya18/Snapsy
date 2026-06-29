@@ -10,9 +10,9 @@
       "startDate": "2026-06-29",
       "deadline": "2026-06-29",
       "notes": "",
-      "driveRootId": null,
-      "driveCliId": null,
-      "driveProjId": null,
+      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
+      "driveCliId": "1JDH3iJVy_9cW5a2zFbq8Q8ofpUbD0RXk",
+      "driveProjId": "1juV0uGZKVdTHZXnIWbOM__Qn9Cidb2dI",
       "createdAt": "2026-06-29T05:39:15.449Z",
       "subfolders": [
         {
@@ -23,7 +23,7 @@
         {
           "id": "sf_1782711717893",
           "name": "Comingsoon",
-          "driveId": null
+          "driveId": "1F1prkLh5HfOFnRRygrgVM1BFDejANOy2"
         }
       ]
     },
@@ -230,7 +230,7 @@
       "name": "R6-Kingsmen-290626.pdf",
       "size": 816710,
       "type": "application/pdf",
-      "status": "pending",
+      "status": "uploading",
       "progress": 0,
       "driveId": null,
       "driveLink": null,
@@ -249,5 +249,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:42:07.343Z"
+  "_savedAt": "2026-06-29T05:42:09.815Z"
 }
