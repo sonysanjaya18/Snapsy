@@ -2094,27 +2094,34 @@ function updateProjectStatus(val) {
 }
 
 // ── FILE PREVIEW THUMBNAILS ──────────────────────────
-// Generates a tiny base64 thumbnail (JPEG, ~120×90) from image or PDF first-page.
-// Stored in f.thumb so it persists via localStorage (no _raw needed later).
+// Generates TWO thumbnails per image file:
+//   f.thumb     — kecil (max 160px) untuk cover kartu, super ringan
+//   f.thumbFull — besar (max 1200px) untuk lightbox, tajam tapi tetap compressed
 async function genThumb(raw) {
   return new Promise(resolve => {
     const ext = raw.name.split('.').pop().toLowerCase();
     const isImg = ['jpg','jpeg','png','gif','webp','svg'].includes(ext);
     const isPdf = ext === 'pdf';
-    const MAX = 800;
 
     if (isImg) {
       const reader = new FileReader();
       reader.onload = e => {
         const img = new Image();
         img.onload = () => {
-          const ratio = Math.min(MAX / img.width, (MAX * 0.75) / img.height, 1);
-          const w = Math.round(img.width * ratio);
-          const h = Math.round(img.height * ratio);
-          const c = document.createElement('canvas');
-          c.width = w; c.height = h;
-          c.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(c.toDataURL('image/jpeg', 0.72));
+          const makeThumb = (maxPx, quality) => {
+            // tidak pernah upscale melebihi ukuran asli
+            const scale = Math.min(maxPx / Math.max(img.width, img.height), 1);
+            const w = Math.round(img.width  * scale);
+            const h = Math.round(img.height * scale);
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            return c.toDataURL('image/jpeg', quality);
+          };
+          resolve({
+            thumb:     makeThumb(160,  0.55),   // cover kartu — tiny
+            thumbFull: makeThumb(1200, 0.82),   // lightbox   — tajam
+          });
         };
         img.onerror = () => resolve(null);
         img.src = e.target.result;
@@ -2122,17 +2129,24 @@ async function genThumb(raw) {
       reader.onerror = () => resolve(null);
       reader.readAsDataURL(raw);
     } else if (isPdf && typeof pdfjsLib !== 'undefined') {
-      // PDF thumbnail via pdf.js if available; silent skip if not loaded
       const reader = new FileReader();
       reader.onload = async e => {
         try {
-          const pdf = await pdfjsLib.getDocument({data: e.target.result}).promise;
+          const pdf  = await pdfjsLib.getDocument({data: e.target.result}).promise;
           const page = await pdf.getPage(1);
-          const vp = page.getViewport({scale: 0.3});
-          const c = document.createElement('canvas');
-          c.width = vp.width; c.height = vp.height;
-          await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise;
-          resolve(c.toDataURL('image/jpeg', 0.72));
+          const vpSm = page.getViewport({scale: 0.25});
+          const vpLg = page.getViewport({scale: 1.2});
+          const render = async vp => {
+            const c = document.createElement('canvas');
+            c.width = vp.width; c.height = vp.height;
+            await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise;
+            return c;
+          };
+          const [cSm, cLg] = await Promise.all([render(vpSm), render(vpLg)]);
+          resolve({
+            thumb:     cSm.toDataURL('image/jpeg', 0.55),
+            thumbFull: cLg.toDataURL('image/jpeg', 0.82),
+          });
         } catch { resolve(null); }
       };
       reader.onerror = () => resolve(null);
@@ -2235,9 +2249,9 @@ function completedCard(p) {
   const projFiles = files.filter(f=>f.projId===p.id);
   const taskTotal = taskList.reduce((s,t)=>s+(parseFloat(t.price)||0),0);
 
-  // simpan ke registry — aman, tidak lewat attribute
+  // simpan ke registry — gunakan thumbFull untuk lightbox (tajam), thumb untuk cover (ringan)
   const imgFiles = projFiles.filter(f=>f.thumb);
-  _galleryRegistry[p.id] = imgFiles.map(f=>({src:f.thumb, name:f.name}));
+  _galleryRegistry[p.id] = imgFiles.map(f=>({src: f.thumbFull || f.thumb, name:f.name}));
 
   // Gallery area
   let galleryHtml = '';
@@ -2852,7 +2866,7 @@ function addFiles(rawFiles) {
     if(files.find(f=>f.projId===curProjId&&f.name===raw.name&&(f.subfolderRef||'')===(curSubfolderId||''))) {
       toast('"'+raw.name+'" sudah ada di subfolder ini','error'); return;
     }
-    const fObj = {id:'f_'+Date.now()+Math.random().toString(36).slice(2),projId:curProjId,name:raw.name,size:raw.size,type:raw.type,status:'pending',progress:0,driveId:null,driveLink:null,subfolderRef:curSubfolderId||'',thumb:null,_raw:raw};
+    const fObj = {id:'f_'+Date.now()+Math.random().toString(36).slice(2),projId:curProjId,name:raw.name,size:raw.size,type:raw.type,status:'pending',progress:0,driveId:null,driveLink:null,subfolderRef:curSubfolderId||'',thumb:null,thumbFull:null,_raw:raw};
     files.push(fObj);
     added.push({fObj, raw});
   });
@@ -2860,8 +2874,8 @@ function addFiles(rawFiles) {
   if(added.length) toast(added.length+' file ditambahkan ke "'+curSubfolderName+'"','success');
   // generate thumbnails async (lightweight, non-blocking)
   added.forEach(({fObj, raw}) => {
-    genThumb(raw).then(thumb => {
-      if(thumb) { fObj.thumb = thumb; saveState(); }
+    genThumb(raw).then(result => {
+      if(result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); }
     });
   });
 }
@@ -3200,7 +3214,7 @@ function projCard(p) {
     const thumbHtml = visible.map(f => {
       const e = ext(f);
       if (f.thumb) {
-        return `<img class="pc-thumb" src="${f.thumb}" title="${f.name}" onclick="event.stopPropagation();openLightbox('${f.thumb}')" loading="lazy">`;
+        return `<img class="pc-thumb" src="${f.thumb}" title="${f.name}" onclick="event.stopPropagation();openLightbox('${f.thumbFull||f.thumb}')" loading="lazy">`;
       } else if (e === 'pdf') {
         return `<div class="pc-thumb-pdf" title="${f.name}" onclick="event.stopPropagation()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
