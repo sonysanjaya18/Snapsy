@@ -1,28 +1,6 @@
 {
   "projects": [
     {
-      "id": "p_1782711555449",
-      "client": "Racha",
-      "name": "Kingsmen Poster",
-      "price": "",
-      "currency": "USD",
-      "status": "need-work",
-      "startDate": "2026-06-29",
-      "deadline": "2026-06-29",
-      "notes": "",
-      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
-      "driveCliId": "1JDH3iJVy_9cW5a2zFbq8Q8ofpUbD0RXk",
-      "driveProjId": "1juV0uGZKVdTHZXnIWbOM__Qn9Cidb2dI",
-      "createdAt": "2026-06-29T05:39:15.449Z",
-      "subfolders": [
-        {
-          "id": "sf_1782711708402",
-          "name": "Poster",
-          "driveId": null
-        }
-      ]
-    },
-    {
       "id": "p_1782711026659",
       "client": "Racha",
       "name": "Kingsmen Poster",
@@ -183,15 +161,6 @@
       "price": "11",
       "taskStatus": "done",
       "createdAt": "2026-06-29T05:30:41.201Z"
-    },
-    {
-      "id": "t_1782711568763",
-      "projId": "p_1782711555449",
-      "name": "comingsoon poster",
-      "done": false,
-      "price": "",
-      "taskStatus": "todo",
-      "createdAt": "2026-06-29T05:39:28.763Z"
     }
   ],
   "files": [
@@ -206,18 +175,6 @@
       "driveId": "1ySQwSz3WqMcJe9PIApvixKzPLYEWG4XJ",
       "driveLink": "https://drive.google.com/file/d/1ySQwSz3WqMcJe9PIApvixKzPLYEWG4XJ/view?usp=drivesdk",
       "subfolderRef": "sf_1782711099771"
-    },
-    {
-      "id": "f_17827116665120gocx5dgzzod",
-      "projId": "p_1782711555449",
-      "name": "R6-Kingsmen-290626.pdf",
-      "size": 816710,
-      "type": "application/pdf",
-      "status": "pending",
-      "progress": 0,
-      "driveId": null,
-      "driveLink": null,
-      "subfolderRef": "sf_1782711611968"
     }
   ],
   "quotations": [],
@@ -232,5 +189,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:43:02.845Z"
+  "_savedAt": "2026-06-29T05:43:29.308Z"
 }
