@@ -282,34 +282,50 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
 /* FILE PREVIEW STRIP — completed project cards */
 .pc-thumb-strip {
-  display: flex; gap: 5px; margin-top: 10px; flex-wrap: nowrap; overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px; margin-top: 10px;
 }
+/* 1 file → full width */
+.pc-thumb-strip.n1 { grid-template-columns: 1fr; }
+/* 2 files → 2 equal columns, taller */
+.pc-thumb-strip.n2 { grid-template-columns: 1fr 1fr; }
+/* 3 files → 3 cols */
+.pc-thumb-strip.n3 { grid-template-columns: 1fr 1fr 1fr; }
+/* 4+ → 4 cols */
+.pc-thumb-strip.n4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
 .pc-thumb {
-  width: 56px; height: 42px; border-radius: 5px; object-fit: cover; flex-shrink: 0;
+  width: 100%; aspect-ratio: 4/3; border-radius: 6px; object-fit: cover;
   border: 1px solid var(--border); background: var(--surface2); cursor: pointer;
+  display: block;
   transition: transform .15s, box-shadow .15s;
 }
-.pc-thumb:hover { transform: scale(1.07); box-shadow: 0 3px 10px rgba(0,0,0,.15); }
+.pc-thumb-strip.n1 .pc-thumb { aspect-ratio: 16/7; }
+.pc-thumb-strip.n2 .pc-thumb { aspect-ratio: 4/3; }
+.pc-thumb:hover { transform: scale(1.03); box-shadow: 0 4px 14px rgba(0,0,0,.18); }
 .pc-thumb-more {
-  width: 56px; height: 42px; border-radius: 5px; background: var(--surface2);
+  width: 100%; aspect-ratio: 4/3; border-radius: 6px; background: var(--surface2);
   border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; cursor: pointer;
+  font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer;
   transition: background .12s;
 }
 .pc-thumb-more:hover { background: var(--surface3); color: var(--text); }
 .pc-thumb-pdf {
-  width: 56px; height: 42px; border-radius: 5px; background: rgba(220,38,38,.08);
+  width: 100%; aspect-ratio: 4/3; border-radius: 6px; background: rgba(220,38,38,.08);
   border: 1px solid rgba(220,38,38,.15); display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 2px; flex-shrink: 0; cursor: pointer;
-  transition: background .12s; font-size: 9px; font-weight: 700; color: var(--red);
+  align-items: center; justify-content: center; gap: 3px; cursor: pointer;
+  transition: background .12s; font-size: 10px; font-weight: 700; color: var(--red);
 }
+.pc-thumb-strip.n1 .pc-thumb-pdf { aspect-ratio: 16/7; }
 .pc-thumb-pdf:hover { background: rgba(220,38,38,.14); }
 .pc-thumb-file {
-  width: 56px; height: 42px; border-radius: 5px; background: var(--surface2);
+  width: 100%; aspect-ratio: 4/3; border-radius: 6px; background: var(--surface2);
   border: 1px solid var(--border); display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 2px; flex-shrink: 0;
-  font-size: 9px; font-weight: 600; color: var(--muted);
+  align-items: center; justify-content: center; gap: 3px;
+  font-size: 10px; font-weight: 600; color: var(--muted);
 }
+.pc-thumb-strip.n1 .pc-thumb-file { aspect-ratio: 16/7; }
 
 /* LIGHTBOX */
 #thumb-lightbox {
@@ -1981,7 +1997,7 @@ async function genThumb(raw) {
     const ext = raw.name.split('.').pop().toLowerCase();
     const isImg = ['jpg','jpeg','png','gif','webp','svg'].includes(ext);
     const isPdf = ext === 'pdf';
-    const MAX = 120;
+    const MAX = 240;
 
     if (isImg) {
       const reader = new FileReader();
@@ -2676,6 +2692,11 @@ function showView(name, navEl) {
   document.getElementById('view-'+name).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(navEl) navEl.classList.add('active');
+  // reset filter & search when navigating to projects via nav (not via filterStatus)
+  if(name==='projects' && !navEl?._keepFilter) {
+    const fs=document.getElementById('filterSt'); if(fs) fs.value='';
+    const sq=document.getElementById('searchQ'); if(sq) sq.value='';
+  }
   if(name==='projects') renderProjects();
   if(name==='clients') renderClients();
   if(name==='dashboard') renderDashboard();
@@ -2694,8 +2715,21 @@ function showView(name, navEl) {
     fab.style.display = hasFab ? '' : 'none';
   }
 }
-function backToProjects() { showView('projects',null); renderProjects(); }
-function filterStatus(st) { document.getElementById('filterSt').value=st; showView('projects',null); renderProjects(); }
+function backToProjects() { showView('projects',null); }
+function filterStatus(st) {
+  const fs=document.getElementById('filterSt'); if(fs) fs.value=st;
+  const sq=document.getElementById('searchQ'); if(sq) sq.value='';
+  // mark navEl so showView knows not to reset the filter we just set
+  const fakeEl = {classList:{add:()=>{},remove:()=>{}}, _keepFilter:true};
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-projects').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  renderProjects();
+  curMobileView = 'projects';
+  if (typeof updateMobileBadges === 'function') updateMobileBadges();
+  const fab = document.getElementById('fab-add');
+  if (fab) fab.style.display = '';
+}
 
 // ── RENDER ────────────────────────────────────────────
 function renderDashboard() {
@@ -2889,10 +2923,13 @@ function projCard(p) {
   if (p.status === 'paid' && projFiles.length) {
     const MAX_VISIBLE = 4;
     const ext = f => f.name.split('.').pop().toLowerCase();
-    // prioritize files with thumbnails, then pdfs, then others
+    // prioritize files with thumbnails first
     const sorted = [...projFiles].sort((a,b)=>(b.thumb?1:0)-(a.thumb?1:0));
     const visible = sorted.slice(0, MAX_VISIBLE);
     const rest = projFiles.length - visible.length;
+    // grid class: n1/n2/n3/n4 — determines column layout
+    const totalSlots = visible.length + (rest > 0 ? 1 : 0);
+    const gridClass = 'n' + Math.min(totalSlots, 4);
 
     const thumbHtml = visible.map(f => {
       const e = ext(f);
@@ -2900,20 +2937,20 @@ function projCard(p) {
         return `<img class="pc-thumb" src="${f.thumb}" title="${f.name}" onclick="event.stopPropagation();openLightbox('${f.thumb}')" loading="lazy">`;
       } else if (e === 'pdf') {
         return `<div class="pc-thumb-pdf" title="${f.name}" onclick="event.stopPropagation()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           PDF</div>`;
       } else {
         const icn = ['jpg','jpeg','png','gif','webp','svg'].includes(e) ? '🖼' : ['mp4','mov','avi'].includes(e) ? '🎬' : ['ai','psd','fig'].includes(e) ? '🎨' : '📄';
         return `<div class="pc-thumb-file" title="${f.name}">
-          <span style="font-size:18px">${icn}</span>
+          <span style="font-size:22px">${icn}</span>
           <span>${e.toUpperCase()}</span></div>`;
       }
     }).join('');
 
     const moreHtml = rest > 0
-      ? `<div class="pc-thumb-more" onclick="event.stopPropagation();openDetail('${p.id}')">+${rest}</div>` : '';
+      ? `<div class="pc-thumb-more" onclick="event.stopPropagation();openDetail('${p.id}')">+${rest} lagi</div>` : '';
 
-    thumbStrip = `<div class="pc-thumb-strip">${thumbHtml}${moreHtml}</div>`;
+    thumbStrip = `<div class="pc-thumb-strip ${gridClass}">${thumbHtml}${moreHtml}</div>`;
   }
 
   return `<div class="project-card s-${p.status}" onclick="openDetail('${p.id}')">
@@ -2937,17 +2974,17 @@ function projCard(p) {
 }
 
 function updateCounts() {
-  const n=id=>projects.filter(p=>p.status===id).length;
+  const n=id=>projects.filter(p=>p.status===id&&p.status!=='paid').length;
   const activeProjects = projects.filter(p=>p.status!=='paid');
   document.getElementById('nc-all').textContent=activeProjects.length;
   document.getElementById('nc-proj').textContent=activeProjects.length;
   document.getElementById('nc-cli').textContent=clients.length;
-  document.getElementById('nc-on').textContent=n('ongoing')+n('need-work');
-  document.getElementById('nc-pe').textContent=n('need-work');
+  document.getElementById('nc-on').textContent=n('ongoing');
+  document.getElementById('nc-pe').textContent=n('need-work')+n('pending');
   document.getElementById('nc-re').textContent=n('revision');
-  document.getElementById('nc-do').textContent=n('done')+n('need-to-pay');
+  document.getElementById('nc-do').textContent=n('done')+n('need-to-pay')+n('invoice-sent');
   document.getElementById('nc-ca').textContent=n('cancel');
-  document.getElementById('nc-paid').textContent=n('paid');
+  document.getElementById('nc-paid').textContent=projects.filter(p=>p.status==='paid').length;
   document.getElementById('nc-qt').textContent=quotations.length;
   if (typeof updateMobileBadges === 'function') updateMobileBadges();
 }
