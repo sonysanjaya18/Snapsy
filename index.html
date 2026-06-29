@@ -136,6 +136,19 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .project-card.s-need-work::before { background: #6b7299; }
 .project-card.s-need-to-pay::before { background: linear-gradient(90deg, var(--green), #10b981); }
 .project-card.s-invoice-sent::before { background: #a855f7; }
+/* PROJECT CARD PROGRESS BAR */
+.pc-progress-wrap { margin-top: 10px; }
+.pc-progress-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.pc-progress-pct { font-weight: 700; }
+.pc-progress-bar { height: 5px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+.pc-progress-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .4s ease;
+}
+.pc-progress-fill.pct-100 { background: linear-gradient(90deg, #16a34a, #22c55e); }
+.pc-progress-fill.pct-high { background: linear-gradient(90deg, var(--accent2), #22c55e); }
+
 .pc-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
 .pc-client { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
 .pc-row { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; }
@@ -857,9 +870,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
     <div class="sidebar-label">Filter Status</div>
     <div class="nav-item" onclick="filterStatus('ongoing')"><span style="width:9px;height:9px;border-radius:50%;background:#4f8ef7;flex-shrink:0;display:inline-block"></span> Ongoing <span class="nav-count" id="nc-on">0</span></div>
-    <div class="nav-item" onclick="filterStatus('pending')"><span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:inline-block"></span> Pending <span class="nav-count" id="nc-pe">0</span></div>
+    <div class="nav-item" onclick="filterStatus('need-work,pending')"><span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:inline-block"></span> Pending <span class="nav-count" id="nc-pe">0</span></div>
     <div class="nav-item" onclick="filterStatus('revision')"><span style="width:9px;height:9px;border-radius:50%;background:#ea6c1a;flex-shrink:0;display:inline-block"></span> Revisi <span class="nav-count" id="nc-re">0</span></div>
-    <div class="nav-item" onclick="filterStatus('done')"><span style="width:9px;height:9px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-block"></span> Done <span class="nav-count" id="nc-do">0</span></div>
+    <div class="nav-item" onclick="filterStatus('done,need-to-pay,invoice-sent')"><span style="width:9px;height:9px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-block"></span> Done <span class="nav-count" id="nc-do">0</span></div>
     <div class="nav-item" onclick="filterStatus('cancel')"><span style="width:9px;height:9px;border-radius:50%;background:#dc2626;flex-shrink:0;display:inline-block"></span> Cancel <span class="nav-count" id="nc-ca">0</span></div>
 
     <div class="sidebar-label">Arsip</div>
@@ -2719,8 +2732,6 @@ function backToProjects() { showView('projects',null); }
 function filterStatus(st) {
   const fs=document.getElementById('filterSt'); if(fs) fs.value=st;
   const sq=document.getElementById('searchQ'); if(sq) sq.value='';
-  // mark navEl so showView knows not to reset the filter we just set
-  const fakeEl = {classList:{add:()=>{},remove:()=>{}}, _keepFilter:true};
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-projects').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -2832,9 +2843,14 @@ function renderDashboard() {
 }
 
 function renderProjects() {
-  const q=(document.getElementById('searchQ')?.value||'').toLowerCase(); const sf=document.getElementById('filterSt')?.value||'';
-  // paid projects are excluded from main list — they live in Completed
-  const list=projects.filter(p=>{ if(p.status==='paid') return false; const m=p.name.toLowerCase().includes(q)||p.client.toLowerCase().includes(q); return m&&(!sf||p.status===sf); });
+  const q=(document.getElementById('searchQ')?.value||'').toLowerCase();
+  const sf=document.getElementById('filterSt')?.value||'';
+  const sfList = sf ? sf.split(',') : [];
+  const list=projects.filter(p=>{
+    if(p.status==='paid') return false;
+    const m=p.name.toLowerCase().includes(q)||p.client.toLowerCase().includes(q);
+    return m&&(!sfList.length||sfList.includes(p.status));
+  });
   const el=document.getElementById('proj-grid'); if(!el) return;
   el.innerHTML=list.length?list.map(p=>projCard(p)).join(''):`<div class="empty" style="grid-column:1/-1"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="et">Tidak ditemukan</div></div>`;
 }
@@ -2910,6 +2926,20 @@ function projCard(p) {
       }).join('')}
     </div>` : '';
 
+  // Progress bar based on done tasks
+  const pct = taskList.length ? Math.round(doneTasks / taskList.length * 100) : 0;
+  const pctClass = pct===100 ? 'pct-100' : pct>=60 ? 'pct-high' : '';
+  const progressBar = taskList.length ? `
+    <div class="pc-progress-wrap">
+      <div class="pc-progress-header">
+        <span>${doneTasks} dari ${taskList.length} task selesai</span>
+        <span class="pc-progress-pct" style="color:${pct===100?'var(--green)':pct>=60?'var(--accent2)':'var(--muted)'}">${pct}%</span>
+      </div>
+      <div class="pc-progress-bar">
+        <div class="pc-progress-fill ${pctClass}" style="width:${pct}%"></div>
+      </div>
+    </div>` : '';
+
   // Invoice FAB buttons — muncul jika ada task done/invoiced
   const hasDoneTask = taskList.some(t => ['done','invoiced'].includes(t.taskStatus||'todo'));
   const invFab = hasDoneTask ? `
@@ -2962,7 +2992,7 @@ function projCard(p) {
       <span class="badge b-${p.status}">${sLabel(p.status)}</span>
     </div>
     <div class="pc-row"><span class="pc-row-label">Total Task Value</span><span class="price-text">${taskTotal>0?fPrice(taskTotal,p.currency):'—'}</span></div>
-    ${taskList.length?`<div class="pc-row"><span class="pc-row-label">Task</span><span>${doneTasks}/${taskList.length} selesai</span></div>`:''}
+    ${progressBar}
     ${taskStatusRow}
     ${thumbStrip}
     <div class="pc-footer" style="margin-top:10px">
