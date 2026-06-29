@@ -3380,7 +3380,7 @@ async function ghConnect() {
   ghSetBadge('syncing', 'Menghubungkan...');
   try {
     const res = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
-      headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache' }
+      headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' }
     });
     if (!res.ok) {
       const err = await res.json();
@@ -3428,8 +3428,8 @@ async function ghLoadData() {
   ghSetBadge('syncing', 'Memuat data...');
   try {
     const res = await fetch(
-      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
-      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache' } }
+      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}?t=${Date.now()}`,
+      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' } }
     );
 
     if (res.status === 404) {
@@ -3473,8 +3473,8 @@ async function ghSilentPull() {
   dbg('silentPull: fetching SHA… current=' + (ghFileSha ? ghFileSha.slice(0,7) : 'null'));
   try {
     const res = await fetch(
-      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
-      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache' } }
+      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}?t=${Date.now()}`,
+      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' } }
     );
     if (!res.ok) { dbg('silentPull: fetch error ' + res.status); return; }
     const json = await res.json();
@@ -3537,7 +3537,6 @@ async function ghPushData() {
           Authorization: 'token ' + token,
           Accept: 'application/vnd.github+json',
           'Content-Type': 'application/json',
-          'Cache-Control': 'no-store',
         },
         body: JSON.stringify(body)
       }
@@ -3564,8 +3563,8 @@ async function ghRefreshSha() {
   const {token, username, repo} = ghCreds();
   try {
     const res = await fetch(
-      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
-      { headers: { Authorization: 'token ' + token, 'Cache-Control': 'no-store', 'Pragma': 'no-cache' } }
+      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}?t=${Date.now()}`,
+      { headers: { Authorization: 'token ' + token } }
     );
     if (res.ok) { const j = await res.json(); ghFileSha = j.sha; }
   } catch(e) {}
