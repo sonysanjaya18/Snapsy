@@ -6,7 +6,7 @@
       "name": "Kingsmen Poster",
       "price": "",
       "currency": "USD",
-      "status": "ongoing",
+      "status": "paid",
       "startDate": "2026-06-29",
       "deadline": "2026-06-29",
       "notes": "",
@@ -189,5 +189,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T11:37:59.083Z"
+  "_savedAt": "2026-06-29T11:38:07.124Z"
 }
