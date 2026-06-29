@@ -482,6 +482,329 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .gh-syncerr  { background:rgba(220,38,38,.1);   color:var(--red); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spin { animation: spin 1s linear infinite; display:inline-block; }
+
+/* ═══════════════════════════════════════════════
+   MOBILE RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── Layout ── */
+  .layout {
+    grid-template-columns: 1fr;
+    min-height: calc(100vh - 52px);
+  }
+
+  /* ── Topbar ── */
+  .topbar { padding: 10px 14px; }
+  .brand  { font-size: 15px; }
+  .topbar-right { gap: 6px; }
+  .topbar-right .btn-primary { display: none; } /* hide desktop "+ Proyek Baru" */
+  #loginBtn { display: none !important; }
+  #authBadge { display: none; }
+
+  /* ── Sidebar → hidden on mobile (replaced by bottom nav) ── */
+  .sidebar { display: none; }
+
+  /* ── Bottom Navigation Bar ── */
+  #mobile-nav {
+    display: flex;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
+    background: var(--surface); border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  }
+  .mnav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 4px 2px; cursor: pointer; transition: .12s;
+    color: var(--muted); font-size: 10px; font-weight: 600;
+    border: none; background: none; position: relative;
+  }
+  .mnav-item.active { color: var(--accent); }
+  .mnav-item svg { transition: .12s; }
+  .mnav-item.active svg { stroke: var(--accent); }
+  .mnav-badge {
+    position: absolute; top: 2px; right: calc(50% - 14px);
+    background: var(--accent); color: #fff;
+    font-size: 9px; font-weight: 700; min-width: 16px; height: 16px;
+    border-radius: 20px; display: flex; align-items: center; justify-content: center;
+    padding: 0 4px;
+  }
+
+  /* ── Main content padding (above bottom nav) ── */
+  .main { padding-bottom: 70px; }
+  .view { padding: 14px 14px 0; }
+
+  /* ── FAB (Floating Action Button) ── */
+  #mobile-fab {
+    display: flex;
+    position: fixed; bottom: 76px; right: 16px; z-index: 140;
+    width: 52px; height: 52px; border-radius: 16px;
+    background: var(--accent); color: #fff; border: none;
+    font-size: 26px; font-weight: 300; cursor: pointer;
+    align-items: center; justify-content: center;
+    box-shadow: 0 6px 20px rgba(108,99,255,.45);
+    transition: .15s;
+  }
+  #mobile-fab:active { transform: scale(.94); }
+
+  /* ── Stats grid → 2 cols ── */
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+  .stat { padding: 12px; }
+  .stat-value { font-size: 20px; }
+
+  /* ── Earnings row → stack ── */
+  #earnings-row { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+
+  /* ── Project grid → 1 col ── */
+  .project-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  /* ── Page header ── */
+  .page-header { margin-bottom: 12px; }
+  .page-title { font-size: 17px; }
+  .page-header .btn { display: none; } /* hide page-level add buttons, use FAB instead */
+
+  /* ── Detail layout → stack ── */
+  .detail-layout { grid-template-columns: 1fr; gap: 12px; }
+  .detail-back { margin-bottom: 10px; font-size: 14px; }
+
+  /* ── Modals → full bottom sheet on mobile ── */
+  .overlay { align-items: flex-end; }
+  .modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 18px 18px 0 0 !important;
+    max-height: 92vh !important;
+    padding: 20px 16px !important;
+    padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+  }
+  .modal-title { font-size: 16px; }
+  .confirm-modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 18px 18px 0 0 !important;
+    padding: 20px 16px !important;
+  }
+  .phonebook-modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 18px 18px 0 0 !important;
+    max-height: 92vh !important;
+  }
+  .qt-detail-modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 18px 18px 0 0 !important;
+    max-height: 92vh !important;
+  }
+
+  /* ── Form rows → stack on mobile ── */
+  .frow { grid-template-columns: 1fr; gap: 0; }
+
+  /* ── Search bar ── */
+  .search-bar { padding: 8px 12px; }
+
+  /* ── Client items ── */
+  .client-item { padding: 12px; gap: 10px; }
+  .c-name { font-size: 13px; }
+
+  /* ── Toast → bottom center ── */
+  .toast-wrap { bottom: 80px; right: 12px; left: 12px; align-items: center; }
+  .toast { min-width: unset; width: 100%; max-width: 100%; }
+
+  /* ── Quotation action bar → wrap ── */
+  .qt-detail-footer { flex-wrap: wrap; }
+  .pb-action-bar { padding: 12px 16px 16px; }
+
+  /* ── Drive box hidden on mobile ── */
+  .drive-box { display: none; }
+
+  /* ── GitHub login screen ── */
+  .gh-login-card { padding: 28px 20px; border-radius: 16px; }
+
+  /* ── inv total bar ── */
+  .inv-total-bar { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  /* ── Status chips wrap better ── */
+  .status-chips { gap: 5px; }
+  .schip { padding: 5px 10px; font-size: 11px; }
+}
+
+/* Hide mobile nav & fab on desktop */
+#mobile-nav { display: none; }
+#mobile-fab { display: none; }
+
+
+/* ════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── LAYOUT ── */
+  .layout {
+    grid-template-columns: 1fr;
+    min-height: calc(100vh - 54px);
+    padding-bottom: 70px; /* space for bottom nav */
+  }
+
+  /* ── TOPBAR ── */
+  .topbar { padding: 10px 14px; }
+  .brand  { font-size: 15px; }
+  .topbar-right { gap: 6px; }
+  .topbar-right .btn-primary { display: none; } /* hide "+ Proyek Baru" — use FAB instead */
+  #loginBtn { display: none !important; }
+  .btn-sm { padding: 5px 9px; font-size: 11px; }
+
+  /* ── SIDEBAR → BOTTOM NAV ── */
+  .sidebar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    flex-direction: row; align-items: center; justify-content: space-around;
+    padding: 0; height: 62px; z-index: 150;
+    border-right: none; border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+    overflow: hidden;
+  }
+  .sidebar-label  { display: none; }
+  .drive-box      { display: none; }
+  .nav-count      { display: none; }
+
+  /* show only main nav items, hide filter items */
+  .sidebar .nav-item[onclick*="filterStatus"] { display: none; }
+  .sidebar .nav-item[data-view="completed"]   { display: flex; }
+
+  .nav-item {
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px; padding: 6px 4px; border-left: none !important;
+    border-top: 3px solid transparent; font-size: 9px; flex: 1;
+    height: 100%; border-radius: 0;
+  }
+  .nav-item svg { width: 20px; height: 20px; }
+  .nav-item.active {
+    border-left-color: transparent !important;
+    border-top-color: var(--accent);
+    background: rgba(108,99,255,.06);
+    color: var(--accent);
+  }
+  .nav-item span[style*="border-radius:50%"] { display: none; } /* hide status dots */
+
+  /* ── MAIN VIEW ── */
+  .view { padding: 14px 14px 10px; }
+
+  /* ── PAGE HEADER ── */
+  .page-header { margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+  .page-title  { font-size: 18px; }
+  .page-header .btn { font-size: 12px; padding: 7px 13px; }
+
+  /* ── STATS ── */
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+  .stat  { padding: 12px; }
+  .stat-value { font-size: 20px; }
+
+  /* ── EARNINGS ROW ── */
+  #earnings-row { grid-template-columns: 1fr !important; gap: 8px; margin-bottom: 14px; }
+
+  /* ── PROJECT GRID ── */
+  .project-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  /* ── PROJECT CARD ── */
+  .project-card { padding: 14px; }
+  .pc-name { font-size: 14px; }
+
+  /* ── DETAIL VIEW ── */
+  .detail-layout { grid-template-columns: 1fr; gap: 12px; }
+  .detail-back   { margin-bottom: 12px; }
+
+  /* ── MODALS ── */
+  .overlay { align-items: flex-end; }
+  .modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 92vh;
+    padding: 22px 18px 30px;
+    animation: slideUp .25s cubic-bezier(.34,1.2,.64,1);
+  }
+  @keyframes slideUp { from{transform:translateY(100%);opacity:.8} to{transform:none;opacity:1} }
+
+  .confirm-modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    padding: 22px 18px 30px;
+  }
+  .phonebook-modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 92vh;
+  }
+  .qt-detail-modal {
+    width: 100% !important; max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 92vh;
+  }
+
+  /* ── FORMS ── */
+  .frow { grid-template-columns: 1fr; gap: 10px; }
+  .fi2, .fs, .ft { font-size: 16px !important; padding: 11px 13px; } /* 16px prevents iOS zoom */
+  .modal-footer { flex-direction: column-reverse; }
+  .modal-footer .btn { width: 100%; justify-content: center; padding: 12px; }
+
+  /* ── SEARCH BAR ── */
+  .search-bar { padding: 9px 12px; gap: 8px; }
+  .search-bar input { font-size: 14px; }
+
+  /* ── TASKS ── */
+  .task-actions { opacity: 1 !important; } /* always show on mobile */
+  .task-price-input { width: 90px; font-size: 13px; }
+
+  /* ── CLIENT LIST ── */
+  .client-item { padding: 12px; gap: 10px; }
+  .c-name { font-size: 13px; }
+
+  /* ── QUOTATION CARDS ── */
+  .qt-action-bar { flex-wrap: wrap; }
+  .qt-item-row { flex-wrap: wrap; }
+  .qt-item-row .price-input { width: 100px; }
+
+  /* ── PHONEBOOK ACTIONS ── */
+  .pb-action-bar { flex-wrap: wrap; padding: 14px 16px 20px; }
+  .pb-action-btn { min-width: calc(50% - 4px); font-size: 13px; }
+
+  /* ── QT DETAIL FOOTER ── */
+  .qt-detail-footer { flex-wrap: wrap; }
+  .qt-detail-footer .pb-action-btn,
+  .qt-detail-footer .btn { flex: 1; min-width: calc(50% - 4px); justify-content: center; }
+
+  /* ── TOAST ── */
+  .toast-wrap { bottom: 74px; right: 12px; left: 12px; }
+  .toast { min-width: unset; max-width: 100%; }
+
+  /* ── LOGIN SCREEN ── */
+  .gh-login-card { padding: 28px 20px; }
+
+  /* ── INVOICE ── */
+  .inv-result-actions { flex-direction: column; }
+  .inv-result-actions .btn { width: 100%; justify-content: center; }
+
+  /* ── FAB (Floating Action Button) ── */
+  #fab-add {
+    display: flex !important;
+    position: fixed; bottom: 76px; right: 16px;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(108,99,255,.4);
+    z-index: 149; border: none; cursor: pointer;
+    font-size: 26px; font-weight: 300; line-height: 1;
+    transition: transform .15s;
+  }
+  #fab-add:active { transform: scale(.92); }
+}
+
+@media (min-width: 769px) {
+  #fab-add { display: none !important; }
+}
+
+@media (max-width: 768px) {
+  .nav-label-full  { display: none !important; }
+  .nav-label-short { display: inline !important; }
+}
+@media (min-width: 769px) {
+  .nav-label-short { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -539,10 +862,10 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 <div class="layout">
   <div class="sidebar">
     <div class="sidebar-label">Menu</div>
-    <div class="nav-item active" data-view="dashboard" onclick="showView('dashboard',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Dashboard <span class="nav-count" id="nc-all">0</span></div>
-    <div class="nav-item" data-view="projects" onclick="showView('projects',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Semua Proyek <span class="nav-count" id="nc-proj">0</span></div>
-    <div class="nav-item" data-view="clients" onclick="showView('clients',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Klien <span class="nav-count" id="nc-cli">0</span></div>
-    <div class="nav-item" data-view="quotations" onclick="showView('quotations',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="12" y1="9" x2="8" y2="9"/></svg> Quotation <span class="nav-count" id="nc-qt">0</span></div>
+    <div class="nav-item active" data-view="dashboard" onclick="showView('dashboard',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> <span class="nav-label-full">Dashboard</span><span class="nav-label-short" style="display:none">Home</span> <span class="nav-count" id="nc-all">0</span></div>
+    <div class="nav-item" data-view="projects" onclick="showView('projects',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> <span class="nav-label-full">Semua Proyek</span><span class="nav-label-short" style="display:none">Proyek</span> <span class="nav-count" id="nc-proj">0</span></div>
+    <div class="nav-item" data-view="clients" onclick="showView('clients',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span class="nav-label-full">Klien</span><span class="nav-label-short" style="display:none">Klien</span> <span class="nav-count" id="nc-cli">0</span></div>
+    <div class="nav-item" data-view="quotations" onclick="showView('quotations',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="12" y1="9" x2="8" y2="9"/></svg> <span class="nav-label-full">Quotation</span><span class="nav-label-short" style="display:none">Quote</span> <span class="nav-count" id="nc-qt">0</span></div>
 
     <div class="sidebar-label">Filter Status</div>
     <div class="nav-item" onclick="filterStatus('ongoing')"><span style="width:9px;height:9px;border-radius:50%;background:#4f8ef7;flex-shrink:0;display:inline-block"></span> Ongoing <span class="nav-count" id="nc-on">0</span></div>
@@ -552,7 +875,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <div class="nav-item" onclick="filterStatus('cancel')"><span style="width:9px;height:9px;border-radius:50%;background:#dc2626;flex-shrink:0;display:inline-block"></span> Cancel <span class="nav-count" id="nc-ca">0</span></div>
 
     <div class="sidebar-label">Arsip</div>
-    <div class="nav-item" data-view="completed" onclick="showView('completed',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Completed <span class="nav-count" id="nc-paid">0</span></div>
+    <div class="nav-item" data-view="completed" onclick="showView('completed',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> <span class="nav-label-full">Completed</span><span class="nav-label-short" style="display:none">Done</span> <span class="nav-count" id="nc-paid">0</span></div>
 
     <div class="drive-box">
       <div class="dbh"><div class="dot dot-red" id="sDot"></div><span id="sTxt">Google Drive</span></div>
@@ -2441,6 +2764,7 @@ function updateCounts() {
   document.getElementById('nc-ca').textContent=n('cancel');
   document.getElementById('nc-paid').textContent=n('paid');
   document.getElementById('nc-qt').textContent=quotations.length;
+  if (typeof updateMobileBadges === 'function') updateMobileBadges();
 }
 
 // ── SETUP & CONFIRM ───────────────────────────────────
@@ -2998,6 +3322,16 @@ function convertQtToProject() {
 }
 
 // ══════════════════════════════════════════════════════
+// ── MOBILE FAB ────────────────────────────────────────
+function fabAction() {
+  // Context-aware: open relevant modal based on current view
+  const active = document.querySelector('.nav-item.active');
+  const view = active ? active.dataset.view : 'dashboard';
+  if (view === 'clients') openAddClient();
+  else if (view === 'quotations') openAddQuotation();
+  else openAddProject();
+}
+
 // ── GITHUB SYNC ───────────────────────────────────────
 // ══════════════════════════════════════════════════════
 const GH_DATA_FILE = 'snapsy-data.json';
@@ -3322,6 +3656,54 @@ function viewClientProjects() {
 }
 
 
+// ── MOBILE NAV ────────────────────────────────────────
+let curMobileView = 'dashboard';
+
+function mobileNav(view, el) {
+  // Update bottom nav active state
+  document.querySelectorAll('.mnav-item').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  curMobileView = view;
+
+  // Also sync desktop sidebar
+  const desktopNav = document.querySelector(`[data-view="${view}"]`);
+  showView(view, desktopNav);
+  updateMobileBadges();
+}
+
+function updateMobileBadges() {
+  const projCount = projects.filter(p => p.status !== 'paid').length;
+  const qtCount   = quotations.length;
+
+  const projBadge = document.getElementById('mnb-proj');
+  if (projBadge) { projBadge.textContent = projCount; projBadge.style.display = projCount > 0 ? 'flex' : 'none'; }
+
+  const qtBadge = document.getElementById('mnb-qt');
+  if (qtBadge) { qtBadge.textContent = qtCount; qtBadge.style.display = qtCount > 0 ? 'flex' : 'none'; }
+}
+
+// FAB action depends on current view
+function mobileFabAction() {
+  switch(curMobileView) {
+    case 'projects':   openAddProject();   break;
+    case 'clients':    openAddClient();    break;
+    case 'quotations': openAddQuotation(); break;
+    default:           openAddProject();   break;
+  }
+}
+
+// Sync mobile nav when desktop nav is used
+const _origShowView = showView;
+function showView(name, el) {
+  _origShowView(name, el);
+  // sync mobile nav highlight
+  document.querySelectorAll('.mnav-item').forEach(b => b.classList.remove('active'));
+  const mBtn = document.getElementById('mn-' + name);
+  if (mBtn) mBtn.classList.add('active');
+  curMobileView = name;
+  updateMobileBadges();
+}
+
 // ── PWA SERVICE WORKER ────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -3331,5 +3713,37 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav id="mobile-nav">
+  <button class="mnav-item active" id="mn-dashboard" onclick="mobileNav('dashboard',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </button>
+  <button class="mnav-item" id="mn-projects" onclick="mobileNav('projects',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    Proyek
+    <span class="mnav-badge" id="mnb-proj">0</span>
+  </button>
+  <button class="mnav-item" id="mn-clients" onclick="mobileNav('clients',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Klien
+  </button>
+  <button class="mnav-item" id="mn-quotations" onclick="mobileNav('quotations',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Quote
+    <span class="mnav-badge" id="mnb-qt" style="display:none">0</span>
+  </button>
+  <button class="mnav-item" id="mn-completed" onclick="mobileNav('completed',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    Paid
+  </button>
+</nav>
+
+<!-- MOBILE FAB -->
+<button id="mobile-fab" onclick="mobileFabAction()" title="Tambah baru">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
 </body>
 </html>
