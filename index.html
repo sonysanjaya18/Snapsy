@@ -2904,9 +2904,19 @@ function renderClients() {
   }).join('');
 }
 
-function filterByClient(client) {
-  document.getElementById('searchQ').value=client;
-  showView('projects',null); renderProjects();
+function filterByClient(clientName) {
+  // navigate to projects view dulu (ini reset filter & search)
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-projects').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  curMobileView = 'projects';
+  const fab = document.getElementById('fab-add');
+  if (fab) fab.style.display = '';
+  // set search SETELAH navigate supaya tidak ke-reset
+  const sq = document.getElementById('searchQ'); if(sq) sq.value = clientName;
+  const fs = document.getElementById('filterSt'); if(fs) fs.value = '';
+  renderProjects();
+  if (typeof updateMobileBadges === 'function') updateMobileBadges();
 }
 
 function projCard(p) {
