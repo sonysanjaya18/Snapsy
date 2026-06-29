@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1782711555449",
+      "client": "Racha",
+      "name": "Kingsmen Poster",
+      "price": "",
+      "currency": "USD",
+      "status": "pending",
+      "startDate": "2026-06-29",
+      "deadline": "2026-06-29",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-06-29T05:39:15.449Z"
+    },
+    {
       "id": "p_1782711026659",
       "client": "Racha",
       "name": "Kingsmen Poster",
@@ -189,5 +204,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:37:04.164Z"
+  "_savedAt": "2026-06-29T05:39:16.953Z"
 }
