@@ -1475,7 +1475,7 @@ const STATUSES = [
 ];
 
 // ── INIT ──────────────────────────────────────────────
-window.onload = () => {
+window.onload = async () => {
   document.getElementById('f-start').value = today();
   document.getElementById('dp-root').textContent = cfg.root || 'Snapsy.Std';
   document.getElementById('dr-root').textContent = cfg.root || 'Snapsy.Std';
@@ -1484,15 +1484,15 @@ window.onload = () => {
   updateCounts(); renderDashboard();
   if (cfg.clientId && cfg.apiKey) { initGapi(); document.getElementById('loginBtn').style.display='inline-flex'; }
 
-  // GitHub sync init
-  ghInit();
+  // GitHub sync init — tunggu sampai selesai supaya ghFileSha sudah terisi
+  await ghInit();
 
-  // ── Auto-sync: pull dari GitHub setiap 60 detik ──
+  // ── Auto-sync: pull dari GitHub setiap 15 detik ──
   setInterval(() => {
     if (ghConnected()) ghSilentPull();
-  }, 60000);
+  }, 15000);
 
-  // ── Auto-sync saat tab/app aktif kembali ──
+  // ── Auto-sync saat tab/app aktif kembali dari background ──
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && ghConnected()) {
       ghSilentPull();
@@ -3341,14 +3341,14 @@ function ghConnected() {
 }
 
 // ── INIT ─────────────────────────────────────────────
-function ghInit() {
+async function ghInit() {
   if (!ghConnected()) {
     document.getElementById('gh-login-screen').style.display = 'flex';
     return;
   }
   document.getElementById('gh-login-screen').style.display = 'none';
   document.getElementById('gh-disconnect-btn').style.display = 'inline-flex';
-  ghLoadData();
+  await ghLoadData();
 }
 
 // ── CONNECT ──────────────────────────────────────────
@@ -3467,8 +3467,8 @@ async function ghSilentPull() {
     if (!res.ok) return;
     const json = await res.json();
 
-    // Kalau SHA sama → tidak ada perubahan, skip
-    if (json.sha === ghFileSha) return;
+    // Kalau SHA sama dan sudah pernah load → tidak ada perubahan, skip
+    if (ghFileSha && json.sha === ghFileSha) return;
 
     ghFileSha = json.sha;
     const raw  = atob(json.content.replace(/\n/g,''));
@@ -3485,14 +3485,14 @@ async function ghSilentPull() {
     updateCounts();
     // Re-render view yang sedang aktif
     const activeView = document.querySelector('.view.active')?.id?.replace('view-','');
-    if (activeView === 'dashboard')   renderDashboard();
-    else if (activeView === 'projects')  renderProjects();
-    else if (activeView === 'clients')   renderClients();
-    else if (activeView === 'completed') renderCompleted();
+    if (activeView === 'dashboard')    renderDashboard();
+    else if (activeView === 'projects')   renderProjects();
+    else if (activeView === 'clients')    renderClients();
+    else if (activeView === 'completed')  renderCompleted();
     else if (activeView === 'quotations') renderQuotations();
 
     ghSetBadge('synced', 'Tersinkron');
-    toast('✦ Data diperbarui dari GitHub', 'info');
+    toast('✦ Data diperbarui otomatis', 'info');
   } catch(e) {
     // Silent fail — jangan ganggu user
     console.warn('GH silent pull error:', e);
