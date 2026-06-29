@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1782698452967",
+      "client": "Yoan Taoba",
+      "name": "Mockup Livery",
+      "price": "",
+      "currency": "IDR",
+      "status": "pending",
+      "startDate": "2026-06-27",
+      "deadline": "2026-06-30",
+      "notes": "Materi Semua ada di Whatsapp",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-06-29T02:00:52.967Z"
+    },
+    {
       "id": "p_1782687247501",
       "client": "George",
       "name": "Nonna Marias Pasta",
@@ -102,5 +117,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T01:59:58.913Z"
+  "_savedAt": "2026-06-29T02:00:54.473Z"
 }
