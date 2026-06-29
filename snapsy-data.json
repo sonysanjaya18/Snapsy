@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1782711026659",
+      "client": "Racha",
+      "name": "Kingsmen Poster",
+      "price": "",
+      "currency": "USD",
+      "status": "pending",
+      "startDate": "2026-06-29",
+      "deadline": "2026-06-29",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-06-29T05:30:26.659Z"
+    },
+    {
       "id": "p_1782698452967",
       "client": "Yoan Taoba",
       "name": "Mockup Livery",
@@ -144,5 +159,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:29:55.003Z"
+  "_savedAt": "2026-06-29T05:30:28.166Z"
 }
