@@ -349,10 +349,12 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 }
 #gallery-lb.show { display: flex; }
 #gallery-lb-img {
-  max-width: min(88vw, 920px); max-height: 78vh;
+  width: min(88vw, 900px);
+  height: min(80vh, 700px);
   border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.6);
   object-fit: contain; display: block;
   transition: opacity .18s ease;
+  background: rgba(255,255,255,.04);
 }
 #gallery-lb-img.fading { opacity: 0; }
 #gallery-lb-close {
@@ -2099,7 +2101,7 @@ async function genThumb(raw) {
     const ext = raw.name.split('.').pop().toLowerCase();
     const isImg = ['jpg','jpeg','png','gif','webp','svg'].includes(ext);
     const isPdf = ext === 'pdf';
-    const MAX = 240;
+    const MAX = 800;
 
     if (isImg) {
       const reader = new FileReader();
@@ -2112,7 +2114,7 @@ async function genThumb(raw) {
           const c = document.createElement('canvas');
           c.width = w; c.height = h;
           c.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(c.toDataURL('image/jpeg', 0.42));
+          resolve(c.toDataURL('image/jpeg', 0.72));
         };
         img.onerror = () => resolve(null);
         img.src = e.target.result;
@@ -2130,7 +2132,7 @@ async function genThumb(raw) {
           const c = document.createElement('canvas');
           c.width = vp.width; c.height = vp.height;
           await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise;
-          resolve(c.toDataURL('image/jpeg', 0.42));
+          resolve(c.toDataURL('image/jpeg', 0.72));
         } catch { resolve(null); }
       };
       reader.onerror = () => resolve(null);
