@@ -13,7 +13,14 @@
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-06-29T05:30:26.659Z"
+      "createdAt": "2026-06-29T05:30:26.659Z",
+      "subfolders": [
+        {
+          "id": "sf_1782711099771",
+          "name": "Poster",
+          "driveId": null
+        }
+      ]
     },
     {
       "id": "p_1782698452967",
@@ -168,5 +175,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:30:51.493Z"
+  "_savedAt": "2026-06-29T05:31:41.815Z"
 }
