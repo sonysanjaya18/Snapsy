@@ -637,9 +637,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
   /* ── LAYOUT ── */
   .layout {
-    grid-template-columns: 1fr;
-    min-height: calc(100vh - 54px);
-    padding-bottom: 70px; /* space for bottom nav */
+    grid-template-columns: 1fr !important;
+    min-height: calc(100vh - 54px) !important;
+    padding-bottom: 70px !important;
   }
 
   /* ── TOPBAR ── */
@@ -652,12 +652,19 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
   /* ── SIDEBAR → BOTTOM NAV ── */
   .sidebar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    flex-direction: row; align-items: center; justify-content: space-around;
-    padding: 0; height: 62px; z-index: 150;
-    border-right: none; border-top: 1px solid var(--border);
-    box-shadow: 0 -2px 12px rgba(0,0,0,.08);
-    overflow: hidden;
+    position: fixed !important;
+    bottom: 0 !important; left: 0 !important; right: 0 !important;
+    top: auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    padding: 0 !important;
+    height: 62px !important;
+    width: 100% !important;
+    border-right: none !important;
+    border-top: 1px solid var(--border) !important;
+    box-shadow: 0 -2px 12px rgba(0,0,0,.08) !important;
+    overflow: hidden !important;
   }
   .sidebar-label  { display: none; }
   .drive-box      { display: none; }
