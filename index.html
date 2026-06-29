@@ -486,144 +486,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 /* ═══════════════════════════════════════════════
    MOBILE RESPONSIVE
 ═══════════════════════════════════════════════ */
-@media (max-width: 768px) {
 
-  /* ── Layout ── */
-  .layout {
-    grid-template-columns: 1fr;
-    min-height: calc(100vh - 52px);
-  }
-
-  /* ── Topbar ── */
-  .topbar { padding: 10px 14px; }
-  .brand  { font-size: 15px; }
-  .topbar-right { gap: 6px; }
-  .topbar-right .btn-primary { display: none; } /* hide desktop "+ Proyek Baru" */
-  #loginBtn { display: none !important; }
-  #authBadge { display: none; }
-
-  /* ── Sidebar → hidden on mobile (replaced by bottom nav) ── */
-  .sidebar { display: none; }
-
-  /* ── Bottom Navigation Bar ── */
-  #mobile-nav {
-    display: flex;
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 150;
-    background: var(--surface); border-top: 1px solid var(--border);
-    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
-    padding: 6px 0 max(6px, env(safe-area-inset-bottom));
-  }
-  .mnav-item {
-    flex: 1; display: flex; flex-direction: column; align-items: center;
-    gap: 3px; padding: 4px 2px; cursor: pointer; transition: .12s;
-    color: var(--muted); font-size: 10px; font-weight: 600;
-    border: none; background: none; position: relative;
-  }
-  .mnav-item.active { color: var(--accent); }
-  .mnav-item svg { transition: .12s; }
-  .mnav-item.active svg { stroke: var(--accent); }
-  .mnav-badge {
-    position: absolute; top: 2px; right: calc(50% - 14px);
-    background: var(--accent); color: #fff;
-    font-size: 9px; font-weight: 700; min-width: 16px; height: 16px;
-    border-radius: 20px; display: flex; align-items: center; justify-content: center;
-    padding: 0 4px;
-  }
-
-  /* ── Main content padding (above bottom nav) ── */
-  .main { padding-bottom: 70px; }
-  .view { padding: 14px 14px 0; }
-
-  /* ── FAB (Floating Action Button) ── */
-  #mobile-fab {
-    display: flex;
-    position: fixed; bottom: 76px; right: 16px; z-index: 140;
-    width: 52px; height: 52px; border-radius: 16px;
-    background: var(--accent); color: #fff; border: none;
-    font-size: 26px; font-weight: 300; cursor: pointer;
-    align-items: center; justify-content: center;
-    box-shadow: 0 6px 20px rgba(108,99,255,.45);
-    transition: .15s;
-  }
-  #mobile-fab:active { transform: scale(.94); }
-
-  /* ── Stats grid → 2 cols ── */
-  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
-  .stat { padding: 12px; }
-  .stat-value { font-size: 20px; }
-
-  /* ── Earnings row → stack ── */
-  #earnings-row { grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
-
-  /* ── Project grid → 1 col ── */
-  .project-grid { grid-template-columns: 1fr; gap: 10px; }
-
-  /* ── Page header ── */
-  .page-header { margin-bottom: 12px; }
-  .page-title { font-size: 17px; }
-  .page-header .btn { display: none; } /* hide page-level add buttons, use FAB instead */
-
-  /* ── Detail layout → stack ── */
-  .detail-layout { grid-template-columns: 1fr; gap: 12px; }
-  .detail-back { margin-bottom: 10px; font-size: 14px; }
-
-  /* ── Modals → full bottom sheet on mobile ── */
-  .overlay { align-items: flex-end; }
-  .modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 18px 18px 0 0 !important;
-    max-height: 92vh !important;
-    padding: 20px 16px !important;
-    padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
-  }
-  .modal-title { font-size: 16px; }
-  .confirm-modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 18px 18px 0 0 !important;
-    padding: 20px 16px !important;
-  }
-  .phonebook-modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 18px 18px 0 0 !important;
-    max-height: 92vh !important;
-  }
-  .qt-detail-modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 18px 18px 0 0 !important;
-    max-height: 92vh !important;
-  }
-
-  /* ── Form rows → stack on mobile ── */
-  .frow { grid-template-columns: 1fr; gap: 0; }
-
-  /* ── Search bar ── */
-  .search-bar { padding: 8px 12px; }
-
-  /* ── Client items ── */
-  .client-item { padding: 12px; gap: 10px; }
-  .c-name { font-size: 13px; }
-
-  /* ── Toast → bottom center ── */
-  .toast-wrap { bottom: 80px; right: 12px; left: 12px; align-items: center; }
-  .toast { min-width: unset; width: 100%; max-width: 100%; }
-
-  /* ── Quotation action bar → wrap ── */
-  .qt-detail-footer { flex-wrap: wrap; }
-  .pb-action-bar { padding: 12px 16px 16px; }
-
-  /* ── Drive box hidden on mobile ── */
-  .drive-box { display: none; }
-
-  /* ── GitHub login screen ── */
-  .gh-login-card { padding: 28px 20px; border-radius: 16px; }
-
-  /* ── inv total bar ── */
-  .inv-total-bar { flex-direction: column; align-items: flex-start; gap: 4px; }
-
-  /* ── Status chips wrap better ── */
-  .status-chips { gap: 5px; }
-  .schip { padding: 5px 10px; font-size: 11px; }
-}
 
 /* Hide mobile nav & fab on desktop */
 #mobile-nav { display: none; }
@@ -633,185 +496,234 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 /* ════════════════════════════════════════════════
    MOBILE RESPONSIVE
    ════════════════════════════════════════════════ */
+
+
+
+
+
+
+
+/* ════════════════════════════════════════
+   MOBILE — max 768px
+   ════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── LAYOUT ── */
+  /* LAYOUT: sidebar goes bottom, main fills screen */
   .layout {
-    grid-template-columns: 1fr !important;
-    min-height: calc(100vh - 54px) !important;
-    padding-bottom: 70px !important;
+    display: block !important;
+    padding-bottom: 66px !important;
   }
 
-  /* ── TOPBAR ── */
-  .topbar { padding: 10px 14px; }
-  .brand  { font-size: 15px; }
-  .topbar-right { gap: 6px; }
-  .topbar-right .btn-primary { display: none; } /* hide "+ Proyek Baru" — use FAB instead */
-  #loginBtn { display: none !important; }
-  .btn-sm { padding: 5px 9px; font-size: 11px; }
+  /* TOPBAR */
+  .topbar { padding: 0 12px !important; height: 50px !important; }
+  .brand  { font-size: 14px !important; }
+  #loginBtn,
+  .topbar-right .btn-primary,
+  #gh-disconnect-btn { display: none !important; }
+  #gh-sync-badge { font-size: 9px !important; }
 
-  /* ── SIDEBAR → BOTTOM NAV ── */
+  /* SIDEBAR → FIXED BOTTOM NAV */
   .sidebar {
     position: fixed !important;
     bottom: 0 !important; left: 0 !important; right: 0 !important;
-    top: auto !important;
+    top: auto !important; width: 100% !important;
+    height: 66px !important;
     flex-direction: row !important;
-    align-items: center !important;
+    align-items: stretch !important;
     justify-content: space-around !important;
     padding: 0 !important;
-    height: 62px !important;
-    width: 100% !important;
     border-right: none !important;
-    border-top: 1px solid var(--border) !important;
-    box-shadow: 0 -2px 12px rgba(0,0,0,.08) !important;
-    overflow: hidden !important;
+    border-top: 2px solid var(--border) !important;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.1) !important;
+    z-index: 200 !important;
+    overflow: visible !important;
   }
-  .sidebar-label  { display: none; }
-  .drive-box      { display: none; }
-  .nav-count      { display: none; }
+  .sidebar-label { display: none !important; }
+  .drive-box     { display: none !important; }
+  .nav-count     { display: none !important; }
 
-  /* show only main nav items, hide filter items */
-  .sidebar .nav-item[onclick*="filterStatus"] { display: none; }
-  .sidebar .nav-item[data-view="completed"]   { display: flex; }
+  /* hide status filter nav items, keep main pages only */
+  .nav-item[onclick*="filterStatus"] { display: none !important; }
 
   .nav-item {
-    flex-direction: column; align-items: center; justify-content: center;
-    gap: 3px; padding: 6px 4px; border-left: none !important;
-    border-top: 3px solid transparent; font-size: 9px; flex: 1;
-    height: 100%; border-radius: 0;
+    flex: 1 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 8px 2px !important;
+    border-left: none !important;
+    border-top: 3px solid transparent !important;
+    border-radius: 0 !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    height: 100% !important;
+    color: var(--muted) !important;
+    transition: .15s !important;
   }
-  .nav-item svg { width: 20px; height: 20px; }
+  .nav-item svg { width: 22px !important; height: 22px !important; }
   .nav-item.active {
     border-left-color: transparent !important;
-    border-top-color: var(--accent);
-    background: rgba(108,99,255,.06);
-    color: var(--accent);
+    border-top-color: var(--accent) !important;
+    color: var(--accent) !important;
+    background: rgba(108,99,255,.06) !important;
+    font-weight: 700 !important;
   }
-  .nav-item span[style*="border-radius:50%"] { display: none; } /* hide status dots */
 
-  /* ── MAIN VIEW ── */
-  .view { padding: 14px 14px 10px; }
+  /* MAIN CONTENT */
+  .main { overflow-y: auto !important; }
+  .view { padding: 14px 14px 8px !important; }
 
-  /* ── PAGE HEADER ── */
-  .page-header { margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
-  .page-title  { font-size: 18px; }
-  .page-header .btn { font-size: 12px; padding: 7px 13px; }
-
-  /* ── STATS ── */
-  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
-  .stat  { padding: 12px; }
-  .stat-value { font-size: 20px; }
-
-  /* ── EARNINGS ROW ── */
-  #earnings-row { grid-template-columns: 1fr !important; gap: 8px; margin-bottom: 14px; }
-
-  /* ── PROJECT GRID ── */
-  .project-grid { grid-template-columns: 1fr; gap: 10px; }
-
-  /* ── PROJECT CARD ── */
-  .project-card { padding: 14px; }
-  .pc-name { font-size: 14px; }
-
-  /* ── DETAIL VIEW ── */
-  .detail-layout { grid-template-columns: 1fr; gap: 12px; }
-  .detail-back   { margin-bottom: 12px; }
-
-  /* ── MODALS ── */
-  .overlay { align-items: flex-end; }
-  .modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 20px 20px 0 0 !important;
-    max-height: 92vh;
-    padding: 22px 18px 30px;
-    animation: slideUp .25s cubic-bezier(.34,1.2,.64,1);
+  /* PAGE HEADER */
+  .page-header {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    margin-bottom: 14px !important;
   }
-  @keyframes slideUp { from{transform:translateY(100%);opacity:.8} to{transform:none;opacity:1} }
+  .page-title { font-size: 18px !important; }
+  .page-sub   { font-size: 12px !important; }
+  .page-header > .btn { display: none !important; } /* use FAB instead */
 
-  .confirm-modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 20px 20px 0 0 !important;
-    padding: 22px 18px 30px;
+  /* STATS GRID */
+  .stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+    margin-bottom: 14px !important;
   }
-  .phonebook-modal {
-    width: 100% !important; max-width: 100% !important;
-    border-radius: 20px 20px 0 0 !important;
-    max-height: 92vh;
+  .stat       { padding: 12px !important; }
+  .stat-value { font-size: 18px !important; }
+  .stat-label { font-size: 10px !important; }
+  .stat-sub   { font-size: 10px !important; }
+
+  /* EARNINGS ROW */
+  #earnings-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
   }
+
+  /* PROJECT GRID → single col */
+  .project-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .project-card { padding: 14px !important; }
+  .pc-name      { font-size: 14px !important; }
+
+  /* DETAIL LAYOUT → stacked */
+  .detail-layout {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .detail-back { margin-bottom: 10px !important; }
+
+  /* CLIENTS */
+  .client-item { padding: 12px 10px !important; flex-wrap: wrap !important; }
+
+  /* MODALS — slide up from bottom */
+  .overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal,
+  .confirm-modal,
+  .phonebook-modal,
   .qt-detail-modal {
-    width: 100% !important; max-width: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
     border-radius: 20px 20px 0 0 !important;
-    max-height: 92vh;
+    max-height: 90vh !important;
+    animation: mobileSlideUp .28s cubic-bezier(.32,1.2,.5,1) !important;
+  }
+  .modal         { padding: 22px 16px 32px !important; }
+  .confirm-modal { padding: 22px 16px 32px !important; }
+  .modal-footer  {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+  }
+  .modal-footer .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 13px !important;
+    font-size: 14px !important;
   }
 
-  /* ── FORMS ── */
-  .frow { grid-template-columns: 1fr; gap: 10px; }
-  .fi2, .fs, .ft { font-size: 16px !important; padding: 11px 13px; } /* 16px prevents iOS zoom */
-  .modal-footer { flex-direction: column-reverse; }
-  .modal-footer .btn { width: 100%; justify-content: center; padding: 12px; }
+  /* FORMS */
+  .frow { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .fi2, .fs, .ft {
+    font-size: 16px !important; /* prevent iOS zoom */
+    padding: 12px !important;
+  }
 
-  /* ── SEARCH BAR ── */
-  .search-bar { padding: 9px 12px; gap: 8px; }
-  .search-bar input { font-size: 14px; }
+  /* SEARCH BAR */
+  .search-bar { padding: 10px 12px !important; }
+  .search-bar input { font-size: 15px !important; }
 
-  /* ── TASKS ── */
-  .task-actions { opacity: 1 !important; } /* always show on mobile */
-  .task-price-input { width: 90px; font-size: 13px; }
+  /* TASKS */
+  .task-actions     { opacity: 1 !important; }
+  .task-price-input { width: 85px !important; }
 
-  /* ── CLIENT LIST ── */
-  .client-item { padding: 12px; gap: 10px; }
-  .c-name { font-size: 13px; }
+  /* PHONEBOOK */
+  .pb-action-bar { flex-wrap: wrap !important; padding: 14px 16px 24px !important; }
+  .pb-action-btn { min-width: calc(50% - 4px) !important; }
 
-  /* ── QUOTATION CARDS ── */
-  .qt-action-bar { flex-wrap: wrap; }
-  .qt-item-row { flex-wrap: wrap; }
-  .qt-item-row .price-input { width: 100px; }
-
-  /* ── PHONEBOOK ACTIONS ── */
-  .pb-action-bar { flex-wrap: wrap; padding: 14px 16px 20px; }
-  .pb-action-btn { min-width: calc(50% - 4px); font-size: 13px; }
-
-  /* ── QT DETAIL FOOTER ── */
-  .qt-detail-footer { flex-wrap: wrap; }
+  /* QT FOOTER */
+  .qt-detail-footer { flex-wrap: wrap !important; gap: 8px !important; padding: 12px 16px 28px !important; }
   .qt-detail-footer .pb-action-btn,
-  .qt-detail-footer .btn { flex: 1; min-width: calc(50% - 4px); justify-content: center; }
+  .qt-detail-footer .btn {
+    flex: 1 1 calc(50% - 4px) !important;
+    justify-content: center !important;
+    min-width: 120px !important;
+  }
 
-  /* ── TOAST ── */
-  .toast-wrap { bottom: 74px; right: 12px; left: 12px; }
-  .toast { min-width: unset; max-width: 100%; }
+  /* TOAST */
+  .toast-wrap { bottom: 76px !important; right: 10px !important; left: 10px !important; }
+  .toast      { min-width: unset !important; max-width: 100% !important; }
 
-  /* ── LOGIN SCREEN ── */
-  .gh-login-card { padding: 28px 20px; }
-
-  /* ── INVOICE ── */
-  .inv-result-actions { flex-direction: column; }
-  .inv-result-actions .btn { width: 100%; justify-content: center; }
-
-  /* ── FAB (Floating Action Button) ── */
+  /* FAB */
   #fab-add {
     display: flex !important;
-    position: fixed; bottom: 76px; right: 16px;
-    width: 52px; height: 52px; border-radius: 50%;
-    background: var(--accent); color: #fff;
-    align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(108,99,255,.4);
-    z-index: 149; border: none; cursor: pointer;
-    font-size: 26px; font-weight: 300; line-height: 1;
-    transition: transform .15s;
+    position: fixed !important;
+    bottom: 80px !important;
+    right: 16px !important;
+    width: 54px !important; height: 54px !important;
+    border-radius: 50% !important;
+    background: var(--accent) !important;
+    color: #fff !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 20px rgba(108,99,255,.45) !important;
+    z-index: 190 !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 28px !important;
+    font-weight: 300 !important;
+    line-height: 1 !important;
   }
-  #fab-add:active { transform: scale(.92); }
-}
 
-@media (min-width: 769px) {
-  #fab-add { display: none !important; }
-}
+  /* GITHUB LOGIN */
+  .gh-login-card { padding: 28px 18px 36px !important; }
+  #gh-login-screen { align-items: flex-end !important; padding: 0 !important; }
+  .gh-login-card {
+    border-radius: 20px 20px 0 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 
-@media (max-width: 768px) {
+  /* NAV LABELS */
   .nav-label-full  { display: none !important; }
   .nav-label-short { display: inline !important; }
 }
+
+@keyframes mobileSlideUp {
+  from { transform: translateY(100%); opacity: .7; }
+  to   { transform: translateY(0);    opacity: 1;  }
+}
+
 @media (min-width: 769px) {
+  #fab-add         { display: none !important; }
   .nav-label-short { display: none !important; }
 }
+
 </style>
 </head>
 <body>
