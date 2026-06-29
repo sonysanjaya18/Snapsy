@@ -162,20 +162,7 @@
       "createdAt": "2026-06-29T05:30:41.201Z"
     }
   ],
-  "files": [
-    {
-      "id": "f_17827111905437btag4w41ry",
-      "projId": "p_1782711026659",
-      "name": "StoreGrand-Opening.jpg",
-      "size": 961087,
-      "type": "image/jpeg",
-      "status": "pending",
-      "progress": 0,
-      "driveId": null,
-      "driveLink": null,
-      "subfolderRef": "sf_1782711099771"
-    }
-  ],
+  "files": [],
   "quotations": [],
   "cfg": {
     "root": "Snapsy.Std",
@@ -188,5 +175,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:34:05.485Z"
+  "_savedAt": "2026-06-29T05:34:25.057Z"
 }
