@@ -768,7 +768,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 </div>
 
 <div class="topbar">
-  <div class="brand">Snapsy<span>.</span>Std</div>
+  <div class="brand" id="brand-tap">Snapsy<span>.</span>Std</div>
   <div class="topbar-right">
     <span id="authBadge" class="badge b-cancel">● Belum terhubung</span>
     <span id="gh-sync-badge" class="gh-sync-badge" style="display:none"></span>
@@ -1489,11 +1489,13 @@ window.onload = async () => {
 
   // ── Auto-sync: pull dari GitHub setiap 15 detik ──
   setInterval(() => {
+    dbg('⏱ interval tick, connected=' + ghConnected());
     if (ghConnected()) ghSilentPull();
   }, 15000);
 
   // ── Auto-sync saat tab/app aktif kembali dari background ──
   document.addEventListener('visibilitychange', () => {
+    dbg('👁 visibility=' + document.visibilityState);
     if (document.visibilityState === 'visible' && ghConnected()) {
       ghSilentPull();
     }
@@ -2531,6 +2533,12 @@ function showView(name, navEl) {
   if (mBtn) mBtn.classList.add('active');
   curMobileView = name;
   if (typeof updateMobileBadges === 'function') updateMobileBadges();
+  // show/hide FAB — hanya untuk view yang punya tombol tambah
+  const fab = document.getElementById('fab-add');
+  if (fab) {
+    const hasFab = ['projects','clients','quotations'].includes(name);
+    fab.style.display = hasFab ? '' : 'none';
+  }
 }
 function backToProjects() { showView('projects',null); renderProjects(); }
 function filterStatus(st) { document.getElementById('filterSt').value=st; showView('projects',null); renderProjects(); }
@@ -3344,11 +3352,14 @@ function ghConnected() {
 async function ghInit() {
   if (!ghConnected()) {
     document.getElementById('gh-login-screen').style.display = 'flex';
+    dbg('ghInit: not connected');
     return;
   }
   document.getElementById('gh-login-screen').style.display = 'none';
   document.getElementById('gh-disconnect-btn').style.display = 'inline-flex';
+  dbg('ghInit: loading data…');
   await ghLoadData();
+  dbg('ghInit: done, SHA=' + (ghFileSha ? ghFileSha.slice(0,8) : 'null'));
 }
 
 // ── CONNECT ──────────────────────────────────────────
@@ -3369,7 +3380,7 @@ async function ghConnect() {
   ghSetBadge('syncing', 'Menghubungkan...');
   try {
     const res = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
-      headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' }
+      headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache' }
     });
     if (!res.ok) {
       const err = await res.json();
@@ -3418,7 +3429,7 @@ async function ghLoadData() {
   try {
     const res = await fetch(
       `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
-      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' } }
+      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache' } }
     );
 
     if (res.status === 404) {
@@ -3457,19 +3468,22 @@ async function ghLoadData() {
 
 // ── SILENT PULL (auto-sync, tanpa toast, hanya update jika SHA berubah) ──
 async function ghSilentPull() {
-  if (!ghConnected()) return;
+  if (!ghConnected()) { dbg('silentPull: not connected'); return; }
   const {token, username, repo} = ghCreds();
+  dbg('silentPull: fetching SHA… current=' + (ghFileSha ? ghFileSha.slice(0,7) : 'null'));
   try {
     const res = await fetch(
       `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
-      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' } }
+      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Cache-Control': 'no-store', 'Pragma': 'no-cache' } }
     );
-    if (!res.ok) return;
+    if (!res.ok) { dbg('silentPull: fetch error ' + res.status); return; }
     const json = await res.json();
+    dbg('silentPull: remote=' + json.sha.slice(0,7) + ' local=' + (ghFileSha ? ghFileSha.slice(0,7) : 'null'));
 
     // Kalau SHA sama dan sudah pernah load → tidak ada perubahan, skip
-    if (ghFileSha && json.sha === ghFileSha) return;
+    if (ghFileSha && json.sha === ghFileSha) { dbg('silentPull: same SHA, skip'); return; }
 
+    dbg('silentPull: SHA CHANGED → pulling data');
     ghFileSha = json.sha;
     const raw  = atob(json.content.replace(/\n/g,''));
     const data = JSON.parse(raw);
@@ -3494,10 +3508,11 @@ async function ghSilentPull() {
     ghSetBadge('synced', 'Tersinkron');
     toast('✦ Data diperbarui otomatis', 'info');
   } catch(e) {
-    // Silent fail — jangan ganggu user
+    dbg('silentPull ERROR: ' + e.message);
     console.warn('GH silent pull error:', e);
   }
 }
+
 
 // ── PUSH DATA TO GITHUB ──────────────────────────────
 async function ghPushData() {
@@ -3522,6 +3537,7 @@ async function ghPushData() {
           Authorization: 'token ' + token,
           Accept: 'application/vnd.github+json',
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-store',
         },
         body: JSON.stringify(body)
       }
@@ -3549,7 +3565,7 @@ async function ghRefreshSha() {
   try {
     const res = await fetch(
       `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
-      { headers: { Authorization: 'token ' + token } }
+      { headers: { Authorization: 'token ' + token, 'Cache-Control': 'no-store', 'Pragma': 'no-cache' } }
     );
     if (res.ok) { const j = await res.json(); ghFileSha = j.sha; }
   } catch(e) {}
@@ -3720,6 +3736,37 @@ function mobileFabAction() {
 
 // Mobile nav sync is handled inside the original showView via _syncMobileNav
 
+// ── DEBUG LOGGER ─────────────────────────────────────
+let _dbgLog = [];
+function dbg(msg, color='#0f0') {
+  const t = new Date().toLocaleTimeString('id-ID');
+  _dbgLog.unshift(`<span style="color:${color}">[${t}] ${msg}</span>`);
+  if (_dbgLog.length > 60) _dbgLog.pop();
+  const el = document.getElementById('debug-log');
+  if (el) el.innerHTML = _dbgLog.join('\n');
+  // update SHA info
+  const sha = document.getElementById('debug-sha');
+  if (sha) sha.textContent = 'ghFileSha: ' + (ghFileSha || 'null') + '\nConnected: ' + ghConnected();
+}
+
+// Triple-tap brand to open debug
+let _tapCount = 0, _tapTimer = null;
+document.getElementById('brand-tap').addEventListener('click', () => {
+  _tapCount++;
+  clearTimeout(_tapTimer);
+  _tapTimer = setTimeout(() => { _tapCount = 0; }, 600);
+  if (_tapCount >= 3) {
+    _tapCount = 0;
+    const panel = document.getElementById('debug-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    // refresh SHA display
+    const sha = document.getElementById('debug-sha');
+    if (sha) sha.textContent = 'ghFileSha: ' + (ghFileSha || 'null') + '\nConnected: ' + ghConnected();
+    const el = document.getElementById('debug-log');
+    if (el) el.innerHTML = _dbgLog.join('\n');
+  }
+});
+
 // ── PWA SERVICE WORKER ────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -3757,9 +3804,21 @@ if ('serviceWorker' in navigator) {
 </nav>
 
 <!-- MOBILE FAB -->
-<button id="mobile-fab" onclick="mobileFabAction()" title="Tambah baru">
+<button id="fab-add" onclick="mobileFabAction()" title="Tambah baru">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
+<!-- DEBUG PANEL (ketuk brand 3x untuk buka) -->
+<div id="debug-panel" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);padding:16px;overflow-y:auto;font-family:monospace;font-size:11px;color:#0f0">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <b style="color:#fff;font-size:14px">🔍 Debug Log</b>
+    <div style="display:flex;gap:8px">
+      <button onclick="ghSilentPull()" style="background:#6c63ff;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer">Force Pull</button>
+      <button onclick="document.getElementById('debug-panel').style.display='none'" style="background:#444;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer">Tutup</button>
+    </div>
+  </div>
+  <div id="debug-sha" style="margin-bottom:8px;padding:8px;background:#111;border-radius:6px;color:#aaa;font-size:10px"></div>
+  <div id="debug-log" style="white-space:pre-wrap;line-height:1.8"></div>
+</div>
 
 </body>
 </html>
