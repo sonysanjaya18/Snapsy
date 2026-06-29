@@ -1486,6 +1486,18 @@ window.onload = () => {
 
   // GitHub sync init
   ghInit();
+
+  // ── Auto-sync: pull dari GitHub setiap 60 detik ──
+  setInterval(() => {
+    if (ghConnected()) ghSilentPull();
+  }, 60000);
+
+  // ── Auto-sync saat tab/app aktif kembali ──
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && ghConnected()) {
+      ghSilentPull();
+    }
+  });
 };
 
 function migrateOldClients() {
@@ -1509,6 +1521,25 @@ function migrateOldClients() {
 }
 
 // ── GOOGLE DRIVE ──────────────────────────────────────
+const GD_TOKEN_KEY  = 'ssy_gd_token';
+const GD_EXPIRY_KEY = 'ssy_gd_expiry';
+
+function gdSaveToken(token, expiresIn) {
+  const expiry = Date.now() + (parseInt(expiresIn) - 60) * 1000; // 60s buffer
+  localStorage.setItem(GD_TOKEN_KEY,  token);
+  localStorage.setItem(GD_EXPIRY_KEY, expiry);
+}
+function gdRestoreToken() {
+  const token  = localStorage.getItem(GD_TOKEN_KEY);
+  const expiry = parseInt(localStorage.getItem(GD_EXPIRY_KEY) || '0');
+  if (token && Date.now() < expiry) return token;
+  return null;
+}
+function gdClearToken() {
+  localStorage.removeItem(GD_TOKEN_KEY);
+  localStorage.removeItem(GD_EXPIRY_KEY);
+}
+
 function initGapi() {
   gapi.load('client', async () => {
     await gapi.client.init({ apiKey: cfg.apiKey, discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] });
@@ -1516,19 +1547,47 @@ function initGapi() {
     tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: cfg.clientId, scope: SCOPES,
       callback: (resp) => {
-        if (resp.error) { toast('Auth gagal: '+resp.error,'error'); return; }
+        if (resp.error) {
+          // silent login gagal — minta user login manual
+          if (resp.error === 'interaction_required' || resp.error === 'access_denied') {
+            setDriveStatus('ready');
+            document.getElementById('loginBtn').style.display = 'inline-flex';
+          } else {
+            toast('Auth gagal: ' + resp.error, 'error');
+          }
+          gdClearToken();
+          return;
+        }
         accessToken = resp.access_token;
+        gapi.client.setToken({ access_token: accessToken });
+        gdSaveToken(resp.access_token, resp.expires_in || 3600);
         setDriveStatus('connected');
         document.getElementById('loginBtn').style.display = 'none';
-        toast('Terhubung ke Google Drive!','success');
+        if (resp._fromSilent) return; // silent restore — tidak perlu toast
+        toast('Terhubung ke Google Drive!', 'success');
       }
     });
-    setDriveStatus('ready');
+
+    // Coba restore token dari localStorage dulu
+    const saved = gdRestoreToken();
+    if (saved) {
+      accessToken = saved;
+      gapi.client.setToken({ access_token: saved });
+      setDriveStatus('connected');
+      document.getElementById('loginBtn').style.display = 'none';
+      // Coba silent refresh di background supaya token terus valid
+      setTimeout(() => {
+        tokenClient.requestAccessToken({ prompt: '', _fromSilent: true });
+      }, 500);
+    } else {
+      setDriveStatus('ready');
+    }
   });
 }
+
 function loginGoogle() {
-  if (!tokenClient) { toast('Setup dulu!','error'); return; }
-  tokenClient.requestAccessToken({ prompt:'consent' });
+  if (!tokenClient) { toast('Setup dulu!', 'error'); return; }
+  tokenClient.requestAccessToken({ prompt: 'consent' });
 }
 
 async function ensureFolder(name, parentId=null) {
@@ -3393,6 +3452,50 @@ async function ghLoadData() {
   } catch(e) {
     ghSetBadge('error', 'Gagal muat');
     toast('Gagal muat data: ' + e.message, 'error');
+  }
+}
+
+// ── SILENT PULL (auto-sync, tanpa toast, hanya update jika SHA berubah) ──
+async function ghSilentPull() {
+  if (!ghConnected()) return;
+  const {token, username, repo} = ghCreds();
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${username}/${repo}/contents/${GH_DATA_FILE}`,
+      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' } }
+    );
+    if (!res.ok) return;
+    const json = await res.json();
+
+    // Kalau SHA sama → tidak ada perubahan, skip
+    if (json.sha === ghFileSha) return;
+
+    ghFileSha = json.sha;
+    const raw  = atob(json.content.replace(/\n/g,''));
+    const data = JSON.parse(raw);
+
+    if (data.projects)   projects   = data.projects;
+    if (data.clients)    clients    = data.clients;
+    if (data.tasks)      tasks      = data.tasks;
+    if (data.files)      files      = data.files;
+    if (data.quotations) quotations = data.quotations;
+    if (data.cfg)        Object.assign(cfg, data.cfg);
+
+    saveLocalOnly();
+    updateCounts();
+    // Re-render view yang sedang aktif
+    const activeView = document.querySelector('.view.active')?.id?.replace('view-','');
+    if (activeView === 'dashboard')   renderDashboard();
+    else if (activeView === 'projects')  renderProjects();
+    else if (activeView === 'clients')   renderClients();
+    else if (activeView === 'completed') renderCompleted();
+    else if (activeView === 'quotations') renderQuotations();
+
+    ghSetBadge('synced', 'Tersinkron');
+    toast('✦ Data diperbarui dari GitHub', 'info');
+  } catch(e) {
+    // Silent fail — jangan ganggu user
+    console.warn('GH silent pull error:', e);
   }
 }
 
