@@ -174,6 +174,18 @@
       "driveId": "1-pnGNFGYoi18IP2zJzcESxFMKKycpVsB",
       "driveLink": "https://drive.google.com/file/d/1-pnGNFGYoi18IP2zJzcESxFMKKycpVsB/view?usp=drivesdk",
       "subfolderRef": ""
+    },
+    {
+      "id": "f_1782711294901ms77j44ncsa",
+      "projId": "p_1782711026659",
+      "name": "StoreGrand-Opening.jpg",
+      "size": 961087,
+      "type": "image/jpeg",
+      "status": "pending",
+      "progress": 0,
+      "driveId": null,
+      "driveLink": null,
+      "subfolderRef": "sf_1782711099771"
     }
   ],
   "quotations": [],
@@ -188,5 +200,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:34:36.009Z"
+  "_savedAt": "2026-06-29T05:34:56.404Z"
 }
