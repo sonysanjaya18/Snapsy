@@ -280,6 +280,55 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .empty .ei { font-size: 40px; margin-bottom: 10px; }
 .empty .et { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
 
+/* FILE PREVIEW STRIP — completed project cards */
+.pc-thumb-strip {
+  display: flex; gap: 5px; margin-top: 10px; flex-wrap: nowrap; overflow: hidden;
+}
+.pc-thumb {
+  width: 56px; height: 42px; border-radius: 5px; object-fit: cover; flex-shrink: 0;
+  border: 1px solid var(--border); background: var(--surface2); cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.pc-thumb:hover { transform: scale(1.07); box-shadow: 0 3px 10px rgba(0,0,0,.15); }
+.pc-thumb-more {
+  width: 56px; height: 42px; border-radius: 5px; background: var(--surface2);
+  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; cursor: pointer;
+  transition: background .12s;
+}
+.pc-thumb-more:hover { background: var(--surface3); color: var(--text); }
+.pc-thumb-pdf {
+  width: 56px; height: 42px; border-radius: 5px; background: rgba(220,38,38,.08);
+  border: 1px solid rgba(220,38,38,.15); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px; flex-shrink: 0; cursor: pointer;
+  transition: background .12s; font-size: 9px; font-weight: 700; color: var(--red);
+}
+.pc-thumb-pdf:hover { background: rgba(220,38,38,.14); }
+.pc-thumb-file {
+  width: 56px; height: 42px; border-radius: 5px; background: var(--surface2);
+  border: 1px solid var(--border); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px; flex-shrink: 0;
+  font-size: 9px; font-weight: 600; color: var(--muted);
+}
+
+/* LIGHTBOX */
+#thumb-lightbox {
+  display: none; position: fixed; inset: 0; z-index: 9000;
+  background: rgba(10,12,24,.88); align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+#thumb-lightbox.show { display: flex; }
+#thumb-lightbox img {
+  max-width: min(92vw, 860px); max-height: 82vh; border-radius: 10px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5); object-fit: contain;
+}
+#thumb-lb-close {
+  position: absolute; top: 18px; right: 22px; color: #fff; font-size: 26px;
+  cursor: pointer; opacity: .8; line-height:1; background:none; border:none;
+  transition: opacity .12s;
+}
+#thumb-lb-close:hover { opacity: 1; }
+
 /* client list */
 .client-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; transition: .12s; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
 .client-item:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(108,99,255,.1); }
@@ -1924,6 +1973,66 @@ function updateProjectStatus(val) {
   }
 }
 
+// ── FILE PREVIEW THUMBNAILS ──────────────────────────
+// Generates a tiny base64 thumbnail (JPEG, ~120×90) from image or PDF first-page.
+// Stored in f.thumb so it persists via localStorage (no _raw needed later).
+async function genThumb(raw) {
+  return new Promise(resolve => {
+    const ext = raw.name.split('.').pop().toLowerCase();
+    const isImg = ['jpg','jpeg','png','gif','webp','svg'].includes(ext);
+    const isPdf = ext === 'pdf';
+    const MAX = 120;
+
+    if (isImg) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const ratio = Math.min(MAX / img.width, (MAX * 0.75) / img.height, 1);
+          const w = Math.round(img.width * ratio);
+          const h = Math.round(img.height * ratio);
+          const c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(c.toDataURL('image/jpeg', 0.42));
+        };
+        img.onerror = () => resolve(null);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(raw);
+    } else if (isPdf && typeof pdfjsLib !== 'undefined') {
+      // PDF thumbnail via pdf.js if available; silent skip if not loaded
+      const reader = new FileReader();
+      reader.onload = async e => {
+        try {
+          const pdf = await pdfjsLib.getDocument({data: e.target.result}).promise;
+          const page = await pdf.getPage(1);
+          const vp = page.getViewport({scale: 0.3});
+          const c = document.createElement('canvas');
+          c.width = vp.width; c.height = vp.height;
+          await page.render({canvasContext: c.getContext('2d'), viewport: vp}).promise;
+          resolve(c.toDataURL('image/jpeg', 0.42));
+        } catch { resolve(null); }
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsArrayBuffer(raw);
+    } else {
+      resolve(null);
+    }
+  });
+}
+
+function openLightbox(src) {
+  document.getElementById('thumb-lb-img').src = src;
+  document.getElementById('thumb-lightbox').classList.add('show');
+}
+function closeLightbox() {
+  document.getElementById('thumb-lightbox').classList.remove('show');
+  document.getElementById('thumb-lb-img').src = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
 // ── TASKS & FILES ─────────────────────────────────────
 function getProjTasks(projId) { return tasks.filter(t=>t.projId===projId); }
 function addTask() { const inp = document.getElementById('new-task-input'); const name = inp.value.trim(); if(!name) return; tasks.push({id:'t_'+Date.now(),projId:curProjId,name,done:false,price:'',taskStatus:'todo',createdAt:new Date().toISOString()}); inp.value=''; saveState(); renderTasks(curProjId); autoUpdateProjStatus(curProjId); }
@@ -2480,7 +2589,26 @@ function onDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag
 function onDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
 function onDrop(e) { e.preventDefault(); e.currentTarget.classList.remove('drag-over'); addFiles([...e.dataTransfer.files]); }
 function onFileSelect(e) { addFiles([...e.target.files]); e.target.value=''; }
-function addFiles(rawFiles) { if(!curProjId) return; rawFiles.forEach(raw => { if(files.find(f=>f.projId===curProjId&&f.name===raw.name&&(f.subfolderRef||'')===(curSubfolderId||''))) { toast('"'+raw.name+'" sudah ada di subfolder ini','error'); return; } files.push({id:'f_'+Date.now()+Math.random().toString(36).slice(2),projId:curProjId,name:raw.name,size:raw.size,type:raw.type,status:'pending',progress:0,driveId:null,driveLink:null,subfolderRef:curSubfolderId||'',_raw:raw}); }); saveState(); renderDetailFiles(curProjId); toast(rawFiles.length+' file ditambahkan ke "'+curSubfolderName+'"','success'); }
+function addFiles(rawFiles) {
+  if(!curProjId) return;
+  const added = [];
+  rawFiles.forEach(raw => {
+    if(files.find(f=>f.projId===curProjId&&f.name===raw.name&&(f.subfolderRef||'')===(curSubfolderId||''))) {
+      toast('"'+raw.name+'" sudah ada di subfolder ini','error'); return;
+    }
+    const fObj = {id:'f_'+Date.now()+Math.random().toString(36).slice(2),projId:curProjId,name:raw.name,size:raw.size,type:raw.type,status:'pending',progress:0,driveId:null,driveLink:null,subfolderRef:curSubfolderId||'',thumb:null,_raw:raw};
+    files.push(fObj);
+    added.push({fObj, raw});
+  });
+  saveState(); renderDetailFiles(curProjId);
+  if(added.length) toast(added.length+' file ditambahkan ke "'+curSubfolderName+'"','success');
+  // generate thumbnails async (lightweight, non-blocking)
+  added.forEach(({fObj, raw}) => {
+    genThumb(raw).then(thumb => {
+      if(thumb) { fObj.thumb = thumb; saveState(); }
+    });
+  });
+}
 async function uploadSingleFile(fileId) { if(!accessToken) { if(!gapiReady) { toast('Setup Drive dulu','error'); return; } tokenClient.requestAccessToken({prompt:'consent'}); return; } const f=files.find(x=>x.id===fileId); if(!f||!f._raw) { toast('File tidak ada di memori','error'); return; } const proj = getProj(f.projId); f.status='uploading'; f.progress=0; renderDetailFiles(curProjId); try { const savedSf=curSubfolderId; const savedSfName=curSubfolderName; curSubfolderId=f.subfolderRef||''; const sf=(proj.subfolders||[]).find(s=>s.id===curSubfolderId); curSubfolderName=sf?sf.name:'Folder Utama'; const folderId = await getTargetFolderId(proj); curSubfolderId=savedSf; curSubfolderName=savedSfName; const res = await driveUpload(f, folderId, pct=>{ f.progress=pct; const bar=document.getElementById('pf_'+f.id); if(bar) bar.style.width=pct+'%'; }); f.status='done'; f.driveId=res.id; f.driveLink=res.webViewLink; saveState(); renderDetailFiles(curProjId); toast('Upload sukses!','success'); } catch(err) { f.status='error'; saveState(); renderDetailFiles(curProjId); toast('Upload gagal','error'); } }
 async function uploadAllFiles() { const pending=files.filter(f=>f.projId===curProjId&&f.status==='pending'); if(!pending.length) return; toast('Uploading...','info'); for(const f of pending) await uploadSingleFile(f.id); }
 function confirmDeleteFile(fileId) { const f=files.find(x=>x.id===fileId); if(!f) return; showConfirm('Hapus File?', `Yakin hapus "<b>${f.name}</b>"?`, async () => { if(f.driveId && accessToken) { try { await driveDelete(f.driveId); } catch(e) {} } files=files.filter(x=>x.id!==fileId); saveState(); renderDetailFiles(curProjId); toast('Dihapus','success'); }); }
@@ -2727,7 +2855,8 @@ function filterByClient(client) {
 function projCard(p) {
   const taskList=getProjTasks(p.id);
   const doneTasks=taskList.filter(t=>(t.taskStatus||'todo')==='done').length;
-  const fileCount=files.filter(f=>f.projId===p.id).length;
+  const projFiles=files.filter(f=>f.projId===p.id);
+  const fileCount=projFiles.length;
   const days=p.deadline?Math.ceil((new Date(p.deadline)-new Date())/86400000):null;
   const taskTotal=taskList.reduce((s,t)=>s+(parseFloat(t.price)||0),0);
 
@@ -2755,6 +2884,38 @@ function projCard(p) {
       <button class="inv-card-btn-multi" title="Invoice multi-proyek" onclick="openMultiInvoiceForClient('${p.client}')">⊞</button>
     </div>` : '';
 
+  // ── FILE PREVIEW STRIP (only for paid/completed) ──
+  let thumbStrip = '';
+  if (p.status === 'paid' && projFiles.length) {
+    const MAX_VISIBLE = 4;
+    const ext = f => f.name.split('.').pop().toLowerCase();
+    // prioritize files with thumbnails, then pdfs, then others
+    const sorted = [...projFiles].sort((a,b)=>(b.thumb?1:0)-(a.thumb?1:0));
+    const visible = sorted.slice(0, MAX_VISIBLE);
+    const rest = projFiles.length - visible.length;
+
+    const thumbHtml = visible.map(f => {
+      const e = ext(f);
+      if (f.thumb) {
+        return `<img class="pc-thumb" src="${f.thumb}" title="${f.name}" onclick="event.stopPropagation();openLightbox('${f.thumb}')" loading="lazy">`;
+      } else if (e === 'pdf') {
+        return `<div class="pc-thumb-pdf" title="${f.name}" onclick="event.stopPropagation()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          PDF</div>`;
+      } else {
+        const icn = ['jpg','jpeg','png','gif','webp','svg'].includes(e) ? '🖼' : ['mp4','mov','avi'].includes(e) ? '🎬' : ['ai','psd','fig'].includes(e) ? '🎨' : '📄';
+        return `<div class="pc-thumb-file" title="${f.name}">
+          <span style="font-size:18px">${icn}</span>
+          <span>${e.toUpperCase()}</span></div>`;
+      }
+    }).join('');
+
+    const moreHtml = rest > 0
+      ? `<div class="pc-thumb-more" onclick="event.stopPropagation();openDetail('${p.id}')">+${rest}</div>` : '';
+
+    thumbStrip = `<div class="pc-thumb-strip">${thumbHtml}${moreHtml}</div>`;
+  }
+
   return `<div class="project-card s-${p.status}" onclick="openDetail('${p.id}')">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
       <div>
@@ -2766,8 +2927,9 @@ function projCard(p) {
     <div class="pc-row"><span class="pc-row-label">Total Task Value</span><span class="price-text">${taskTotal>0?fPrice(taskTotal,p.currency):'—'}</span></div>
     ${taskList.length?`<div class="pc-row"><span class="pc-row-label">Task</span><span>${doneTasks}/${taskList.length} selesai</span></div>`:''}
     ${taskStatusRow}
+    ${thumbStrip}
     <div class="pc-footer" style="margin-top:10px">
-      <span style=\"display:flex;align-items:center;gap:4px\"><svg width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48\"/></svg>${fileCount} file</span>
+      <span style="display:flex;align-items:center;gap:4px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${fileCount} file</span>
       ${dpill}
     </div>
     ${invFab}
@@ -3832,6 +3994,12 @@ if ('serviceWorker' in navigator) {
 <button id="fab-add" onclick="mobileFabAction()" title="Tambah baru">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
+<!-- THUMBNAIL LIGHTBOX -->
+<div id="thumb-lightbox" onclick="closeLightbox()">
+  <button id="thumb-lb-close" onclick="closeLightbox()">✕</button>
+  <img id="thumb-lb-img" src="" alt="Preview">
+</div>
+
 <!-- DEBUG PANEL (ketuk brand 3x untuk buka) -->
 <div id="debug-panel" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);padding:16px;overflow-y:auto;font-family:monospace;font-size:11px;color:#0f0">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
