@@ -48,6 +48,15 @@
   ],
   "clients": [
     {
+      "id": "c_1782710993501",
+      "name": "Racha",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-06-29T05:29:53.501Z"
+    },
+    {
       "id": "c_1782698397411",
       "name": "Yoan Taoba",
       "phone": "089507196967",
@@ -135,5 +144,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T04:29:14.608Z"
+  "_savedAt": "2026-06-29T05:29:55.003Z"
 }
