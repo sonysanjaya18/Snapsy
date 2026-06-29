@@ -6,7 +6,7 @@
       "name": "Kingsmen Poster",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-06-29",
       "deadline": "2026-06-29",
       "notes": "",
@@ -20,7 +20,8 @@
           "name": "Poster",
           "driveId": "1Gfi33zzB5Kigdxxwwt813Qc8Mh18uWtr"
         }
-      ]
+      ],
+      "paidAt": "2026-06-29T05:37:02.661Z"
     },
     {
       "id": "p_1782698452967",
@@ -188,5 +189,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:35:06.495Z"
+  "_savedAt": "2026-06-29T05:37:04.164Z"
 }
