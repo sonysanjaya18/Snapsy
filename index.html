@@ -120,6 +120,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
 /* PROJECT CARDS */
 .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+#completed-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .project-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 16px; cursor: pointer;
@@ -340,23 +341,103 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 }
 .pc-thumb-strip.n1 .pc-thumb-file { aspect-ratio: 16/7; }
 
-/* LIGHTBOX */
-#thumb-lightbox {
+/* GALLERY LIGHTBOX */
+#gallery-lb {
   display: none; position: fixed; inset: 0; z-index: 9000;
-  background: rgba(10,12,24,.88); align-items: center; justify-content: center;
-  backdrop-filter: blur(6px);
+  background: rgba(8,10,20,.93); align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
 }
-#thumb-lightbox.show { display: flex; }
-#thumb-lightbox img {
-  max-width: min(92vw, 860px); max-height: 82vh; border-radius: 10px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.5); object-fit: contain;
+#gallery-lb.show { display: flex; }
+#gallery-lb-img {
+  max-width: min(88vw, 920px); max-height: 78vh;
+  border-radius: 12px; box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  object-fit: contain; display: block;
+  transition: opacity .18s ease;
 }
-#thumb-lb-close {
-  position: absolute; top: 18px; right: 22px; color: #fff; font-size: 26px;
-  cursor: pointer; opacity: .8; line-height:1; background:none; border:none;
-  transition: opacity .12s;
+#gallery-lb-img.fading { opacity: 0; }
+#gallery-lb-close {
+  position: absolute; top: 18px; right: 22px; color: #fff; font-size: 22px;
+  cursor: pointer; opacity: .7; background: rgba(255,255,255,.1); border: none;
+  width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; transition: opacity .12s, background .12s;
 }
-#thumb-lb-close:hover { opacity: 1; }
+#gallery-lb-close:hover { opacity: 1; background: rgba(255,255,255,.2); }
+.gallery-lb-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  color: #fff; background: rgba(255,255,255,.12); border: none;
+  width: 46px; height: 46px; border-radius: 50%; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s, transform .15s;
+  user-select: none;
+}
+.gallery-lb-arrow:hover { background: rgba(255,255,255,.25); transform: translateY(-50%) scale(1.08); }
+.gallery-lb-arrow:disabled { opacity: .2; cursor: default; transform: translateY(-50%); }
+#gallery-lb-prev { left: 18px; }
+#gallery-lb-next { right: 18px; }
+#gallery-lb-counter {
+  position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,.7); font-size: 12px; font-weight: 600;
+  background: rgba(0,0,0,.35); padding: 5px 14px; border-radius: 20px;
+  letter-spacing: .5px;
+}
+#gallery-lb-dots {
+  position: absolute; bottom: 54px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px;
+}
+.gallery-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.3);
+  cursor: pointer; transition: background .15s, transform .15s;
+}
+.gallery-dot.active { background: #fff; transform: scale(1.2); }
+#gallery-lb-name {
+  position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,.8); font-size: 12px; font-weight: 500;
+  background: rgba(0,0,0,.35); padding: 5px 14px; border-radius: 20px;
+  max-width: 60vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* COMPLETED CARD — gambar di atas */
+.cc-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  transition: transform .15s, box-shadow .15s;
+  cursor: pointer;
+}
+.cc-wrap:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+.cc-gallery {
+  position: relative; width: 100%; aspect-ratio: 16/9;
+  background: var(--surface2); overflow: hidden;
+}
+.cc-gallery-img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .2s;
+}
+.cc-wrap:hover .cc-gallery-img { transform: scale(1.03); }
+.cc-gallery-empty {
+  width: 100%; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+  color: var(--muted); font-size: 11px;
+}
+.cc-gallery-count {
+  position: absolute; bottom: 8px; right: 10px;
+  background: rgba(0,0,0,.5); color: #fff; font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 12px; backdrop-filter: blur(4px);
+  display: flex; align-items: center; gap: 4px;
+}
+.cc-gallery-dots {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 4px;
+}
+.cc-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.45);
+  transition: background .15s;
+}
+.cc-dot.active { background: #fff; }
+.cc-body { padding: 12px 14px 14px; }
+.cc-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cc-client { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; margin-bottom: 10px; }
+.cc-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-top: 8px; }
 
 /* client list */
 .client-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; transition: .12s; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
@@ -2060,15 +2141,170 @@ async function genThumb(raw) {
   });
 }
 
+// ── GALLERY LIGHTBOX ─────────────────────────────────
+let _lbImages = []; // [{src, name}]
+let _lbIdx    = 0;
+
 function openLightbox(src) {
-  document.getElementById('thumb-lb-img').src = src;
-  document.getElementById('thumb-lightbox').classList.add('show');
+  // single image fallback
+  openGallery([{src, name:''}], 0);
 }
+
+function openGallery(images, startIdx) {
+  _lbImages = images;
+  _lbIdx    = startIdx || 0;
+  _renderLb();
+  document.getElementById('gallery-lb').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function _renderLb() {
+  const lb   = document.getElementById('gallery-lb');
+  const img  = document.getElementById('gallery-lb-img');
+  const prev = document.getElementById('gallery-lb-prev');
+  const next = document.getElementById('gallery-lb-next');
+  const ctr  = document.getElementById('gallery-lb-counter');
+  const dots = document.getElementById('gallery-lb-dots');
+  const name = document.getElementById('gallery-lb-name');
+  const cur  = _lbImages[_lbIdx];
+
+  img.src = cur.src;
+  name.textContent = cur.name || '';
+  name.style.display = cur.name ? '' : 'none';
+
+  const total = _lbImages.length;
+  ctr.textContent = total > 1 ? `${_lbIdx + 1} / ${total}` : '';
+  prev.disabled = _lbIdx === 0;
+  next.disabled = _lbIdx === total - 1;
+  prev.style.display = total > 1 ? '' : 'none';
+  next.style.display = total > 1 ? '' : 'none';
+
+  // dots (max 10)
+  if (total > 1 && total <= 10) {
+    dots.innerHTML = _lbImages.map((_,i) =>
+      `<div class="gallery-dot ${i===_lbIdx?'active':''}" onclick="lbGoTo(${i})"></div>`
+    ).join('');
+    dots.style.display = '';
+  } else { dots.style.display = 'none'; }
+}
+
+function lbNav(dir) {
+  const next = _lbIdx + dir;
+  if (next < 0 || next >= _lbImages.length) return;
+  const img = document.getElementById('gallery-lb-img');
+  img.classList.add('fading');
+  setTimeout(() => {
+    _lbIdx = next;
+    _renderLb();
+    img.classList.remove('fading');
+  }, 160);
+}
+
+function lbGoTo(i) {
+  if (i === _lbIdx) return;
+  const img = document.getElementById('gallery-lb-img');
+  img.classList.add('fading');
+  setTimeout(() => { _lbIdx = i; _renderLb(); img.classList.remove('fading'); }, 160);
+}
+
 function closeLightbox() {
-  document.getElementById('thumb-lightbox').classList.remove('show');
-  document.getElementById('thumb-lb-img').src = '';
+  document.getElementById('gallery-lb').classList.remove('show');
+  document.getElementById('gallery-lb-img').src = '';
+  document.body.style.overflow = '';
+  _lbImages = []; _lbIdx = 0;
 }
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+function handleLbBackdrop(e) {
+  if (e.target === document.getElementById('gallery-lb')) closeLightbox();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('gallery-lb').classList.contains('show')) return;
+  if (e.key === 'Escape')      closeLightbox();
+  if (e.key === 'ArrowLeft')   lbNav(-1);
+  if (e.key === 'ArrowRight')  lbNav(1);
+});
+
+// ── COMPLETED CARD ────────────────────────────────────
+function completedCard(p) {
+  const taskList  = getProjTasks(p.id);
+  const doneTasks = taskList.filter(t=>(t.taskStatus||'todo')==='done').length;
+  const projFiles = files.filter(f=>f.projId===p.id);
+  const taskTotal = taskList.reduce((s,t)=>s+(parseFloat(t.price)||0),0);
+
+  // Kumpulkan semua file dengan thumb (images)
+  const imgFiles = projFiles.filter(f=>f.thumb);
+  const allImgs  = imgFiles.map(f=>({src:f.thumb, name:f.name}));
+
+  // Gallery area — gambar pertama sebagai cover, dots kalau >1
+  let galleryHtml = '';
+  if (imgFiles.length > 0) {
+    const cover = imgFiles[0];
+    const dotHtml = imgFiles.length > 1
+      ? `<div class="cc-gallery-dots">${imgFiles.slice(0,5).map((_,i)=>`<div class="cc-dot${i===0?' active':''}"></div>`).join('')}</div>` : '';
+    const countHtml = imgFiles.length > 1
+      ? `<div class="cc-gallery-count"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>${imgFiles.length}</div>` : '';
+    galleryHtml = `
+      <div class="cc-gallery" onclick="event.stopPropagation();openGallery(${encodeGallery(allImgs)},0)">
+        <img class="cc-gallery-img" src="${cover.thumb}" alt="${cover.name}" loading="lazy">
+        ${dotHtml}${countHtml}
+      </div>`;
+  } else {
+    // no images — placeholder
+    const ext = f => f.name.split('.').pop().toLowerCase();
+    const hasPdf = projFiles.some(f=>ext(f)==='pdf');
+    galleryHtml = `
+      <div class="cc-gallery">
+        <div class="cc-gallery-empty">
+          <span style="font-size:32px">${hasPdf?'📄':projFiles.length?'📁':'🖼'}</span>
+          <span>${hasPdf?'PDF':'Belum ada preview'}</span>
+        </div>
+      </div>`;
+  }
+
+  // Progress bar
+  const pct = taskList.length ? Math.round(doneTasks/taskList.length*100) : 0;
+  const pctClass = pct===100?'pct-100':pct>=60?'pct-high':'';
+  const progressBar = taskList.length ? `
+    <div class="pc-progress-wrap" style="margin-top:0;margin-bottom:8px">
+      <div class="pc-progress-header">
+        <span>${doneTasks}/${taskList.length} task</span>
+        <span class="pc-progress-pct" style="color:${pct===100?'var(--green)':pct>=60?'var(--accent2)':'var(--muted)'}">${pct}%</span>
+      </div>
+      <div class="pc-progress-bar"><div class="pc-progress-fill ${pctClass}" style="width:${pct}%"></div></div>
+    </div>` : '';
+
+  return `<div class="cc-wrap" onclick="openDetail('${p.id}')">
+    ${galleryHtml}
+    <div class="cc-body">
+      <div class="cc-name" title="${p.name}">${p.name}</div>
+      <div class="cc-client"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${p.client}</div>
+      ${progressBar}
+      <div class="cc-meta">
+        <span class="price-text" style="font-size:12px">${taskTotal>0?fPrice(taskTotal,p.currency):'—'}</span>
+        <span style="display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${projFiles.length} file</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function encodeGallery(imgs) {
+  // encode array as inline JSON-safe string for onclick attribute
+  return "'" + imgs.map(i=>i.src+'||'+i.name.replace(/'/g,''')).join('^^^') + "'";
+}
+
+// override openGallery to accept encoded string or array
+const _openGalleryOrig = openGallery;
+window.openGallery = function(imgsOrStr, idx) {
+  if (typeof imgsOrStr === 'string') {
+    const imgs = imgsOrStr ? imgsOrStr.split('^^^').map(s=>{
+      const [src,...rest]=s.split('||'); return {src, name:rest.join('||')};
+    }) : [];
+    _openGalleryOrig(imgs, idx);
+  } else {
+    _openGalleryOrig(imgsOrStr, idx);
+  }
+};
 
 // ── TASKS & FILES ─────────────────────────────────────
 function getProjTasks(projId) { return tasks.filter(t=>t.projId===projId); }
@@ -2866,7 +3102,7 @@ function renderCompleted() {
   const q=(document.getElementById('searchQCompleted')?.value||'').toLowerCase();
   const list=projects.filter(p=>p.status==='paid'&&(p.name.toLowerCase().includes(q)||p.client.toLowerCase().includes(q)));
   const el=document.getElementById('completed-grid'); if(!el) return;
-  el.innerHTML=list.length?list.map(p=>projCard(p)).join(''):`<div class="empty" style="grid-column:1/-1"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="et">Belum ada proyek yang completed</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Proyek akan muncul di sini saat status task diubah ke <b>Paid</b></div></div>`;
+  el.innerHTML=list.length?list.map(p=>completedCard(p)).join(''):`<div class="empty" style="grid-column:1/-1"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="et">Belum ada proyek yang completed</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Proyek akan muncul di sini saat status task diubah ke <b>Paid</b></div></div>`;
 }
 
 function renderClients() {
@@ -4078,10 +4314,15 @@ if ('serviceWorker' in navigator) {
 <button id="fab-add" onclick="mobileFabAction()" title="Tambah baru">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
-<!-- THUMBNAIL LIGHTBOX -->
-<div id="thumb-lightbox" onclick="closeLightbox()">
-  <button id="thumb-lb-close" onclick="closeLightbox()">✕</button>
-  <img id="thumb-lb-img" src="" alt="Preview">
+<!-- GALLERY LIGHTBOX -->
+<div id="gallery-lb" onclick="handleLbBackdrop(event)">
+  <button id="gallery-lb-close" onclick="closeLightbox()">✕</button>
+  <div id="gallery-lb-name"></div>
+  <button class="gallery-lb-arrow" id="gallery-lb-prev" onclick="lbNav(-1)">&#8592;</button>
+  <img id="gallery-lb-img" src="" alt="Preview">
+  <button class="gallery-lb-arrow" id="gallery-lb-next" onclick="lbNav(1)">&#8594;</button>
+  <div id="gallery-lb-dots"></div>
+  <div id="gallery-lb-counter"></div>
 </div>
 
 <!-- DEBUG PANEL (ketuk brand 3x untuk buka) -->
