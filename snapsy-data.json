@@ -19,11 +19,6 @@
           "id": "sf_1782711708402",
           "name": "Poster",
           "driveId": null
-        },
-        {
-          "id": "sf_1782711717893",
-          "name": "Comingsoon",
-          "driveId": "1F1prkLh5HfOFnRRygrgVM1BFDejANOy2"
         }
       ]
     },
@@ -234,7 +229,7 @@
       "progress": 0,
       "driveId": "10Y0lCUsH_2PJqAnOdYtppuNtOynxT2ns",
       "driveLink": "https://drive.google.com/file/d/10Y0lCUsH_2PJqAnOdYtppuNtOynxT2ns/view?usp=drivesdk",
-      "subfolderRef": "sf_1782711717893"
+      "subfolderRef": ""
     }
   ],
   "quotations": [],
@@ -249,5 +244,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T05:42:12.054Z"
+  "_savedAt": "2026-06-29T05:42:58.404Z"
 }
