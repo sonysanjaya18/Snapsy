@@ -1637,20 +1637,37 @@ function renderSubfolderBar(projId) {
   if (!bar) return;
   const subs = getSubfolders(projId);
   // rebuild chips (keep static "Folder Utama" chip + add btn)
-  // remove old dynamic chips first
   [...bar.querySelectorAll('.sf-dynamic')].forEach(el => el.remove());
   const addBtn = bar.querySelector('.subfolder-add-btn');
-  subs.forEach(sf => {
-    const chip = document.createElement('div');
-    chip.className = 'subfolder-chip sf-dynamic' + (curSubfolderId === sf.id ? ' active' : '');
-    chip.dataset.sf = sf.id;
-    chip.innerHTML = `<svg width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z\"/></svg> ${sf.name} <span class="sf-del" onclick="event.stopPropagation();confirmDeleteSubfolder('${sf.id}')" title="Hapus subfolder">✕</span>`;
-    chip.addEventListener('click', () => selectSubfolder(chip, sf.id, sf.name));
-    bar.insertBefore(chip, addBtn);
-  });
+
+  // Render hierarkis: root dulu, lalu anak-anaknya dengan indent
+  function renderLevel(parentId, depth) {
+    subs.filter(sf => (sf.parentId || null) === (parentId || null)).forEach(sf => {
+      const chip = document.createElement('div');
+      chip.className = 'subfolder-chip sf-dynamic' + (curSubfolderId === sf.id ? ' active' : '');
+      chip.dataset.sf = sf.id;
+      const indent = depth > 0 ? `<span style="opacity:.4;margin-right:2px">${'↳'.repeat(depth)}</span> ` : '';
+      chip.innerHTML = `${indent}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> ${sf.name} <span class="sf-del" onclick="event.stopPropagation();confirmDeleteSubfolder('${sf.id}')" title="Hapus subfolder">✕</span>`;
+      chip.addEventListener('click', () => selectSubfolder(chip, sf.id, sf.name));
+      bar.insertBefore(chip, addBtn);
+      // render anak-anaknya (nested)
+      renderLevel(sf.id, depth + 1);
+    });
+  }
+  renderLevel(null, 0);
+
   // update root chip active state
   const rootChip = bar.querySelector('[data-sf=""]');
   if (rootChip) rootChip.classList.toggle('active', curSubfolderId === '');
+
+  // Update label tombol add sesuai posisi aktif
+  if (addBtn) {
+    const activeName = curSubfolderId
+      ? (subs.find(s => s.id === curSubfolderId)?.name || 'Subfolder')
+      : 'Folder Utama';
+    addBtn.title = `Buat subfolder di dalam "${activeName}"`;
+    addBtn.textContent = curSubfolderId ? `＋ Subfolder dalam "${activeName}"` : '＋ Subfolder';
+  }
 }
 
 function selectSubfolder(el, sfId, sfName) {
@@ -1664,6 +1681,8 @@ function selectSubfolder(el, sfId, sfName) {
   const dpSub = document.getElementById('dp-sub');
   if (dpSub) dpSub.innerHTML = sfId ? ` › <b>${sfName}</b>` : '';
   renderDetailFiles(curProjId);
+  // update tombol add label
+  renderSubfolderBar(curProjId);
 }
 
 function promptAddSubfolder() {
@@ -1688,25 +1707,32 @@ async function addSubfolder(name) {
   const p = getProj(curProjId);
   if (!p) return;
   if (!p.subfolders) p.subfolders = [];
-  if (p.subfolders.find(s => s.name.toLowerCase() === name.toLowerCase())) {
-    toast('Subfolder sudah ada', 'error'); return;
+
+  // Tentukan parent: kalau sedang di dalam subfolder, buat di dalamnya (nested)
+  const parentSfId = curSubfolderId || null;
+  const parentSf = parentSfId ? p.subfolders.find(s => s.id === parentSfId) : null;
+
+  // Cek duplikat dalam parent yang sama
+  if (p.subfolders.find(s => s.name.toLowerCase() === name.toLowerCase() && (s.parentId || null) === parentSfId)) {
+    toast('Subfolder sudah ada di sini', 'error'); return;
   }
-  const sfObj = { id: 'sf_' + Date.now(), name, driveId: null };
+
+  const sfObj = { id: 'sf_' + Date.now(), name, driveId: null, parentId: parentSfId };
   p.subfolders.push(sfObj);
   saveState();
   renderSubfolderBar(curProjId);
   toast('Subfolder "' + name + '" ditambahkan', 'success');
-  // Create in Drive if connected
+
+  // Create in Drive if connected — pakai ensureFolder supaya tidak dobel
   if (accessToken && p.driveProjId) {
     try {
-      const projFolderId = p.driveProjId;
-      const created = await gapi.client.drive.files.create({
-        resource: { name, mimeType: 'application/vnd.google-apps.folder', parents: [projFolderId] },
-        fields: 'id'
-      });
-      sfObj.driveId = created.result.id;
+      // parentDriveId: kalau ada parent subfolder pakai driveId-nya, kalau tidak pakai root project
+      const parentDriveId = (parentSf && parentSf.driveId) ? parentSf.driveId : p.driveProjId;
+      // ensureFolder: cek dulu di Drive, kalau sudah ada pakai yang lama
+      const driveId = await ensureFolder(name, parentDriveId);
+      sfObj.driveId = driveId;
       saveState();
-      toast('Subfolder dibuat di Drive', 'success');
+      toast('Subfolder siap di Drive ✓', 'success');
     } catch(e) { toast('Subfolder lokal saja, Drive gagal', 'error'); }
   }
 }
@@ -1739,16 +1765,16 @@ async function getTargetFolderId(proj) {
   const sf = (proj.subfolders || []).find(s => s.id === curSubfolderId);
   if (!sf) return projFolderId;
   if (sf.driveId) return sf.driveId;
-  // create in Drive if not yet
+  // Subfolder belum punya driveId — pakai ensureFolder (cek dulu, tidak dobel)
+  const parentSf = sf.parentId ? (proj.subfolders || []).find(s => s.id === sf.parentId) : null;
+  const parentDriveId = (parentSf && parentSf.driveId) ? parentSf.driveId : projFolderId;
   try {
-    const created = await gapi.client.drive.files.create({
-      resource: { name: sf.name, mimeType: 'application/vnd.google-apps.folder', parents: [projFolderId] },
-      fields: 'id'
-    });
-    sf.driveId = created.result.id;
+    sf.driveId = await ensureFolder(sf.name, parentDriveId);
     saveState();
     return sf.driveId;
-  } catch(e) { return projFolderId; }
+  } catch(e) {
+    return projFolderId;
+  }
 }
 
 // ── CLIENTS CRUD ──────────────────────────────────────
