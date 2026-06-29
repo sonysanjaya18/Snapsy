@@ -870,9 +870,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
     <div class="sidebar-label">Filter Status</div>
     <div class="nav-item" onclick="filterStatus('ongoing')"><span style="width:9px;height:9px;border-radius:50%;background:#4f8ef7;flex-shrink:0;display:inline-block"></span> Ongoing <span class="nav-count" id="nc-on">0</span></div>
-    <div class="nav-item" onclick="filterStatus('need-work,pending')"><span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:inline-block"></span> Pending <span class="nav-count" id="nc-pe">0</span></div>
-    <div class="nav-item" onclick="filterStatus('revision')"><span style="width:9px;height:9px;border-radius:50%;background:#ea6c1a;flex-shrink:0;display:inline-block"></span> Revisi <span class="nav-count" id="nc-re">0</span></div>
-    <div class="nav-item" onclick="filterStatus('done,need-to-pay,invoice-sent')"><span style="width:9px;height:9px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-block"></span> Done <span class="nav-count" id="nc-do">0</span></div>
+    <div class="nav-item" onclick="filterStatus('need-work')"><span style="width:9px;height:9px;border-radius:50%;background:#d97706;flex-shrink:0;display:inline-block"></span> Need Work <span class="nav-count" id="nc-pe">0</span></div>
+    <div class="nav-item" onclick="filterStatus('revision')"><span style="width:9px;height:9px;border-radius:50%;background:#ea6c1a;flex-shrink:0;display:inline-block"></span> Revision <span class="nav-count" id="nc-re">0</span></div>
+    <div class="nav-item" onclick="filterStatus('done')"><span style="width:9px;height:9px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-block"></span> Done <span class="nav-count" id="nc-do">0</span></div>
     <div class="nav-item" onclick="filterStatus('cancel')"><span style="width:9px;height:9px;border-radius:50%;background:#dc2626;flex-shrink:0;display:inline-block"></span> Cancel <span class="nav-count" id="nc-ca">0</span></div>
 
     <div class="sidebar-label">Arsip</div>
@@ -950,9 +950,11 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
         <input type="text" id="searchQ" placeholder="Cari proyek / klien..." oninput="renderProjects()">
         <select class="fs" style="width:auto;padding:5px 10px;font-size:12px" id="filterSt" onchange="renderProjects()">
           <option value="">Semua</option>
-          <option value="pending">Pending</option>
+          <option value="need-work">Need Work</option>
           <option value="ongoing">Ongoing</option>
           <option value="revision">Revisi</option>
+          <option value="need-to-pay">Need to Pay</option>
+          <option value="invoice-sent">Invoice Sent</option>
           <option value="done">Done</option>
           <option value="cancel">Cancel</option>
         </select>
@@ -1134,9 +1136,11 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
       <div class="fg"><label class="fl">Harga Proyek (<span id="pm-curr-lbl">IDR</span>)</label><input class="fi2" id="f-price" type="number" placeholder="Nominal Harga"></div>
       <div class="fg"><label class="fl">Status</label>
         <select class="fs" id="f-status">
-          <option value="pending">Pending</option>
+          <option value="need-work">Need Work</option>
           <option value="ongoing">Ongoing</option>
           <option value="revision">Revisi</option>
+          <option value="need-to-pay">Need to Pay</option>
+          <option value="invoice-sent">Invoice Sent</option>
           <option value="done">Done</option>
           <option value="cancel">Cancel</option>
           <option value="paid">Paid (Completed)</option>
@@ -1559,6 +1563,10 @@ window.onload = async () => {
   document.getElementById('dr-root').textContent = cfg.root || 'Snapsy.Std';
 
   migrateOldClients();
+  // migrate legacy 'pending' status → 'need-work'
+  let migrated = false;
+  projects.forEach(p => { if(p.status === 'pending') { p.status = 'need-work'; migrated = true; } });
+  if(migrated) saveState();
   updateCounts(); renderDashboard();
   if (cfg.clientId && cfg.apiKey) { initGapi(); document.getElementById('loginBtn').style.display='inline-flex'; }
 
@@ -1930,7 +1938,7 @@ function openAddProject() {
   ['f-client','f-name','f-notes'].forEach(id => document.getElementById(id).value='');
   document.getElementById('f-price').value='';
   document.getElementById('pm-curr-lbl').textContent = 'IDR';
-  document.getElementById('f-status').value='pending';
+  document.getElementById('f-status').value='need-work';
   document.getElementById('f-start').value=today();
   document.getElementById('f-deadline').value='';
   updateCliSuggest();
@@ -2845,11 +2853,10 @@ function renderDashboard() {
 function renderProjects() {
   const q=(document.getElementById('searchQ')?.value||'').toLowerCase();
   const sf=document.getElementById('filterSt')?.value||'';
-  const sfList = sf ? sf.split(',') : [];
   const list=projects.filter(p=>{
     if(p.status==='paid') return false;
     const m=p.name.toLowerCase().includes(q)||p.client.toLowerCase().includes(q);
-    return m&&(!sfList.length||sfList.includes(p.status));
+    return m&&(!sf||p.status===sf);
   });
   const el=document.getElementById('proj-grid'); if(!el) return;
   el.innerHTML=list.length?list.map(p=>projCard(p)).join(''):`<div class="empty" style="grid-column:1/-1"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="et">Tidak ditemukan</div></div>`;
@@ -3004,17 +3011,17 @@ function projCard(p) {
 }
 
 function updateCounts() {
-  const n=id=>projects.filter(p=>p.status===id&&p.status!=='paid').length;
+  const n=id=>projects.filter(p=>p.status===id).length;
   const activeProjects = projects.filter(p=>p.status!=='paid');
   document.getElementById('nc-all').textContent=activeProjects.length;
   document.getElementById('nc-proj').textContent=activeProjects.length;
   document.getElementById('nc-cli').textContent=clients.length;
   document.getElementById('nc-on').textContent=n('ongoing');
-  document.getElementById('nc-pe').textContent=n('need-work')+n('pending');
+  document.getElementById('nc-pe').textContent=n('need-work');
   document.getElementById('nc-re').textContent=n('revision');
-  document.getElementById('nc-do').textContent=n('done')+n('need-to-pay')+n('invoice-sent');
+  document.getElementById('nc-do').textContent=n('done');
   document.getElementById('nc-ca').textContent=n('cancel');
-  document.getElementById('nc-paid').textContent=projects.filter(p=>p.status==='paid').length;
+  document.getElementById('nc-paid').textContent=n('paid');
   document.getElementById('nc-qt').textContent=quotations.length;
   if (typeof updateMobileBadges === 'function') updateMobileBadges();
 }
