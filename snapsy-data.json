@@ -72,6 +72,15 @@
   ],
   "clients": [
     {
+      "id": "c_1782799862014",
+      "name": "Sammy",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-06-30T06:11:02.014Z"
+    },
+    {
       "id": "c_1782710993501",
       "name": "Racha",
       "phone": "",
@@ -190,5 +199,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-29T22:31:31.774Z"
+  "_savedAt": "2026-06-30T06:11:03.525Z"
 }
