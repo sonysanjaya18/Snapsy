@@ -1,17 +1,6 @@
 {
   "projects": [
     {
-      "id": "p_1782800740346iqdqoro3ki",
-      "name": "Racha Project",
-      "client": "Racha",
-      "price": 125,
-      "currency": "USD",
-      "status": "pending",
-      "startDate": "2026-06-30",
-      "deadline": "2026-07-07",
-      "notes": "From quotation QT-3YEZP"
-    },
-    {
       "id": "p_1782800060321",
       "client": "Sammy",
       "name": "Sammy Catering",
@@ -214,22 +203,6 @@
       "price": "26",
       "taskStatus": "todo",
       "createdAt": "2026-06-30T06:14:41.150Z"
-    },
-    {
-      "id": "tk_1782800740347u5950asoka9",
-      "projId": "p_1782800740346iqdqoro3ki",
-      "name": "Logo Sticker",
-      "price": 35,
-      "done": false,
-      "taskStatus": "todo"
-    },
-    {
-      "id": "tk_17828007403478k47o57i36k",
-      "projId": "p_1782800740346iqdqoro3ki",
-      "name": "Print Stiker Bontax (x2)",
-      "price": 90,
-      "done": false,
-      "taskStatus": "todo"
     }
   ],
   "files": [
@@ -284,5 +257,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-30T06:25:41.850Z"
+  "_savedAt": "2026-06-30T06:25:56.177Z"
 }
