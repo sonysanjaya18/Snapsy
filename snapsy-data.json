@@ -224,12 +224,12 @@
       "id": "qt_178280047519381rvbz62d6p",
       "num": "QT-3YEZP",
       "clientName": "Racha",
-      "phone": "0899386899",
+      "phone": "08993868995",
       "email": "",
       "currency": "USD",
       "notes": "",
       "validUntil": "2026-07-07",
-      "status": "sent",
+      "status": "pending",
       "createdAt": "2026-06-30",
       "items": [
         {
@@ -257,5 +257,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-30T06:22:44.125Z"
+  "_savedAt": "2026-06-30T06:23:24.310Z"
 }
