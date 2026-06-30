@@ -219,38 +219,7 @@
       "subfolderRef": "sf_1782711099771"
     }
   ],
-  "quotations": [
-    {
-      "id": "qt_1782857541593mjf2wmvvljs",
-      "num": "QT-29KKT",
-      "clientName": "Racha",
-      "phone": "0899386899",
-      "email": "sony.apkcreative@gmail.com",
-      "currency": "USD",
-      "notes": "",
-      "validUntil": "2026-07-07",
-      "status": "sent",
-      "createdAt": "2026-06-30",
-      "items": [
-        {
-          "name": "Print Sticker",
-          "qty": 19,
-          "price": 25,
-          "desc": "- Include Design\n-Include 3 Revision",
-          "printMeta": {
-            "paperLabel": "A3+",
-            "itemW": 12,
-            "itemH": 3,
-            "perSheet": 27,
-            "qtyOrdered": 500,
-            "sheets": 19,
-            "totalPcs": 513
-          }
-        }
-      ],
-      "total": 475
-    }
-  ],
+  "quotations": [],
   "cfg": {
     "root": "Snapsy.Std",
     "studio": "Snapsy Std.",
@@ -262,5 +231,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-30T23:28:45.277Z"
+  "_savedAt": "2026-06-30T23:44:16.621Z"
 }
