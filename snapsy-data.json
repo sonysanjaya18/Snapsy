@@ -235,7 +235,7 @@
         {
           "name": "Print Sticker",
           "qty": 19,
-          "price": 0,
+          "price": 25,
           "desc": "- Include Design\n-Include 3 Revision",
           "printMeta": {
             "paperLabel": "A3+",
@@ -248,7 +248,7 @@
           }
         }
       ],
-      "total": 0
+      "total": 475
     }
   ],
   "cfg": {
@@ -262,5 +262,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-30T22:12:52.520Z"
+  "_savedAt": "2026-06-30T22:13:14.936Z"
 }
