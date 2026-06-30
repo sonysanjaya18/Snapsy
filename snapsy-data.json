@@ -219,33 +219,7 @@
       "subfolderRef": "sf_1782711099771"
     }
   ],
-  "quotations": [
-    {
-      "id": "qt_178280047519381rvbz62d6p",
-      "num": "QT-3YEZP",
-      "clientName": "Racha",
-      "phone": "08993868995",
-      "email": "",
-      "currency": "USD",
-      "notes": "",
-      "validUntil": "2026-07-07",
-      "status": "accepted",
-      "createdAt": "2026-06-30",
-      "items": [
-        {
-          "name": "Logo Sticker",
-          "qty": 1,
-          "price": 35
-        },
-        {
-          "name": "Print Stiker Bontax",
-          "qty": 2,
-          "price": 45
-        }
-      ],
-      "total": 125
-    }
-  ],
+  "quotations": [],
   "cfg": {
     "root": "Snapsy.Std",
     "studio": "Snapsy Std.",
@@ -257,5 +231,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-30T06:51:06.540Z"
+  "_savedAt": "2026-06-30T06:51:12.624Z"
 }
