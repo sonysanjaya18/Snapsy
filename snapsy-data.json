@@ -6,7 +6,7 @@
       "name": "Sammy Catering",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-06-30",
       "deadline": "2026-07-01",
       "notes": "",
@@ -201,7 +201,7 @@
       "name": "Digital Menu Update",
       "done": false,
       "price": "26",
-      "taskStatus": "todo",
+      "taskStatus": "review",
       "createdAt": "2026-06-30T06:14:41.150Z"
     }
   ],
@@ -220,6 +220,7 @@
     }
   ],
   "quotations": [],
+  "withdrawals": [],
   "cfg": {
     "root": "Snapsy.Std",
     "studio": "Snapsy Std.",
@@ -231,5 +232,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-01T00:45:21.855Z"
+  "_savedAt": "2026-07-01T04:33:50.696Z"
 }
