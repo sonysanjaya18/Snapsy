@@ -255,6 +255,8 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 /* MODAL */
 .overlay { display: none; position: fixed; inset: 0; background: rgba(26,29,46,.45); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .overlay.show { display: flex; }
+#confirmModal { z-index: 600; }
+#pcalcModal   { z-index: 400; }
 .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 26px; width: 500px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
 .modal-title { font-size: 17px; font-weight: 800; margin-bottom: 20px; }
 .fg { margin-bottom: 14px; }
@@ -441,6 +443,47 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .cc-client { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; margin-bottom: 10px; }
 .cc-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-top: 8px; }
 
+/* PRINT IMPOSITION CALCULATOR */
+.pcalc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.pcalc-field { display: flex; flex-direction: column; gap: 4px; }
+.pcalc-field label { font-size: 11px; color: var(--muted); font-weight: 600; }
+.pcalc-inline { display: flex; align-items: center; gap: 6px; }
+.pcalc-inline input { flex: 1; min-width: 0; }
+.pcalc-unit { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+.pcalc-result {
+  background: var(--surface2); border-radius: 12px; padding: 14px 16px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 14px 0;
+}
+.pcalc-stat { text-align: center; }
+.pcalc-stat-num { font-size: 22px; font-weight: 800; color: var(--text); }
+.pcalc-stat-num.warn { color: var(--red); }
+.pcalc-stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.pcalc-preview {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;
+}
+.pcalc-note { font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 14px; }
+.pcalc-note.optimal { color: var(--accent2); }
+.pcalc-item-svg rect.pcalc-cell { fill: var(--accent); fill-opacity: .18; stroke: var(--accent); stroke-width: 1; }
+
+.qt-item-breakdown {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--muted); background: var(--surface2);
+  border-radius: 8px; padding: 6px 10px; margin: -4px 0 8px;
+}
+.qt-item-breakdown b { color: var(--text); }
+.qt-item-breakdown-del {
+  margin-left: auto; background: none; border: none; color: var(--red);
+  font-size: 10px; cursor: pointer; text-decoration: underline; padding: 0;
+}
+.qt-item-desc {
+  width: 100%; margin: 0 0 12px; resize: vertical; min-height: 44px;
+  font-size: 12px; color: var(--muted); border-color: var(--border);
+  background: var(--surface2); border-radius: 8px; padding: 8px 10px;
+  line-height: 1.5;
+}
+.qt-item-desc:focus { color: var(--text); background: var(--surface); }
+
 /* client list */
 .client-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; transition: .12s; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
 .client-item:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(108,99,255,.1); }
@@ -606,7 +649,26 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .qt-detail-modal { background:var(--surface); border:1px solid var(--border); border-radius:16px; width:560px; max-width:96vw; max-height:90vh; overflow-y:auto; box-shadow:0 24px 70px rgba(0,0,0,.18); }
 .qt-detail-header { padding:24px 24px 16px; border-bottom:1px solid var(--border); }
 .qt-detail-body   { padding:18px 24px; }
-.qt-detail-footer { padding:14px 24px 22px; display:flex; gap:8px; flex-wrap:wrap; }
+.qt-detail-footer { padding: 12px 24px 22px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border); }
+.qt-footer-row { display: flex; gap: 8px; }
+.qt-foot-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 12px; border-radius: 10px; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border); transition: background .13s, opacity .13s;
+  white-space: nowrap;
+}
+.qt-foot-wa    { background: #25d366; border-color: #25d366; color: #fff; }
+.qt-foot-wa:hover { background: #1db954; }
+.qt-foot-email { background: var(--surface2); color: var(--text); }
+.qt-foot-email:hover { background: var(--surface3); }
+.qt-foot-pdf   { background: var(--surface2); color: var(--text); }
+.qt-foot-pdf:hover { background: var(--surface3); }
+.qt-foot-accept {
+  flex: 2; background: var(--accent); border-color: var(--accent); color: #fff;
+}
+.qt-foot-accept:hover { opacity: .88; }
+.qt-foot-close { background: none; color: var(--muted); border-color: transparent; }
+.qt-foot-close:hover { background: var(--surface2); color: var(--text); }
 .qt-service-table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
 .qt-service-table th { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; padding:6px 8px; border-bottom:2px solid var(--border); text-align:left; }
 .qt-service-table th:last-child { text-align:right; }
@@ -832,13 +894,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   .pb-action-btn { min-width: calc(50% - 4px) !important; }
 
   /* QT FOOTER */
-  .qt-detail-footer { flex-wrap: wrap !important; gap: 8px !important; padding: 12px 16px 28px !important; }
-  .qt-detail-footer .pb-action-btn,
-  .qt-detail-footer .btn {
-    flex: 1 1 calc(50% - 4px) !important;
-    justify-content: center !important;
-    min-width: 120px !important;
-  }
+  .qt-detail-footer { padding: 12px 16px 28px !important; }
+  .qt-footer-row { flex-wrap: wrap; }
+  .qt-foot-btn { flex: 1 1 calc(50% - 4px); min-width: 100px; font-size: 11px; }
 
   /* TOAST */
   .toast-wrap { bottom: 76px !important; right: 10px !important; left: 10px !important; }
@@ -890,6 +948,8 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 }
 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -1351,10 +1411,15 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
       Daftar Layanan / Item
     </div>
     <div id="qt-items-wrap"></div>
-    <button class="btn btn-ghost btn-sm" onclick="addQtItem()" style="margin-top:4px;margin-bottom:14px">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Tambah Item
-    </button>
+    <div style="display:flex;gap:8px;margin-top:4px;margin-bottom:14px">
+      <button class="btn btn-ghost btn-sm" onclick="addQtItem()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Item
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="openPcalc()">
+        🧮 Kalkulator Cetak
+      </button>
+    </div>
 
     <!-- Total bar -->
     <div class="inv-total-bar">
@@ -1365,6 +1430,85 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('qtModal')">Batal</button>
       <button class="btn btn-primary" onclick="saveQuotation()">Simpan Quotation</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT IMPOSITION CALCULATOR MODAL -->
+<div class="overlay" id="pcalcModal">
+  <div class="modal" style="width:480px">
+    <div class="modal-title">🧮 Kalkulator Cetak (Imposisi)</div>
+
+    <div class="pcalc-row">
+      <div class="pcalc-field">
+        <label>Ukuran Kertas Cetak</label>
+        <select class="fs" id="pc-paper" onchange="pcalcOnPaperChange()">
+          <option value="A3+">A3+ (32 × 45 cm)</option>
+          <option value="A3">A3 (29.7 × 42 cm)</option>
+          <option value="A4">A4 (21 × 29.7 cm)</option>
+          <option value="F4">F4 (21.5 × 33 cm)</option>
+          <option value="custom">Custom...</option>
+        </select>
+      </div>
+      <div class="pcalc-field">
+        <label>Margin Tepi Cetak</label>
+        <div class="pcalc-inline">
+          <input class="fi2" type="number" id="pc-margin" value="0.3" step="0.1" min="0" oninput="pcalcCalc()">
+          <span class="pcalc-unit">cm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcalc-row" id="pc-custom-row" style="display:none">
+      <div class="pcalc-field">
+        <label>Lebar Kertas</label>
+        <div class="pcalc-inline"><input class="fi2" type="number" id="pc-paperW" value="32" step="0.1" oninput="pcalcCalc()"><span class="pcalc-unit">cm</span></div>
+      </div>
+      <div class="pcalc-field">
+        <label>Tinggi Kertas</label>
+        <div class="pcalc-inline"><input class="fi2" type="number" id="pc-paperH" value="45" step="0.1" oninput="pcalcCalc()"><span class="pcalc-unit">cm</span></div>
+      </div>
+    </div>
+
+    <div class="pcalc-row">
+      <div class="pcalc-field">
+        <label>Lebar Item</label>
+        <div class="pcalc-inline"><input class="fi2" type="number" id="pc-itemW" value="12" step="0.1" oninput="pcalcCalc()"><span class="pcalc-unit">cm</span></div>
+      </div>
+      <div class="pcalc-field">
+        <label>Tinggi Item</label>
+        <div class="pcalc-inline"><input class="fi2" type="number" id="pc-itemH" value="8" step="0.1" oninput="pcalcCalc()"><span class="pcalc-unit">cm</span></div>
+      </div>
+    </div>
+
+    <div class="pcalc-row">
+      <div class="pcalc-field">
+        <label>Jarak Antar Item (gap)</label>
+        <div class="pcalc-inline"><input class="fi2" type="number" id="pc-gap" value="0.2" step="0.1" min="0" oninput="pcalcCalc()"><span class="pcalc-unit">cm</span></div>
+      </div>
+      <div class="pcalc-field">
+        <label>Jumlah Order Klien</label>
+        <div class="pcalc-inline"><input class="fi2" type="number" id="pc-qty" value="500" step="10" min="1" oninput="pcalcCalc()"><span class="pcalc-unit">pcs</span></div>
+      </div>
+    </div>
+
+    <div class="pcalc-result">
+      <div class="pcalc-stat"><div class="pcalc-stat-num" id="pc-perSheet">–</div><div class="pcalc-stat-label">item / lembar</div></div>
+      <div class="pcalc-stat"><div class="pcalc-stat-num" id="pc-sheets">–</div><div class="pcalc-stat-label">lembar dibutuhkan</div></div>
+      <div class="pcalc-stat"><div class="pcalc-stat-num" id="pc-waste">–</div><div class="pcalc-stat-label">sisa / lebih</div></div>
+    </div>
+
+    <div class="pcalc-preview"><div id="pc-preview"></div></div>
+    <div class="pcalc-note" id="pc-note"></div>
+
+    <div class="fg">
+      <label class="fl">Nama Item (akan masuk ke quotation)</label>
+      <input class="fi2" id="pc-itemname" placeholder="misal: Cetak Stiker 12x8cm">
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('pcalcModal')">Batal</button>
+      <button class="btn btn-primary" onclick="pcalcApplyToQuotation()">Pakai Hasil Ini →</button>
     </div>
   </div>
 </div>
@@ -1424,19 +1568,51 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     </div>
 
     <div class="qt-detail-footer">
-      <button class="pb-action-btn pb-btn-wa" style="flex:1;min-width:120px" onclick="sendQtWA()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Kirim WA
+      <!-- Baris 1: kirim -->
+      <div class="qt-footer-row">
+        <button class="qt-foot-btn qt-foot-wa" onclick="sendQtWA()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Kirim WA
+        </button>
+        <button class="qt-foot-btn qt-foot-email" onclick="sendQtEmail()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Kirim Email
+        </button>
+        <button class="qt-foot-btn qt-foot-pdf" onclick="openQtPdfPreview()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><polyline points="9 14 12 17 15 14"/></svg>
+          Export PDF
+        </button>
+      </div>
+      <!-- Baris 2: aksi utama -->
+      <div class="qt-footer-row">
+        <button class="qt-foot-btn qt-foot-accept" onclick="convertQtToProject()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Accept — Jadikan Proyek
+        </button>
+        <button class="qt-foot-btn qt-foot-close" onclick="closeModal('qtDetailModal')">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PDF Preview Quotation -->
+<div class="overlay" id="qtPdfPreviewModal" style="z-index:400">
+  <div class="modal" style="width:740px;max-height:92vh;display:flex;flex-direction:column;gap:0;padding:0;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="font-size:15px;font-weight:700">Preview Quotation PDF</div>
+      <button class="btn btn-ghost btn-xs" onclick="closeModal('qtPdfPreviewModal')">✕</button>
+    </div>
+    <div id="qt-pdf-preview-body" style="overflow-y:auto;flex:1;padding:20px 24px;background:var(--surface2)">
+      <!-- rendered quotation HTML goes here -->
+    </div>
+    <div style="display:flex;gap:8px;padding:14px 24px;border-top:1px solid var(--border);flex-shrink:0">
+      <button class="btn btn-ghost" onclick="closeModal('qtPdfPreviewModal')">Tutup</button>
+      <button class="btn btn-primary" style="flex:1" onclick="closeModal('qtPdfPreviewModal');downloadQtPDF()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><polyline points="9 14 12 17 15 14"/></svg>
+        Download PDF
       </button>
-      <button class="pb-action-btn pb-btn-email" style="flex:1;min-width:120px" onclick="sendQtEmail()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Kirim Email
-      </button>
-      <button class="btn btn-success btn-sm" style="flex:1;min-width:140px" onclick="convertQtToProject()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        Jadikan Proyek
-      </button>
-      <button class="btn btn-ghost btn-sm" onclick="closeModal('qtDetailModal')">Tutup</button>
     </div>
   </div>
 </div>
@@ -2722,42 +2898,61 @@ function downloadInvPDF() {
   if(!currentInvoiceData) return;
   const d = currentInvoiceData;
 
-  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${d.invNum}</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#fff;font-family:'Segoe UI',Arial,sans-serif}
-    @media print{
-      body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-      @page{size:A4;margin:15mm}
+  toast('⏳ Menyiapkan PDF invoice...', 'info');
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:700px;background:#fff;z-index:-1';
+  wrap.innerHTML = buildInvHTML(d);
+  document.body.appendChild(wrap);
+
+  html2canvas(wrap, {
+    scale: 2, useCORS: true, backgroundColor: '#ffffff',
+    logging: false, width: 700, windowWidth: 700,
+  }).then(canvas => {
+    document.body.removeChild(wrap);
+    const { jsPDF } = window.jspdf;
+    const pdf   = new jsPDF({ unit:'mm', format:'a4', orientation:'portrait' });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const imgW  = pageW - margin * 2;
+    const imgH  = (canvas.height / canvas.width) * imgW;
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+    if (imgH <= pageH - margin * 2) {
+      pdf.addImage(imgData, 'JPEG', margin, margin, imgW, imgH);
+    } else {
+      let yOffset = 0;
+      const maxH  = pageH - margin * 2;
+      const pxPerMm = canvas.width / imgW;
+      while (yOffset < imgH) {
+        const sliceH  = Math.min(maxH, imgH - yOffset);
+        const slicePx = sliceH * pxPerMm;
+        const srcY    = yOffset * pxPerMm;
+        const slice   = document.createElement('canvas');
+        slice.width   = canvas.width;
+        slice.height  = Math.ceil(slicePx);
+        slice.getContext('2d').drawImage(canvas, 0, srcY, canvas.width, slicePx, 0, 0, canvas.width, slicePx);
+        pdf.addImage(slice.toDataURL('image/jpeg', 0.95), 'JPEG', margin, margin, imgW, sliceH);
+        yOffset += sliceH;
+        if (yOffset < imgH) pdf.addPage();
+      }
     }
-  </style>
-  </head><body>${buildInvHTML(d)}</body></html>`;
 
-  const blob = new Blob([html], {type:'text/html'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = `${d.invNum}.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+    pdf.save(`${d.invNum}.pdf`);
+    toast('📄 Invoice PDF berhasil didownload!', 'success');
 
-  // Update status semua project terlibat ke invoice-sent
-  const projIds = d.projIds || (d.project ? [d.project.id] : []);
-  projIds.forEach(pid => {
-    const p = getProj(pid);
-    if(p) { p.status = 'invoice-sent'; }
+    // Update status proyek → invoice-sent
+    const projIds = d.projIds || (d.project ? [d.project.id] : []);
+    projIds.forEach(pid => { const p = getProj(pid); if(p) p.status = 'invoice-sent'; });
+    saveState(); updateCounts();
+    if(curProjId) { const cp = getProj(curProjId); if(cp) renderDetailStatus(cp); }
+    renderDashboard();
+  }).catch(err => {
+    document.body.removeChild(wrap);
+    console.error(err);
+    toast('Gagal generate PDF, coba lagi', 'error');
   });
-  // Fallback: update primary project
-  if(!projIds.length && d.project?.id) {
-    const p = getProj(d.project.id);
-    if(p) p.status = 'invoice-sent';
-  }
-  saveState(); updateCounts();
-  if(curProjId) { const cp = getProj(curProjId); if(cp) renderDetailStatus(cp); }
-  renderDashboard();
-  toast('\U0001f4c4 Invoice didownload & status \u2192 Invoice Sent!', 'success');
 }
 
 function sendInvWA() {
@@ -3462,18 +3657,40 @@ function renderQtItems() {
   const cur = document.getElementById('qt-currency').value || 'IDR';
   const isUSD = cur === 'USD';
   const wrap = document.getElementById('qt-items-wrap');
-  wrap.innerHTML = qtItems.map((it, i) => `
+  wrap.innerHTML = qtItems.map((it, i) => {
+    const pm = it.printMeta;
+    const pricePerSheet = parseFloat(it.price) || 0;
+    const breakdownHtml = pm ? `
+      <div class="qt-item-breakdown">
+        <span>📄 ${pm.sheets} lembar ${pm.paperLabel}</span>
+        <span>·</span>
+        <span>${pm.perSheet}/lembar → <b>${pm.totalPcs} pcs</b></span>
+        <span>·</span>
+        <span>dipesan ${pm.qtyOrdered} pcs</span>
+        ${pricePerSheet > 0 ? `<span>·</span><span>${fPrice(pricePerSheet, cur)}/lembar</span>` : ''}
+        <button type="button" class="qt-item-breakdown-del" onclick="removeQtPrintMeta(${i})" title="Lepas dari kalkulator cetak">lepas</button>
+      </div>` : '';
+    return `
     <div class="qt-item-row" id="qtrow-${i}">
       <input class="fi2" placeholder="${isUSD ? 'Service / Item name' : 'Nama layanan / item'}"
         value="${escHtml(it.name)}" oninput="qtItems[${i}].name=this.value">
       <input class="fi2 price-input" type="number" min="1" style="width:55px"
-        placeholder="Qty" value="${it.qty||1}" oninput="qtItems[${i}].qty=parseFloat(this.value)||1;recalcQtTotal()">
+        placeholder="Qty" value="${it.qty||1}" oninput="qtItems[${i}].qty=parseFloat(this.value)||1;recalcQtTotal()" ${pm ? 'title="Jumlah lembar — diambil dari kalkulator cetak"' : ''}>
       <input class="fi2 price-input" type="number" min="0"
-        placeholder="${isUSD ? 'Price (USD)' : 'Harga (Rp)'}"
+        placeholder="${pm ? (isUSD?'Price/sheet':'Harga/lembar') : (isUSD ? 'Price (USD)' : 'Harga (Rp)')}"
         value="${it.price||''}" oninput="qtItems[${i}].price=this.value;recalcQtTotal()">
       <button class="qt-item-del" onclick="removeQtItem(${i})" title="Hapus">✕</button>
-    </div>`).join('');
+    </div>
+    ${breakdownHtml}
+    <textarea class="fi2 qt-item-desc" rows="2"
+      placeholder="${isUSD ? 'Package details / what\'s included (optional)' : 'Detail paket / apa yang termasuk (opsional)'}"
+      oninput="qtItems[${i}].desc=this.value">${escHtml(it.desc||'')}</textarea>`;
+  }).join('');
   recalcQtTotal();
+}
+
+function removeQtPrintMeta(i) {
+  if (qtItems[i]) { delete qtItems[i].printMeta; renderQtItems(); }
 }
 
 function addQtItem() {
@@ -3499,6 +3716,147 @@ function recalcQtTotal() {
 function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // ── SAVE ─────────────────────────────────────────────
+// ── PRINT IMPOSITION CALCULATOR ──────────────────────
+const PCALC_PAPER_SIZES = {
+  'A3+': [32, 45], 'A3': [29.7, 42], 'A4': [21, 29.7], 'F4': [21.5, 33]
+};
+
+function openPcalc() {
+  document.getElementById('pc-itemname').value = '';
+  document.getElementById('pcalcModal').classList.add('show');
+  pcalcCalc();
+}
+
+function pcalcOnPaperChange() {
+  const v = document.getElementById('pc-paper').value;
+  document.getElementById('pc-custom-row').style.display = v === 'custom' ? 'grid' : 'none';
+  pcalcCalc();
+}
+
+function pcalcGetPaperDims() {
+  const v = document.getElementById('pc-paper').value;
+  if (v === 'custom') {
+    return [parseFloat(document.getElementById('pc-paperW').value) || 0, parseFloat(document.getElementById('pc-paperH').value) || 0];
+  }
+  return PCALC_PAPER_SIZES[v];
+}
+
+function pcalcFitCount(paperW, paperH, itemW, itemH, gap) {
+  const cols = Math.floor((paperW + gap) / (itemW + gap));
+  const rows = Math.floor((paperH + gap) / (itemH + gap));
+  return Math.max(0, cols) * Math.max(0, rows);
+}
+
+let _pcalcLast = null; // simpan hasil terakhir untuk dipakai ke quotation
+
+function pcalcCalc() {
+  const [pw0, ph0] = pcalcGetPaperDims();
+  const margin = parseFloat(document.getElementById('pc-margin').value) || 0;
+  const iw0 = parseFloat(document.getElementById('pc-itemW').value) || 0;
+  const ih0 = parseFloat(document.getElementById('pc-itemH').value) || 0;
+  const gap = parseFloat(document.getElementById('pc-gap').value) || 0;
+  const qty = parseInt(document.getElementById('pc-qty').value) || 0;
+
+  const pw = pw0 - margin * 2;
+  const ph = ph0 - margin * 2;
+
+  const elPerSheet = document.getElementById('pc-perSheet');
+  const elSheets   = document.getElementById('pc-sheets');
+  const elWaste    = document.getElementById('pc-waste');
+  const elNote     = document.getElementById('pc-note');
+
+  if (iw0 <= 0 || ih0 <= 0 || pw <= 0 || ph <= 0) {
+    elPerSheet.textContent = '–'; elSheets.textContent = '–'; elWaste.textContent = '–';
+    elNote.textContent = '';
+    document.getElementById('pc-preview').innerHTML = '';
+    _pcalcLast = null;
+    return;
+  }
+
+  const normal  = pcalcFitCount(pw, ph, iw0, ih0, gap);
+  const rotated = pcalcFitCount(pw, ph, ih0, iw0, gap);
+  const best = Math.max(normal, rotated);
+  const isRotated = rotated > normal;
+  const finalW = isRotated ? ih0 : iw0;
+  const finalH = isRotated ? iw0 : ih0;
+
+  const sheets = best > 0 ? Math.ceil(qty / best) : 0;
+  const waste  = best > 0 ? (sheets * best - qty) : 0;
+
+  elPerSheet.textContent = best;
+  elSheets.textContent   = sheets;
+  elWaste.textContent    = waste;
+  elWaste.classList.toggle('warn', waste > best * 0.3);
+
+  elNote.textContent = best > 0
+    ? (isRotated ? 'Item diputar 90° untuk hasil maksimal' : 'Orientasi normal sudah optimal')
+    : 'Item tidak muat di ukuran kertas ini';
+  elNote.classList.toggle('optimal', best > 0);
+
+  pcalcDrawPreview(pw0, ph0, margin, finalW, finalH, gap, best);
+
+  _pcalcLast = {
+    paperLabel: document.getElementById('pc-paper').value === 'custom'
+      ? `${pw0}x${ph0}cm` : document.getElementById('pc-paper').value,
+    itemW: iw0, itemH: ih0, perSheet: best, sheets, qty
+  };
+}
+
+function pcalcDrawPreview(paperW, paperH, margin, itemW, itemH, gap, count) {
+  const box = 220;
+  const scale = box / Math.max(paperW, paperH);
+  const W = paperW * scale, H = paperH * scale;
+  const mg = margin * scale, iw = itemW * scale, ih = itemH * scale, gp = gap * scale;
+
+  let cells = '';
+  if (itemW > 0 && itemH > 0 && count > 0) {
+    const cols = Math.floor(((paperW - margin*2) + gap) / (itemW + gap));
+    const rows = Math.floor(((paperH - margin*2) + gap) / (itemH + gap));
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = mg + c * (iw + gp);
+        const y = mg + r * (ih + gp);
+        cells += `<rect class="pcalc-cell" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${iw.toFixed(1)}" height="${ih.toFixed(1)}" rx="2"/>`;
+      }
+    }
+  }
+
+  document.getElementById('pc-preview').innerHTML =
+    `<svg class="pcalc-item-svg" width="${W.toFixed(0)}" height="${H.toFixed(0)}" viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}">
+      <rect x="0" y="0" width="${W.toFixed(1)}" height="${H.toFixed(1)}" rx="3" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+      ${cells}
+    </svg>`;
+}
+
+function pcalcApplyToQuotation() {
+  if (!_pcalcLast || _pcalcLast.perSheet <= 0) { toast('Hasil belum valid, cek ukuran kertas dan item','error'); return; }
+  const name = document.getElementById('pc-itemname').value.trim()
+    || `Cetak ${_pcalcLast.itemW}x${_pcalcLast.itemH}cm`;
+
+  const printMeta = {
+    paperLabel: _pcalcLast.paperLabel,
+    itemW: _pcalcLast.itemW,
+    itemH: _pcalcLast.itemH,
+    perSheet: _pcalcLast.perSheet,
+    qtyOrdered: _pcalcLast.qty,
+    sheets: _pcalcLast.sheets,
+    totalPcs: _pcalcLast.perSheet * _pcalcLast.sheets,
+  };
+
+  // cari row item kosong pertama, kalau tidak ada tambah baru
+  let target = qtItems.find(it => !it.name.trim());
+  if (target) {
+    target.name = name;
+    target.qty  = _pcalcLast.sheets;
+    target.printMeta = printMeta;
+  } else {
+    qtItems.push({ name, qty: _pcalcLast.sheets, price: '', printMeta });
+  }
+  renderQtItems();
+  closeModal('pcalcModal');
+  toast(`Item ditambahkan: ${_pcalcLast.sheets} lembar (${printMeta.totalPcs} pcs)`,'success');
+}
+
 function saveQuotation() {
   const clientName = document.getElementById('qt-client').value.trim();
   if (!clientName) { toast('Nama klien harus diisi','error'); return; }
@@ -3531,7 +3889,7 @@ function saveQuotation() {
     if (qt) {
       qt.clientName = clientName; qt.phone = phone; qt.email = email;
       qt.currency = currency; qt.notes = notes; qt.validUntil = validUntil;
-      qt.items = filledItems.map(it => ({name:it.name, qty:parseFloat(it.qty)||1, price:parseFloat(it.price)||0}));
+      qt.items = filledItems.map(it => ({name:it.name, qty:parseFloat(it.qty)||1, price:parseFloat(it.price)||0, desc:it.desc||'', printMeta: it.printMeta || null}));
       qt.total = qt.items.reduce((s,it)=>s+it.price*it.qty,0);
     }
     toast('Quotation diupdate!','success');
@@ -3542,7 +3900,7 @@ function saveQuotation() {
       clientName, phone, email, currency, notes, validUntil,
       status: 'pending',
       createdAt: today(),
-      items: filledItems.map(it => ({name:it.name, qty:parseFloat(it.qty)||1, price:parseFloat(it.price)||0})),
+      items: filledItems.map(it => ({name:it.name, qty:parseFloat(it.qty)||1, price:parseFloat(it.price)||0, desc:it.desc||'', printMeta: it.printMeta || null})),
     };
     qt.total = qt.items.reduce((s,it)=>s+it.price*it.qty,0);
     quotations.unshift(qt);
@@ -3646,13 +4004,29 @@ function openQtDetail(id) {
   ).join('');
 
   // Items table
-  document.getElementById('qtd-items-tbody').innerHTML = qt.items.map((it,i) => `
+  document.getElementById('qtd-items-tbody').innerHTML = qt.items.map((it,i) => {
+    const pm = it.printMeta;
+    const descHtml = it.desc && it.desc.trim() ? `
+      <div style="margin-top:4px">
+        ${it.desc.trim().split('\n').filter(l=>l.trim()).map(l=>
+          `<div style="font-size:11px;color:var(--muted);display:flex;gap:4px"><span style="opacity:.5">·</span><span>${escHtml(l.trim())}</span></div>`
+        ).join('')}
+      </div>` : '';
+    const breakdownRow = pm ? `
+      <tr>
+        <td></td>
+        <td colspan="3" style="padding:2px 0 8px;font-size:11px;color:var(--muted)">
+          📄 ${pm.sheets} lembar ${pm.paperLabel} · ${pm.perSheet} pcs/lembar → total <b style="color:var(--text)">${pm.totalPcs} pcs</b> (dipesan ${pm.qtyOrdered} pcs)
+        </td>
+      </tr>` : '';
+    return `
     <tr>
-      <td style="color:var(--muted);width:28px">${i+1}</td>
-      <td>${escHtml(it.name)}</td>
-      <td style="color:var(--muted)">${it.qty}</td>
-      <td>${fPrice(it.price * it.qty, qt.currency)}</td>
-    </tr>`).join('');
+      <td style="color:var(--muted);width:28px;vertical-align:top;padding-top:12px">${i+1}</td>
+      <td><div style="font-weight:600">${escHtml(it.name)}</div>${descHtml}</td>
+      <td style="color:var(--muted);vertical-align:top;padding-top:12px">${it.qty}</td>
+      <td style="vertical-align:top;padding-top:12px">${fPrice(it.price * it.qty, qt.currency)}</td>
+    </tr>${breakdownRow}`;
+  }).join('');
 
   document.getElementById('qtDetailModal').classList.add('show');
 }
@@ -3743,6 +4117,10 @@ function sendQtWA() {
     msg += `───────────────────\n`;
     qt.items.forEach((it,i) => {
       msg += `${i+1}. ${it.name}\n   ${it.qty} x ${fPrice(it.price,'USD')} = ${fPrice(it.price*it.qty,'USD')}\n`;
+      if (it.printMeta) {
+        const pm = it.printMeta;
+        msg += `   (${pm.sheets} sheets ${pm.paperLabel}, ${pm.perSheet} pcs/sheet = ${pm.totalPcs} pcs total, for your order of ${pm.qtyOrdered} pcs)\n`;
+      }
     });
     msg += `───────────────────\n`;
     msg += `*Total: ${fPrice(qt.total,'USD')}*\n`;
@@ -3756,6 +4134,10 @@ function sendQtWA() {
     msg += `───────────────────\n`;
     qt.items.forEach((it,i) => {
       msg += `${i+1}. ${it.name}\n   ${it.qty} x ${fPrice(it.price,'IDR')} = ${fPrice(it.price*it.qty,'IDR')}\n`;
+      if (it.printMeta) {
+        const pm = it.printMeta;
+        msg += `   (${pm.sheets} lembar ${pm.paperLabel}, ${pm.perSheet} pcs/lembar = total ${pm.totalPcs} pcs, untuk pesanan ${pm.qtyOrdered} pcs)\n`;
+      }
     });
     msg += `───────────────────\n`;
     msg += `*Total: ${fPrice(qt.total,'IDR')}*\n`;
@@ -3808,6 +4190,192 @@ function sendQtEmail() {
     openQtDetail(curQtId);
     renderQuotations();
   }
+}
+
+function openQtPdfPreview() {
+  const qt = quotations.find(q => q.id === curQtId);
+  if (!qt) return;
+  document.getElementById('qt-pdf-preview-body').innerHTML = buildQtPDFHTML(qt);
+  document.getElementById('qtPdfPreviewModal').classList.add('show');
+}
+
+// ── EXPORT PDF ────────────────────────────────────────
+function buildQtPDFHTML(qt) {
+  const isUSD  = qt.currency === 'USD';
+  const studio = cfg.studio || 'Snapsy Std.';
+  const phone  = cfg.phone  || '';
+  const addr   = cfg.addr   || 'Tuban East Java - 69273, Indonesia';
+  const email  = cfg.email  || '';
+
+  const lang = {
+    quoteTo:  isUSD ? 'Quotation For' : 'Penawaran Untuk',
+    desc:     isUSD ? 'DESCRIPTION'   : 'DESKRIPSI',
+    qty:      isUSD ? 'QTY'           : 'QTY',
+    price:    isUSD ? 'AMOUNT'        : 'HARGA',
+    total:    isUSD ? 'TOTAL'         : 'TOTAL',
+    date:     isUSD ? 'Date'          : 'Tanggal',
+    valid:    isUSD ? 'Valid until'   : 'Berlaku hingga',
+    thanks:   isUSD ? 'Thank you for considering us \u2014 ' : 'Terima kasih atas kepercayaan Anda \u2014 ',
+    printSpec:isUSD ? 'Print spec'    : 'Spesifikasi cetak',
+    sheets:   isUSD ? 'sheets'        : 'lembar',
+    perSheet: isUSD ? 'pcs/sheet'     : 'pcs/lembar',
+    ordered:  isUSD ? 'ordered'       : 'dipesan',
+  };
+
+  let rowsHtml = '';
+  qt.items.forEach((it, i) => {
+    const num   = (i+1) < 10 ? '0'+(i+1) : ''+(i+1);
+    const price = parseFloat(it.price) || 0;
+    const qty   = parseFloat(it.qty) || 1;
+    rowsHtml += '<tr>';
+    rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;font-size:11px;color:#bbb;width:32px;font-family:monospace">'+num+'</td>';
+    rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;font-size:13px;color:#1a1a1a">';
+    rowsHtml += '<div style="font-weight:600">'+escHtml(it.name)+'</div>';
+    if (it.desc && it.desc.trim()) {
+      const lines = it.desc.trim().split('\n').filter(l=>l.trim());
+      rowsHtml += '<div style="margin-top:5px;padding-left:2px">';
+      lines.forEach(line => {
+        rowsHtml += '<div style="font-size:11px;color:#666;line-height:1.6;display:flex;gap:5px"><span style="color:#bbb;flex-shrink:0">·</span><span>'+escHtml(line.trim())+'</span></div>';
+      });
+      rowsHtml += '</div>';
+    }
+    if (it.printMeta) {
+      const pm = it.printMeta;
+      rowsHtml += '<div style="font-size:10.5px;color:#999;margin-top:3px;line-height:1.5">'
+        + '\uD83D\uDCC4 '+lang.printSpec+': '+pm.sheets+' '+lang.sheets+' '+pm.paperLabel
+        + ' \u00b7 '+pm.perSheet+' '+lang.perSheet+' \u2192 <b style="color:#666">'+pm.totalPcs+' pcs</b>'
+        + ' ('+lang.ordered+' '+pm.qtyOrdered+' pcs)'
+        + '</div>';
+    }
+    rowsHtml += '</td>';
+    rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:center;font-size:12px;color:#666">'+qty+'</td>';
+    rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:right;font-weight:700;font-size:13px;color:#1a1a1a;white-space:nowrap">'+fPrice(price*qty, qt.currency)+'</td>';
+    rowsHtml += '</tr>';
+  });
+
+  let quoteTo = '<div style="font-size:15px;font-weight:800;color:#111">'+escHtml(qt.clientName)+'</div>';
+  if (qt.email) quoteTo += '<div style="font-size:12px;color:#888;margin-top:3px">'+escHtml(qt.email)+'</div>';
+  if (qt.phone) quoteTo += '<div style="font-size:12px;color:#888;margin-top:2px">'+escHtml(qt.phone)+'</div>';
+
+  let html = '';
+  html += '<div style="background:#fff;font-family:\'Segoe UI\',Arial,sans-serif;font-size:13px;color:#1a1a1a;max-width:680px;margin:0 auto;border:1px solid #e0e0e0">';
+
+  // Header
+  html += '<div style="padding:22px 28px 18px;border-bottom:3px solid #111;display:flex;justify-content:space-between;align-items:flex-end">';
+  html += '<div>';
+  html += '<div style="font-size:20px;font-weight:900;color:#111;letter-spacing:-0.5px">'+escHtml(studio)+'</div>';
+  html += '<div style="font-size:11px;color:#999;margin-top:3px">'+escHtml(addr)+'</div>';
+  if (phone) html += '<div style="font-size:11px;color:#999">'+escHtml(phone)+'</div>';
+  if (email) html += '<div style="font-size:11px;color:#999">'+escHtml(email)+'</div>';
+  html += '</div>';
+  html += '<div style="text-align:right">';
+  html += '<div style="font-size:26px;font-weight:900;letter-spacing:3px;color:#111">QUOTATION</div>';
+  html += '<div style="font-size:12px;color:#888;font-family:monospace;margin-top:2px">'+qt.num+'</div>';
+  html += '<div style="font-size:11px;color:#888;margin-top:2px">'+lang.date+': '+fDate(qt.createdAt)+'</div>';
+  if (qt.validUntil) html += '<div style="font-size:11px;color:#888;margin-top:1px">'+lang.valid+': '+fDate(qt.validUntil)+'</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Quote To
+  html += '<div style="padding:16px 28px;border-bottom:1px solid #ebebeb">';
+  html += '<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#aaa;margin-bottom:6px">'+lang.quoteTo+'</div>';
+  html += quoteTo;
+  html += '</div>';
+
+  // Table
+  html += '<table style="width:100%;border-collapse:collapse">';
+  html += '<thead><tr style="border-bottom:2px solid #111">';
+  html += '<th style="padding:8px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.08em;color:#555;width:32px">#</th>';
+  html += '<th style="padding:8px 14px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.08em;color:#555">'+lang.desc+'</th>';
+  html += '<th style="padding:8px 14px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.08em;color:#555;width:50px">'+lang.qty+'</th>';
+  html += '<th style="padding:8px 14px;text-align:right;font-size:10px;font-weight:700;letter-spacing:.08em;color:#555">'+lang.price+'</th>';
+  html += '</tr></thead>';
+  html += '<tbody>'+rowsHtml+'</tbody>';
+  html += '</table>';
+
+  // Total
+  html += '<div style="display:flex;justify-content:flex-end;padding:14px 28px;border-top:2px solid #111">';
+  html += '<div style="min-width:220px;display:flex;justify-content:space-between;font-size:18px;font-weight:900;color:#111">';
+  html += '<span>'+lang.total+'</span><span>'+fPrice(qt.total, qt.currency)+'</span>';
+  html += '</div></div>';
+
+  // Footer
+  const footerParts = [];
+  if (qt.notes) footerParts.push(escHtml(qt.notes));
+  footerParts.push(lang.thanks + escHtml(studio));
+
+  html += '<div style="padding:14px 28px;border-top:1px solid #ebebeb;font-size:11px;color:#888;line-height:1.8">';
+  html += footerParts.join('<span style="margin:0 8px;color:#ccc">|</span>');
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function downloadQtPDF() {
+  const qt = quotations.find(q => q.id === curQtId);
+  if (!qt) return;
+
+  toast('⏳ Menyiapkan PDF...', 'info');
+
+  // render HTML quotation ke div sementara di luar viewport
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:700px;background:#fff;z-index:-1';
+  wrap.innerHTML = buildQtPDFHTML(qt);
+  document.body.appendChild(wrap);
+
+  html2canvas(wrap, {
+    scale: 2,                // retina — tajam
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: 700,
+    windowWidth: 700,
+  }).then(canvas => {
+    document.body.removeChild(wrap);
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+    const pageW  = pdf.internal.pageSize.getWidth();   // 210mm
+    const pageH  = pdf.internal.pageSize.getHeight();  // 297mm
+    const margin = 10; // mm
+    const imgW   = pageW - margin * 2;
+    const imgH   = (canvas.height / canvas.width) * imgW;
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+    // kalau konten > 1 halaman, potong per halaman
+    if (imgH <= pageH - margin * 2) {
+      pdf.addImage(imgData, 'JPEG', margin, margin, imgW, imgH);
+    } else {
+      let yOffset = 0;
+      const maxH  = pageH - margin * 2;
+      const pxPerMm = canvas.width / imgW;
+
+      while (yOffset < imgH) {
+        const sliceH  = Math.min(maxH, imgH - yOffset);
+        const slicePx = sliceH * pxPerMm;
+        const srcY    = yOffset * pxPerMm;
+
+        const slice = document.createElement('canvas');
+        slice.width  = canvas.width;
+        slice.height = Math.ceil(slicePx);
+        slice.getContext('2d').drawImage(canvas, 0, srcY, canvas.width, slicePx, 0, 0, canvas.width, slicePx);
+
+        pdf.addImage(slice.toDataURL('image/jpeg', 0.95), 'JPEG', margin, margin, imgW, sliceH);
+        yOffset += sliceH;
+        if (yOffset < imgH) pdf.addPage();
+      }
+    }
+
+    pdf.save(`${qt.num}.pdf`);
+    toast('📄 PDF berhasil didownload!', 'success');
+  }).catch(err => {
+    document.body.removeChild(wrap);
+    console.error(err);
+    toast('Gagal generate PDF, coba lagi', 'error');
+  });
 }
 
 // ── CONVERT TO PROJECT ────────────────────────────────
