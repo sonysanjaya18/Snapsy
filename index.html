@@ -663,6 +663,8 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .qt-foot-email:hover { background: var(--surface3); }
 .qt-foot-pdf   { background: var(--surface2); color: var(--text); }
 .qt-foot-pdf:hover { background: var(--surface3); }
+.qt-foot-copy  { background: var(--surface2); color: var(--text); }
+.qt-foot-copy:hover { background: var(--surface3); }
 .qt-foot-accept {
   flex: 2; background: var(--accent); border-color: var(--accent); color: #fff;
 }
@@ -827,6 +829,15 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     grid-template-columns: 1fr !important;
     gap: 8px !important;
   }
+
+  /* FINANCIAL VIEW */
+  #fin-summary-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  #view-financial table { font-size: 11px !important; }
+  #view-financial .search-bar { flex-wrap: wrap !important; }
+  #view-financial .page-header { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
 
   /* PROJECT GRID → single col */
   .project-grid {
@@ -1021,6 +1032,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <div class="sidebar-label">Arsip</div>
     <div class="nav-item" data-view="completed" onclick="showView('completed',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> <span class="nav-label-full">Completed</span><span class="nav-label-short" style="display:none">Done</span> <span class="nav-count" id="nc-paid">0</span></div>
 
+    <div class="sidebar-label">Keuangan</div>
+    <div class="nav-item" data-view="financial" onclick="showView('financial',this)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> <span class="nav-label-full">Financial</span><span class="nav-label-short" style="display:none">Uang</span></div>
+
     <div class="drive-box">
       <div class="dbh"><div class="dot dot-red" id="sDot"></div><span id="sTxt">Google Drive</span></div>
       <div style="color:var(--muted);font-size:11px;margin-top:2px" id="sSub">Belum terhubung</div>
@@ -1147,6 +1161,112 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
         </select>
       </div>
       <div class="project-grid" id="qt-grid"></div>
+    </div>
+
+    <!-- FINANCIAL OVERVIEW -->
+    <div class="view" id="view-financial">
+      <div class="page-header">
+        <div><div class="page-title">Financial Overview</div><div class="page-sub">Ringkasan pendapatan, withdraw USD, dan transaksi</div></div>
+        <button class="btn btn-primary" onclick="openWithdrawModal()">＋ Withdraw USD</button>
+      </div>
+
+      <!-- SUMMARY CARDS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px" id="fin-summary-row">
+        <!-- USD Balance card -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#16a34a,#22c55e)"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Saldo USD Belum Withdraw</div>
+            <div style="width:30px;height:30px;border-radius:8px;background:rgba(22,163,74,.1);display:flex;align-items:center;justify-content:center">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+          </div>
+          <div style="font-size:24px;font-weight:800;color:var(--green);line-height:1.2;margin-bottom:4px" id="fin-usd-balance">—</div>
+          <div style="font-size:11px;color:var(--muted)">saldo USD yang sudah masuk tapi belum kamu withdraw</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+            <span>Total pernah diterima (USD)</span>
+            <span style="font-weight:700;color:var(--text)" id="fin-usd-earned">—</span>
+          </div>
+          <div style="margin-top:4px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+            <span>Total sudah di-withdraw</span>
+            <span style="font-weight:700;color:var(--text)" id="fin-usd-withdrawn">—</span>
+          </div>
+        </div>
+
+        <!-- IDR card -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);position:relative;overflow:hidden">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Total Pendapatan IDR</div>
+            <div style="width:30px;height:30px;border-radius:8px;background:rgba(108,99,255,.1);display:flex;align-items:center;justify-content:center">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+          </div>
+          <div style="font-size:24px;font-weight:800;color:var(--accent);line-height:1.2;margin-bottom:4px" id="fin-idr-earned">—</div>
+          <div style="font-size:11px;color:var(--muted)">langsung masuk rekening bank — tidak perlu di-withdraw manual</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:var(--muted)">
+            <span>Bulan ini</span>
+            <span style="font-weight:700;color:var(--text)" id="fin-idr-month">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPCOMING EARNINGS -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:22px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#d97706,#f59e0b)"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em">Upcoming Earnings</div>
+          <div style="width:30px;height:30px;border-radius:8px;background:rgba(217,119,6,.1);display:flex;align-items:center;justify-content:center">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          </div>
+        </div>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin-bottom:8px">
+          <div>
+            <div style="font-size:20px;font-weight:800;color:var(--accent)" id="fin-upcoming-idr">—</div>
+            <div style="font-size:11px;color:var(--muted)">potensi IDR belum paid</div>
+          </div>
+          <div>
+            <div style="font-size:20px;font-weight:800;color:var(--green)" id="fin-upcoming-usd">—</div>
+            <div style="font-size:11px;color:var(--muted)">potensi USD belum paid</div>
+          </div>
+        </div>
+        <div id="fin-upcoming-list" style="font-size:11px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--border)"></div>
+      </div>
+
+      <!-- TRANSACTION TABLE -->
+      <div class="page-header" style="margin-bottom:10px">
+        <div><div style="font-weight:700;font-size:15px">Riwayat Transaksi</div></div>
+      </div>
+      <div class="search-bar">
+        <select class="fs" style="width:auto;padding:5px 10px;font-size:12px" id="fin-filter-type" onchange="renderFinancial()">
+          <option value="">Semua Tipe</option>
+          <option value="in">Uang Masuk</option>
+          <option value="withdraw">Withdraw</option>
+        </select>
+        <select class="fs" style="width:auto;padding:5px 10px;font-size:12px" id="fin-filter-curr" onchange="renderFinancial()">
+          <option value="">Semua Mata Uang</option>
+          <option value="IDR">IDR</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)">
+        <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:560px">
+          <thead>
+            <tr style="background:var(--surface2)">
+              <th style="text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Tanggal</th>
+              <th style="text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Tipe</th>
+              <th style="text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Deskripsi</th>
+              <th style="text-align:right;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Jumlah</th>
+              <th style="text-align:right;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Saldo USD</th>
+              <th style="text-align:center;padding:10px 14px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em"></th>
+            </tr>
+          </thead>
+          <tbody id="fin-tx-tbody"></tbody>
+        </table>
+        </div>
+        <div id="fin-tx-empty" style="display:none;padding:32px;text-align:center;color:var(--muted);font-size:12.5px">Belum ada transaksi</div>
+      </div>
     </div>
 
     <!-- DETAIL -->
@@ -1369,6 +1489,26 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   </div>
 </div>
 
+<!-- MODAL: Withdraw USD -->
+<div class="overlay" id="withdrawModal">
+  <div class="modal" style="width:420px">
+    <div class="modal-title">💵 Withdraw USD</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px" id="wd-balance-hint">Saldo tersedia: —</div>
+    <div class="fg"><label class="fl">Tanggal Withdraw</label><input class="fi2" id="wd-date" type="date"></div>
+    <div class="fg"><label class="fl">Jumlah (USD) *</label><input class="fi2" id="wd-amount" type="number" step="0.01" placeholder="misal: 150.00" oninput="wdCalcIDR()"></div>
+    <div style="display:flex;gap:10px">
+      <div class="fg" style="flex:1"><label class="fl">Kurs IDR (opsional)</label><input class="fi2" id="wd-rate" type="number" placeholder="misal: 15800" oninput="wdCalcIDR()"></div>
+      <div class="fg" style="flex:1"><label class="fl">Diterima (IDR)</label><input class="fi2" id="wd-idr" type="number" placeholder="otomatis / manual"></div>
+    </div>
+    <div class="fg"><label class="fl">Metode / Tujuan</label><input class="fi2" id="wd-method" placeholder="misal: Payoneer → BCA, Wise, dll"></div>
+    <div class="fg"><label class="fl">Catatan (opsional)</label><textarea class="ft" id="wd-note" placeholder="Catatan tambahan..."></textarea></div>
+    <div class="confirm-footer">
+      <button class="btn btn-ghost" onclick="closeModal('withdrawModal')">Batal</button>
+      <button class="btn btn-primary" onclick="saveWithdraw()">Simpan Withdraw</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: New / Edit Quotation -->
 <div class="overlay" id="qtModal">
   <div class="modal" style="width:600px">
@@ -1574,6 +1714,10 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Kirim WA
         </button>
+        <button class="qt-foot-btn qt-foot-copy" onclick="copyQtWA()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Text
+        </button>
         <button class="qt-foot-btn qt-foot-email" onclick="sendQtEmail()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           Kirim Email
@@ -1742,6 +1886,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <div class="inv-result-actions">
       <button class="btn btn-primary" onclick="downloadInvPDF()" style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Download PDF</button>
       <button class="btn btn-success" id="inv-wa-btn" onclick="sendInvWA()" style="display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Kirim WhatsApp</button>
+      <button class="btn btn-ghost" onclick="copyInvWA()" style="display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Text</button>
       <button class="btn btn-ghost" onclick="closeModal('invResultModal')">Tutup</button>
     </div>
   </div>
@@ -1791,6 +1936,7 @@ let tasks    = JSON.parse(localStorage.getItem('ssy_tasks') || '[]');
 let files    = JSON.parse(localStorage.getItem('ssy_files') || '[]');
 let cfg      = JSON.parse(localStorage.getItem('ssy_cfg')   || '{"root":"Snapsy.Std"}');
 let quotations = JSON.parse(localStorage.getItem('ssy_qt') || '[]');
+let withdrawals = JSON.parse(localStorage.getItem('ssy_wd') || '[]');
 
 let curProjId = null;
 let curSubfolderId = '';    // '' = root proj folder, else Drive folder id
@@ -2955,49 +3101,65 @@ function downloadInvPDF() {
   });
 }
 
-function sendInvWA() {
-  if(!currentInvoiceData) return;
-  const d = currentInvoiceData;
+function buildInvWAMessage(d) {
   const isUSD = d.currency === 'USD';
-  const rawPhone = (d.client.phone||'').replace(/\D/g,'');
   const studio = cfg.studio || 'Snapsy Std.';
   const projGroups = d.projGroups || [{project:d.project, tasks:d.tasks}];
+  const DIV = '--------------------------';
 
   let msg = '';
 
   if(isUSD) {
     msg  = `Hi *${d.client.name}* \uD83D\uDC4B\n\n`;
-    msg += `Here is your invoice from *${studio}*\n`;
-    msg += `Invoice: *${d.invNum}* | ${fDate(d.invDate)}\n\n`;
+    msg += `Before we send the final files, could you please complete the payment first? Here's the invoice summary:\n`;
+    msg += `*Invoice ${d.invNum}* | ${fDate(d.invDate)}\n\n`;
+    msg += `${DIV}\n`;
     projGroups.forEach(g => {
       if(projGroups.length > 1) msg += `*${g.project?.name}*\n`;
       g.tasks.forEach(t => {
-        msg += `  \u2022 ${t.name}: *${fPrice(parseFloat(t.price)||0, d.currency)}*\n`;
+        msg += `* ${t.name} : ${fPrice(parseFloat(t.price)||0, d.currency)}\n`;
       });
     });
-    msg += `\n*Total: ${fPrice(d.total, d.currency)}*`;
-    if(d.payment) msg += `\n\nPayment:\n${d.payment}`;
-    if(d.note)    msg += `\n\n${d.note}`;
-    msg += `\n\nThank you! \uD83D\uDE4F\n_${studio}_`;
+    msg += `${DIV}\n`;
+    msg += `*Total: ${fPrice(d.total, d.currency)}*\n`;
+    if(d.payment) msg += `\nPay on : ${d.payment}\n`;
+    if(d.note)    msg += `\n${d.note}\n`;
+    msg += `\nThank you! \uD83D\uDE4F\n_${studio}_`;
   } else {
     msg  = `Halo *${d.client.name}* \uD83D\uDC4B\n\n`;
-    msg += `Berikut invoice dari *${studio}*\n`;
-    msg += `Invoice: *${d.invNum}* | ${fDate(d.invDate)}\n\n`;
+    msg += `Sebelum kami kirim file final, mohon untuk melakukan pembayaran terlebih dahulu ya. Berikut ringkasan invoice-nya:\n`;
+    msg += `*Invoice ${d.invNum}* | ${fDate(d.invDate)}\n\n`;
+    msg += `${DIV}\n`;
     projGroups.forEach(g => {
       if(projGroups.length > 1) msg += `*${g.project?.name}*\n`;
       g.tasks.forEach(t => {
-        msg += `  \u2022 ${t.name}: *${fPrice(parseFloat(t.price)||0, d.currency)}*\n`;
+        msg += `* ${t.name} : ${fPrice(parseFloat(t.price)||0, d.currency)}\n`;
       });
     });
-    msg += `\n*Total: ${fPrice(d.total, d.currency)}*`;
-    if(d.payment) msg += `\n\nPembayaran:\n${d.payment}`;
-    if(d.note)    msg += `\n\n${d.note}`;
-    msg += `\n\nTerima kasih! \uD83D\uDE4F\n_${studio}_`;
+    msg += `${DIV}\n`;
+    msg += `*Total: ${fPrice(d.total, d.currency)}*\n`;
+    if(d.payment) msg += `\nPembayaran ke : ${d.payment}\n`;
+    if(d.note)    msg += `\n${d.note}\n`;
+    msg += `\nTerima kasih! \uD83D\uDE4F\n_${studio}_`;
   }
+
+  return msg;
+}
+
+function sendInvWA() {
+  if(!currentInvoiceData) return;
+  const rawPhone = (currentInvoiceData.client.phone||'').replace(/\D/g,'');
+  const msg = buildInvWAMessage(currentInvoiceData);
 
   const url = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
   window.open(url,'_blank');
   toast('\U0001f4f1 Membuka WhatsApp...','success');
+}
+
+function copyInvWA() {
+  if(!currentInvoiceData) return;
+  const msg = buildInvWAMessage(currentInvoiceData);
+  copyTextToClipboard(msg, '\uD83D\uDCCB Teks invoice disalin!');
 }
 
 function autoUpdateProjStatus(projId) {
@@ -3181,6 +3343,7 @@ function showView(name, navEl) {
   if(name==='dashboard') renderDashboard();
   if(name==='completed') renderCompleted();
   if(name==='quotations') renderQuotations();
+  if(name==='financial') renderFinancial();
   // sync mobile bottom nav
   document.querySelectorAll('.mnav-item').forEach(b => b.classList.remove('active'));
   const mBtn = document.getElementById('mn-' + name);
@@ -3241,13 +3404,8 @@ function renderDashboard() {
   });
 
   // Use task total if available, fallback to project price
-  function projEarnedValue(p) {
-    const taskTotal = tasks.filter(t => t.projId === p.id).reduce((s,t) => s + (parseFloat(t.price)||0), 0);
-    return taskTotal > 0 ? taskTotal : (parseFloat(p.price) || 0);
-  }
-
-  const earnedIDR = paidThisMonth.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projEarnedValue(p),0);
-  const earnedUSD = paidThisMonth.filter(p=>p.currency==='USD').reduce((s,p)=>s+projEarnedValue(p),0);
+  const earnedIDR = paidThisMonth.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projMoneyValue(p),0);
+  const earnedUSD = paidThisMonth.filter(p=>p.currency==='USD').reduce((s,p)=>s+projMoneyValue(p),0);
   let earnedHtml = '';
   if (earnedIDR > 0) earnedHtml += fPrice(earnedIDR, 'IDR');
   if (earnedUSD > 0) earnedHtml += (earnedIDR > 0 ? '<br>' : '') + fPrice(earnedUSD, 'USD');
@@ -3258,8 +3416,8 @@ function renderDashboard() {
       : `Belum ada proyek paid di ${monthName}`;
 
   // All-time paid
-  const allPaidIDR = paidProjs.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projEarnedValue(p),0);
-  const allPaidUSD = paidProjs.filter(p=>p.currency==='USD').reduce((s,p)=>s+projEarnedValue(p),0);
+  const allPaidIDR = paidProjs.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projMoneyValue(p),0);
+  const allPaidUSD = paidProjs.filter(p=>p.currency==='USD').reduce((s,p)=>s+projMoneyValue(p),0);
   let allPaidHtml = '';
   if (allPaidIDR > 0) allPaidHtml += fPrice(allPaidIDR, 'IDR');
   if (allPaidUSD > 0) allPaidHtml += (allPaidIDR > 0 ? ' + ' : '') + fPrice(allPaidUSD, 'USD');
@@ -3270,13 +3428,8 @@ function renderDashboard() {
   const upcomingProjs = projects.filter(p => upcomingStatuses.includes(p.status));
 
   // Use task total if available, fallback to project price
-  function projValue(p) {
-    const taskTotal = tasks.filter(t => t.projId === p.id).reduce((s,t) => s + (parseFloat(t.price)||0), 0);
-    return taskTotal > 0 ? taskTotal : (parseFloat(p.price) || 0);
-  }
-
-  const upcomingIDR = upcomingProjs.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projValue(p),0);
-  const upcomingUSD = upcomingProjs.filter(p=>p.currency==='USD').reduce((s,p)=>s+projValue(p),0);
+  const upcomingIDR = upcomingProjs.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projMoneyValue(p),0);
+  const upcomingUSD = upcomingProjs.filter(p=>p.currency==='USD').reduce((s,p)=>s+projMoneyValue(p),0);
   let upcomingHtml = '';
   if (upcomingIDR > 0) upcomingHtml += fPrice(upcomingIDR, 'IDR');
   if (upcomingUSD > 0) upcomingHtml += (upcomingIDR > 0 ? ' + ' : '') + fPrice(upcomingUSD, 'USD');
@@ -3287,8 +3440,8 @@ function renderDashboard() {
   // Breakdown by key statuses
   const calcGroup = (statuses) => {
     const grp = projects.filter(p => statuses.includes(p.status));
-    const idr = grp.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projValue(p),0);
-    const usd = grp.filter(p=>p.currency==='USD').reduce((s,p)=>s+projValue(p),0);
+    const idr = grp.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projMoneyValue(p),0);
+    const usd = grp.filter(p=>p.currency==='USD').reduce((s,p)=>s+projMoneyValue(p),0);
     if (!idr && !usd) return '—';
     let h = '';
     if (idr > 0) h += fPrice(idr,'IDR');
@@ -3306,6 +3459,216 @@ function renderDashboard() {
   el.innerHTML = recent.length
     ? recent.map(p => projCard(p)).join('')
     : `<div class="empty" style="grid-column:1/-1"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><div class="et">Belum ada proyek</div><div>Klik "+ Proyek Baru"</div></div>`;
+}
+
+// ── FINANCIAL OVERVIEW ───────────────────────────────
+function finUSDEarned() {
+  return projects.filter(p => p.status === 'paid' && p.currency === 'USD')
+    .reduce((s,p) => s + projMoneyValue(p), 0);
+}
+function finUSDWithdrawn() {
+  return withdrawals.reduce((s,w) => s + (parseFloat(w.amount)||0), 0);
+}
+function finIDREarned() {
+  return projects.filter(p => p.status === 'paid' && (p.currency||'IDR') === 'IDR')
+    .reduce((s,p) => s + projMoneyValue(p), 0);
+}
+function finTransactions() {
+  const now = new Date();
+  const list = [];
+  // income entries from paid projects
+  projects.filter(p => p.status === 'paid').forEach(p => {
+    const amt = projMoneyValue(p);
+    if (!amt) return;
+    list.push({
+      type: 'in',
+      date: p.paidAt || p.startDate || p.createdAt,
+      currency: p.currency || 'IDR',
+      amount: amt,
+      desc: `${p.name} — ${p.client}`,
+      _id: 'in_' + p.id
+    });
+  });
+  // withdrawal entries
+  withdrawals.forEach(w => {
+    list.push({
+      type: 'withdraw',
+      date: w.date,
+      currency: 'USD',
+      amount: w.amount,
+      desc: w.method ? `Withdraw ke ${w.method}` : 'Withdraw USD',
+      note: w.note,
+      idrReceived: w.idrReceived,
+      rate: w.rate,
+      _id: w.id
+    });
+  });
+  // sort ascending by date for running balance calc, then we'll reverse for display
+  list.sort((a,b) => new Date(a.date||0) - new Date(b.date||0));
+  let running = 0;
+  list.forEach(tx => {
+    if (tx.currency === 'USD') {
+      running += tx.type === 'in' ? tx.amount : -tx.amount;
+      tx.runningUSD = running;
+    }
+  });
+  return list.reverse(); // newest first for display
+}
+
+function renderFinancial() {
+  const usdEarned    = finUSDEarned();
+  const usdWithdrawn = finUSDWithdrawn();
+  const usdBalance   = usdEarned - usdWithdrawn;
+  const idrEarned    = finIDREarned();
+
+  document.getElementById('fin-usd-balance').textContent   = fPrice(usdBalance, 'USD');
+  document.getElementById('fin-usd-earned').textContent    = fPrice(usdEarned, 'USD');
+  document.getElementById('fin-usd-withdrawn').textContent = fPrice(usdWithdrawn, 'USD');
+  document.getElementById('fin-idr-earned').textContent    = fPrice(idrEarned, 'IDR');
+
+  const now = new Date();
+  const idrThisMonth = projects.filter(p => {
+    if (p.status !== 'paid' || (p.currency||'IDR') !== 'IDR') return false;
+    const ref = p.paidAt || p.startDate;
+    if (!ref) return false;
+    const d = new Date(ref);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).reduce((s,p) => s + projMoneyValue(p), 0);
+  document.getElementById('fin-idr-month').textContent = fPrice(idrThisMonth, 'IDR');
+
+  // Upcoming earnings (belum paid)
+  const upcomingStatuses = ['pending','ongoing','need-work','revision','done','need-to-pay','invoice-sent'];
+  const upcomingProjs = projects.filter(p => upcomingStatuses.includes(p.status));
+  const upcomingIDR = upcomingProjs.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projMoneyValue(p),0);
+  const upcomingUSD = upcomingProjs.filter(p=>p.currency==='USD').reduce((s,p)=>s+projMoneyValue(p),0);
+  document.getElementById('fin-upcoming-idr').textContent = upcomingIDR > 0 ? fPrice(upcomingIDR,'IDR') : '—';
+  document.getElementById('fin-upcoming-usd').textContent = upcomingUSD > 0 ? fPrice(upcomingUSD,'USD') : '—';
+
+  const calcGroup = (statuses) => {
+    const grp = upcomingProjs.filter(p => statuses.includes(p.status));
+    if (!grp.length) return null;
+    const idr = grp.filter(p=>(p.currency||'IDR')==='IDR').reduce((s,p)=>s+projMoneyValue(p),0);
+    const usd = grp.filter(p=>p.currency==='USD').reduce((s,p)=>s+projMoneyValue(p),0);
+    let h = '';
+    if (idr > 0) h += fPrice(idr,'IDR');
+    if (usd > 0) h += (idr > 0 ? ' + ' : '') + fPrice(usd,'USD');
+    return h ? `${grp.length} proyek: ${h}` : null;
+  };
+  const groups = [
+    ['🔵 Ongoing', calcGroup(['ongoing','need-work','pending','revision'])],
+    ['🟡 Need to Pay / Done', calcGroup(['need-to-pay','done'])],
+    ['🟣 Invoice Sent', calcGroup(['invoice-sent'])],
+  ].filter(g => g[1]);
+  document.getElementById('fin-upcoming-list').innerHTML = groups.length
+    ? groups.map(g => `<span>${g[0]}: <b style="color:var(--text)">${g[1]}</b></span>`).join('')
+    : 'Tidak ada proyek yang belum paid.';
+
+  // Transaction table
+  const filterType = document.getElementById('fin-filter-type')?.value || '';
+  const filterCurr = document.getElementById('fin-filter-curr')?.value || '';
+  let txs = finTransactions();
+  if (filterType) txs = txs.filter(t => t.type === filterType);
+  if (filterCurr) txs = txs.filter(t => t.currency === filterCurr);
+
+  const tbody = document.getElementById('fin-tx-tbody');
+  const emptyEl = document.getElementById('fin-tx-empty');
+  if (!txs.length) {
+    tbody.innerHTML = '';
+    emptyEl.style.display = 'block';
+  } else {
+    emptyEl.style.display = 'none';
+    tbody.innerHTML = txs.map(tx => {
+      const isIn = tx.type === 'in';
+      const badge = isIn
+        ? `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;background:rgba(22,163,74,.12);color:var(--green)">↓ Masuk</span>`
+        : `<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;background:rgba(220,38,38,.1);color:var(--red)">↑ Withdraw</span>`;
+      const amountStr = (isIn ? '+' : '−') + fPrice(tx.amount, tx.currency);
+      const amountColor = isIn ? 'var(--green)' : 'var(--red)';
+      const noteBits = [];
+      if (tx.note) noteBits.push(tx.note);
+      if (!isIn && tx.idrReceived) noteBits.push(`≈ ${fPrice(tx.idrReceived,'IDR')}${tx.rate ? ' (kurs '+parseFloat(tx.rate).toLocaleString('id-ID')+')' : ''}`);
+      const sub = noteBits.length ? `<div style="font-size:10.5px;color:var(--muted);margin-top:2px">${noteBits.join(' · ')}</div>` : '';
+      const delBtn = !isIn
+        ? `<button class="btn btn-ghost btn-sm" style="padding:3px 8px;font-size:11px;color:var(--red)" onclick="deleteWithdrawal('${tx._id}')" title="Hapus withdraw">✕</button>`
+        : '';
+      const runBal = tx.currency === 'USD' && tx.runningUSD !== undefined ? fPrice(tx.runningUSD, 'USD') : '—';
+      return `<tr style="border-top:1px solid var(--border)">
+        <td style="padding:10px 14px;white-space:nowrap;color:var(--muted)">${fDate(tx.date)}</td>
+        <td style="padding:10px 14px">${badge}</td>
+        <td style="padding:10px 14px">${tx.desc}${sub}</td>
+        <td style="padding:10px 14px;text-align:right;font-weight:700;color:${amountColor};white-space:nowrap">${amountStr}</td>
+        <td style="padding:10px 14px;text-align:right;color:var(--muted);white-space:nowrap">${runBal}</td>
+        <td style="padding:10px 14px;text-align:center">${delBtn}</td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function openWithdrawModal() {
+  const balance = finUSDEarned() - finUSDWithdrawn();
+  document.getElementById('wd-balance-hint').textContent = `Saldo tersedia: ${fPrice(balance,'USD')}`;
+  document.getElementById('wd-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('wd-amount').value = '';
+  document.getElementById('wd-rate').value = '';
+  document.getElementById('wd-idr').value = '';
+  document.getElementById('wd-method').value = cfg.paymentInfo || '';
+  document.getElementById('wd-note').value = '';
+  document.getElementById('withdrawModal').classList.add('show');
+}
+
+function wdCalcIDR() {
+  const amt  = parseFloat(document.getElementById('wd-amount').value) || 0;
+  const rate = parseFloat(document.getElementById('wd-rate').value) || 0;
+  if (amt > 0 && rate > 0) {
+    document.getElementById('wd-idr').value = Math.round(amt * rate);
+  }
+}
+
+function saveWithdraw() {
+  const amount = parseFloat(document.getElementById('wd-amount').value) || 0;
+  if (amount <= 0) { toast('Jumlah withdraw harus lebih dari 0','error'); return; }
+
+  const balance = finUSDEarned() - finUSDWithdrawn();
+  if (amount > balance) {
+    showConfirm('Jumlah melebihi saldo?',
+      `Saldo USD kamu saat ini hanya <b>${fPrice(balance,'USD')}</b>, tapi kamu mau withdraw <b>${fPrice(amount,'USD')}</b>. Tetap simpan?`,
+      () => doSaveWithdraw(amount)
+    );
+    return;
+  }
+  doSaveWithdraw(amount);
+}
+
+function doSaveWithdraw(amount) {
+  const date   = document.getElementById('wd-date').value || new Date().toISOString().slice(0,10);
+  const rate   = parseFloat(document.getElementById('wd-rate').value) || null;
+  const idrVal = parseFloat(document.getElementById('wd-idr').value) || null;
+  const method = document.getElementById('wd-method').value.trim();
+  const note   = document.getElementById('wd-note').value.trim();
+
+  withdrawals.unshift({
+    id: 'wd_' + Date.now(),
+    date, amount, rate, idrReceived: idrVal, method, note,
+    createdAt: new Date().toISOString()
+  });
+  saveState();
+  closeModal('withdrawModal');
+  renderFinancial();
+  toast('💵 Withdraw tersimpan!','success');
+}
+
+function deleteWithdrawal(id) {
+  const wd = withdrawals.find(w => w.id === id);
+  if (!wd) return;
+  showConfirm('Hapus catatan withdraw?',
+    `Yakin hapus withdraw <b>${fPrice(wd.amount,'USD')}</b> tanggal ${fDate(wd.date)}?`,
+    () => {
+      withdrawals = withdrawals.filter(w => w.id !== id);
+      saveState();
+      renderFinancial();
+      toast('Withdraw dihapus','success');
+    }
+  );
 }
 
 function renderProjects() {
@@ -3537,6 +3900,7 @@ function saveLocalOnly() {
   localStorage.setItem('ssy_tasks',JSON.stringify(tasks));
   localStorage.setItem('ssy_files',JSON.stringify(sf));
   localStorage.setItem('ssy_qt',JSON.stringify(quotations));
+  localStorage.setItem('ssy_wd',JSON.stringify(withdrawals));
 }
 function saveState() {
   saveLocalOnly();
@@ -3547,6 +3911,10 @@ function fPrice(n, curr = 'IDR') {
   if(!n||n==0) return '—'; 
   if(curr === 'USD') return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(n);
   return 'Rp ' + parseFloat(n).toLocaleString('id-ID'); 
+}
+function projMoneyValue(p) {
+  const taskTotal = tasks.filter(t => t.projId === p.id).reduce((s,t) => s + (parseFloat(t.price)||0), 0);
+  return taskTotal > 0 ? taskTotal : (parseFloat(p.price) || 0);
 }
 function fDate(d) { if(!d) return '—'; return new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); }
 function fSize(b) { if(!b) return '—'; if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
@@ -3564,6 +3932,31 @@ function fIcon(n) {
 }
 function today() { return new Date().toISOString().split('T')[0]; }
 function toast(msg,type='info') { const el=document.createElement('div'); el.className=`toast toast-${type}`; el.innerHTML=msg; document.getElementById('toastWrap').appendChild(el); setTimeout(()=>el.remove(),3500); }
+
+function copyTextToClipboard(text, successMsg) {
+  const doFallback = () => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      toast(successMsg || '\uD83D\uDCCB Teks disalin!', 'success');
+    } catch(e) {
+      toast('Gagal menyalin teks', 'error');
+    }
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      toast(successMsg || '\uD83D\uDCCB Teks disalin!', 'success');
+    }).catch(doFallback);
+  } else {
+    doFallback();
+  }
+}
 
 // ══════════════════════════════════════════════════════
 // ── QUOTATION ─────────────────────────────────────────
@@ -4101,20 +4494,17 @@ function confirmDeleteQuotation() {
 }
 
 // ── SEND WA ──────────────────────────────────────────
-function sendQtWA() {
-  const qt = quotations.find(q => q.id === curQtId);
-  if (!qt) return;
-  if (!qt.phone) { toast('No. telepon belum diisi di quotation ini','error'); return; }
-
+function buildQtWAMessage(qt) {
   const isUSD = qt.currency === 'USD';
   const studio = cfg.studio || 'Snapsy Std.';
+  const DIV = '--------------------------';
 
   let msg = '';
   if (isUSD) {
-    msg += `Hello ${qt.clientName},\n\n`;
-    msg += `Thank you for your interest. Here is our price quotation:\n\n`;
-    msg += `*Quotation ${qt.num}*\n`;
-    msg += `───────────────────\n`;
+    msg += `Hello *${qt.clientName}* \uD83D\uDC4B\n\n`;
+    msg += `Thank you for your interest. Here is our price quotation:\n`;
+    msg += `*Quotation ${qt.num}*\n\n`;
+    msg += `${DIV}\n`;
     qt.items.forEach((it,i) => {
       msg += `${i+1}. ${it.name}\n   ${it.qty} x ${fPrice(it.price,'USD')} = ${fPrice(it.price*it.qty,'USD')}\n`;
       if (it.printMeta) {
@@ -4122,16 +4512,17 @@ function sendQtWA() {
         msg += `   (${pm.sheets} sheets ${pm.paperLabel}, ${pm.perSheet} pcs/sheet = ${pm.totalPcs} pcs total, for your order of ${pm.qtyOrdered} pcs)\n`;
       }
     });
-    msg += `───────────────────\n`;
+    msg += `${DIV}\n`;
     msg += `*Total: ${fPrice(qt.total,'USD')}*\n`;
     if (qt.validUntil) msg += `\nValid until: ${fDate(qt.validUntil)}\n`;
     if (qt.notes) msg += `\n${qt.notes}\n`;
-    msg += `\nThank you,\n${studio}`;
+    msg += `\nPlease let us know if you agree with the price above so we can proceed. We look forward to your confirmation!\n`;
+    msg += `\nThank you,\n_${studio}_`;
   } else {
-    msg += `Halo ${qt.clientName},\n\n`;
-    msg += `Terima kasih telah menghubungi kami. Berikut penawaran harga dari kami:\n\n`;
-    msg += `*Quotation ${qt.num}*\n`;
-    msg += `───────────────────\n`;
+    msg += `Halo *${qt.clientName}* \uD83D\uDC4B\n\n`;
+    msg += `Terima kasih telah menghubungi kami. Berikut penawaran harga dari kami:\n`;
+    msg += `*Quotation ${qt.num}*\n\n`;
+    msg += `${DIV}\n`;
     qt.items.forEach((it,i) => {
       msg += `${i+1}. ${it.name}\n   ${it.qty} x ${fPrice(it.price,'IDR')} = ${fPrice(it.price*it.qty,'IDR')}\n`;
       if (it.printMeta) {
@@ -4139,15 +4530,40 @@ function sendQtWA() {
         msg += `   (${pm.sheets} lembar ${pm.paperLabel}, ${pm.perSheet} pcs/lembar = total ${pm.totalPcs} pcs, untuk pesanan ${pm.qtyOrdered} pcs)\n`;
       }
     });
-    msg += `───────────────────\n`;
+    msg += `${DIV}\n`;
     msg += `*Total: ${fPrice(qt.total,'IDR')}*\n`;
     if (qt.validUntil) msg += `\nBerlaku hingga: ${fDate(qt.validUntil)}\n`;
     if (qt.notes) msg += `\n${qt.notes}\n`;
-    msg += `\nTerima kasih,\n${studio}`;
+    msg += `\nMohon konfirmasi apakah Bapak/Ibu setuju dengan harga di atas agar kami dapat segera memproses pesanan. Kami tunggu kabar baiknya!\n`;
+    msg += `\nTerima kasih,\n_${studio}_`;
   }
 
+  return msg;
+}
+
+function sendQtWA() {
+  const qt = quotations.find(q => q.id === curQtId);
+  if (!qt) return;
+  if (!qt.phone) { toast('No. telepon belum diisi di quotation ini','error'); return; }
+
+  const msg = buildQtWAMessage(qt);
   const phone = qt.phone.replace(/[^0-9]/g,'').replace(/^0/,'62');
   window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg), '_blank');
+
+  // auto-mark as sent
+  if (qt.status === 'pending') {
+    qt.status = 'sent';
+    saveState(); updateCounts();
+    openQtDetail(curQtId);
+    renderQuotations();
+  }
+}
+
+function copyQtWA() {
+  const qt = quotations.find(q => q.id === curQtId);
+  if (!qt) return;
+  const msg = buildQtWAMessage(qt);
+  copyTextToClipboard(msg, '\uD83D\uDCCB Teks quotation disalin!');
 
   // auto-mark as sent
   if (qt.status === 'pending') {
@@ -4557,6 +4973,7 @@ async function ghLoadData() {
     if (data.tasks)      tasks      = data.tasks;
     if (data.files)      files      = data.files;
     if (data.quotations) quotations = data.quotations;
+    if (data.withdrawals) withdrawals = data.withdrawals;
     if (data.cfg)        Object.assign(cfg, data.cfg);
 
     // Sync to localStorage too
@@ -4597,6 +5014,7 @@ async function ghSilentPull() {
     if (data.tasks)      tasks      = data.tasks;
     if (data.files)      files      = data.files;
     if (data.quotations) quotations = data.quotations;
+    if (data.withdrawals) withdrawals = data.withdrawals;
     if (data.cfg)        Object.assign(cfg, data.cfg);
 
     saveLocalOnly();
@@ -4608,6 +5026,7 @@ async function ghSilentPull() {
     else if (activeView === 'clients')    renderClients();
     else if (activeView === 'completed')  renderCompleted();
     else if (activeView === 'quotations') renderQuotations();
+    else if (activeView === 'financial')  renderFinancial();
 
     ghSetBadge('synced', 'Tersinkron');
     toast('✦ Data diperbarui otomatis', 'info');
@@ -4623,7 +5042,7 @@ async function ghPushData() {
   if (!ghConnected()) return;
   const {token, username, repo} = ghCreds();
 
-  const data = { projects, clients, tasks, files: files.map(({_raw,...r})=>r), quotations, cfg, _savedAt: new Date().toISOString() };
+  const data = { projects, clients, tasks, files: files.map(({_raw,...r})=>r), quotations, withdrawals, cfg, _savedAt: new Date().toISOString() };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
 
   const body = {
