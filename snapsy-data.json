@@ -219,7 +219,38 @@
       "subfolderRef": "sf_1782711099771"
     }
   ],
-  "quotations": [],
+  "quotations": [
+    {
+      "id": "qt_17828652247728m7cy9xij93",
+      "num": "QT-09B23",
+      "clientName": "Racha",
+      "phone": "0899386899",
+      "email": "sony.apkcreative@gmail.com",
+      "currency": "USD",
+      "notes": "",
+      "validUntil": "2026-07-08",
+      "status": "pending",
+      "createdAt": "2026-07-01",
+      "items": [
+        {
+          "name": "Cetak 12x8cm",
+          "qty": 50,
+          "price": 12,
+          "desc": "",
+          "printMeta": {
+            "paperLabel": "A3+",
+            "itemW": 12,
+            "itemH": 8,
+            "perSheet": 10,
+            "qtyOrdered": 500,
+            "sheets": 50,
+            "totalPcs": 500
+          }
+        }
+      ],
+      "total": 600
+    }
+  ],
   "cfg": {
     "root": "Snapsy.Std",
     "studio": "Snapsy Std.",
@@ -231,5 +262,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-06-30T23:44:16.621Z"
+  "_savedAt": "2026-07-01T00:20:26.282Z"
 }
