@@ -118,10 +118,11 @@
       "startDate": "2026-06-09",
       "deadline": "2026-06-30",
       "notes": "",
-      "driveRootId": null,
-      "driveCliId": null,
-      "driveProjId": null,
-      "createdAt": "2026-06-28T22:51:06.050Z"
+      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
+      "driveCliId": "1IVx_vR9Nxuszth95pn6_yRKAscCuz4To",
+      "driveProjId": "1XZLutlZxk501oRZvP6gcFfA6-vfYWtfu",
+      "createdAt": "2026-06-28T22:51:06.050Z",
+      "localSynced": {}
     }
   ],
   "clients": [
@@ -314,5 +315,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T22:01:08.411Z"
+  "_savedAt": "2026-07-02T22:40:13.081Z"
 }
