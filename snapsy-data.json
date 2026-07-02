@@ -243,6 +243,15 @@
       "price": "11",
       "taskStatus": "review",
       "createdAt": "2026-07-02T00:02:24.024Z"
+    },
+    {
+      "id": "t_1783001403734",
+      "projId": "p_1783001385516",
+      "name": "poster",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-02T14:10:03.734Z"
     }
   ],
   "files": [
@@ -314,5 +323,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T14:09:47.023Z"
+  "_savedAt": "2026-07-02T14:10:05.239Z"
 }
