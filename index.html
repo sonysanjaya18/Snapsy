@@ -1324,9 +1324,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
             </div>
 
             <div id="local-folder-panel" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:8px 10px;background:var(--surface2,rgba(0,0,0,.03));border-radius:8px">
-              <span style="font-size:12px;color:var(--muted)">💻 Folder lokal:</span>
-              <button class="btn btn-ghost btn-xs" onclick="openLocalProjectFolder()">📂 Buka Folder Proyek</button>
-              <button class="btn btn-ghost btn-xs" onclick="syncFinalToDrive(curProjId)">🔄 Sync 03_FINAL ke Drive</button>
+              <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Folder lokal:</span>
+              <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="openLocalProjectFolder()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Buka Folder Proyek</button>
+              <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="syncFinalToDrive(curProjId)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sync 03_FINAL ke Drive</button>
             </div>
 
             <!-- Subfolder manager -->
@@ -1934,13 +1934,35 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 <div class="overlay" id="localFolderModal">
   <div class="modal" style="width:440px">
     <div class="modal-title" style="display:flex;justify-content:space-between;align-items:center">
-      <span>💻 Folder Lokal</span>
+      <span style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Folder Lokal</span>
       <button class="btn btn-primary btn-xs" onclick="promptAddLocalFolder()">＋ Folder Baru</button>
     </div>
     <div id="lf-breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
     <div id="lf-list" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:4px"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('localFolderModal')">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Nama Folder Lokal Baru -->
+<div class="overlay" id="localNewFolderModal" style="z-index:601">
+  <div class="confirm-modal" style="width:360px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="width:38px;height:38px;border-radius:9px;background:rgba(108,99,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+      <div>
+        <div class="confirm-title" style="margin-bottom:2px">Folder Baru</div>
+        <div style="font-size:12px;color:var(--muted)" id="lfnf-location-hint">Akan dibuat di folder ini</div>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Nama Folder</label>
+      <input class="fi2" id="lfnf-name-input" placeholder="misal: Behind The Scenes"
+        onkeydown="if(event.key==='Enter')confirmAddLocalFolder();if(event.key==='Escape')closeModal('localNewFolderModal')">
+    </div>
+    <div class="confirm-footer">
+      <button class="btn btn-ghost" onclick="closeModal('localNewFolderModal')">Batal</button>
+      <button class="btn btn-primary" onclick="confirmAddLocalFolder()">＋ Buat Folder</button>
     </div>
   </div>
 </div>
@@ -2149,6 +2171,14 @@ async function driveDelete(fileId) { return gapi.client.drive.files.delete({file
 // tidak mendukung showDirectoryPicker, jadi seluruh fitur ini auto nonaktif di sana.
 const LOCAL_FS_SUPPORTED = typeof window.showDirectoryPicker === 'function';
 const LOCAL_SUBDIRS = ['01_WORKING', '02_EXPORT', '03_FINAL', '04_ARCHIVE'];
+
+// Ikon flat 1 warna (gaya sama kayak ikon lain di app ini), dipakai ganti emoji
+const ICO_FOLDER  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>';
+const ICO_LINK    = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+const ICO_WARN    = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+const ICO_REFRESH = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>';
+const ICO_TRASH   = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
+const ICO_FILE    = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
 let localRootHandle = null;      // FileSystemDirectoryHandle folder SNAPSY yang aktif
 let localRootPending = null;     // handle tersimpan tapi izinnya perlu dikonfirmasi ulang
 
@@ -2187,19 +2217,19 @@ function renderLocalRootStatus() {
   const el = document.getElementById('local-root-status');
   if (!el) return;
   if (!LOCAL_FS_SUPPORTED) {
-    el.innerHTML = '<div style="font-size:12px;color:var(--danger,#e05)">⚠️ Browser ini tidak mendukung akses folder lokal. Buka Snapsy pakai Chrome/Edge di laptop untuk fitur ini.</div>';
+    el.innerHTML = `<div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--danger,#e05)">${ICO_WARN} Browser ini tidak mendukung akses folder lokal. Buka Snapsy pakai Chrome/Edge di laptop untuk fitur ini.</div>`;
   } else if (localRootHandle) {
     el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span style="font-size:12px">📁 Terhubung: <b>${localRootHandle.name}</b></span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px">${ICO_FOLDER} Terhubung: <b>${localRootHandle.name}</b></span>
       <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="connectLocalRoot()">Ganti Folder</button>
     </div>`;
   } else if (localRootPending) {
     el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span style="font-size:12px;color:var(--danger,#e05)">⚠️ Folder lokal perlu diizinkan ulang</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--danger,#e05)">${ICO_WARN} Folder lokal perlu diizinkan ulang</span>
       <button class="btn btn-primary" style="padding:4px 10px;font-size:11px" onclick="reconnectLocalRoot()">Izinkan Lagi</button>
     </div>`;
   } else {
-    el.innerHTML = `<button class="btn btn-primary" style="padding:6px 12px;font-size:12px" onclick="connectLocalRoot()">🔗 Hubungkan Folder SNAPSY</button>`;
+    el.innerHTML = `<button class="btn btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;font-size:12px" onclick="connectLocalRoot()">${ICO_LINK} Hubungkan Folder SNAPSY</button>`;
   }
 }
 
@@ -2287,8 +2317,17 @@ async function syncFinalToDrive(projId) {
   catch (e) { toast('Folder 03_FINAL belum ada', 'error'); return; }
 
   if (!p.localSynced) p.localSynced = {}; // {namafile: driveFileId}
-  const folderId = await getProjFolder(p);
-  let uploaded = 0, skipped = 0;
+
+  let folderId;
+  try {
+    folderId = await getProjFolder(p);
+  } catch (e) {
+    console.error('Gagal siapkan folder Drive', e);
+    toast('Gagal terhubung ke Drive — coba klik tombol Login Google Drive lagi (token mungkin kadaluarsa)', 'error');
+    return;
+  }
+
+  let uploaded = 0, skipped = 0, failed = 0;
 
   for await (const [name, handle] of finalDir.entries()) {
     if (handle.kind !== 'file') continue;
@@ -2303,16 +2342,28 @@ async function syncFinalToDrive(projId) {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink');
         xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        xhr.onload = () => xhr.status === 200 ? resolve(JSON.parse(xhr.responseText)) : reject(xhr.responseText);
-        xhr.onerror = () => reject('Network error');
+        xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve(JSON.parse(xhr.responseText)) : reject(new Error('HTTP ' + xhr.status + ': ' + xhr.responseText));
+        xhr.onerror = () => reject(new Error('Network error'));
         xhr.send(form);
       });
       p.localSynced[name] = res.id;
       uploaded++;
-    } catch (e) { console.error('Sync gagal untuk', name, e); }
+    } catch (e) {
+      console.error('Sync gagal untuk', name, e);
+      failed++;
+    }
   }
   saveState();
-  toast(uploaded ? `${uploaded} file di-sync ke Drive ✓` : 'Semua file sudah ter-sync', 'success');
+
+  if (failed && !uploaded) {
+    toast(`Gagal sync ${failed} file — coba login ulang Google Drive (token mungkin kadaluarsa)`, 'error');
+  } else if (failed) {
+    toast(`${uploaded} file ter-sync, ${failed} gagal. Cek Console (F12) untuk detail error.`, 'error');
+  } else if (uploaded) {
+    toast(`${uploaded} file di-sync ke Drive ✓`, 'success');
+  } else {
+    toast('Semua file sudah ter-sync sebelumnya', 'success');
+  }
 }
 
 // ── Browser folder lokal sederhana (dalam modal) ───────
@@ -2353,8 +2404,25 @@ async function renderLocalFolderList() {
       ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
       : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
     const act = isDir ? `onclick="lfEnter('${e.name.replace(/'/g, "\\'")}')" style="cursor:pointer"` : '';
-    return `<div class="subfolder-chip" ${act} style="justify-content:flex-start;width:100%;box-sizing:border-box">${icon} ${e.name}</div>`;
+    const safeName = e.name.replace(/'/g, "\\'");
+    const delBtn = `<button onclick="event.stopPropagation();lfDelete('${safeName}','${e.handle.kind}')" title="Hapus" style="margin-left:auto;flex-shrink:0;display:inline-flex;align-items:center;background:none;border:none;color:var(--danger,#e05555);cursor:pointer;padding:2px 6px;line-height:1">${ICO_TRASH}</button>`;
+    return `<div class="subfolder-chip" ${act} style="justify-content:space-between;width:100%;box-sizing:border-box"><span style="display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis">${icon} ${e.name}</span>${delBtn}</div>`;
   }).join('');
+}
+
+async function lfDelete(name, kind) {
+  const isDir = kind === 'directory';
+  const sub = isDir
+    ? `Folder "<b>${name}</b>" beserta <b>semua isinya</b> akan dihapus permanen dari disk. Yakin lanjut?`
+    : `File "<b>${name}</b>" akan dihapus permanen dari disk. Yakin lanjut?`;
+  showConfirm(isDir ? 'Hapus Folder?' : 'Hapus File?', sub, async () => {
+    const cur = lfStack[lfStack.length - 1];
+    try {
+      await cur.handle.removeEntry(name, { recursive: true });
+      toast(`"${name}" dihapus`, 'success');
+      renderLocalFolderList();
+    } catch (e) { toast('Gagal menghapus (mungkin file sedang dipakai aplikasi lain)', 'error'); }
+  });
 }
 
 async function lfEnter(name) {
@@ -2372,11 +2440,23 @@ function lfGoTo(index) {
 }
 
 function promptAddLocalFolder() {
-  const name = prompt('Nama folder baru:');
-  if (!name || !name.trim()) return;
   const cur = lfStack[lfStack.length - 1];
-  ensureLocalDir(cur.handle, name.trim()).then(() => {
-    toast('Folder "' + name.trim() + '" dibuat ✓', 'success');
+  const hint = document.getElementById('lfnf-location-hint');
+  if (hint) hint.innerHTML = 'Akan dibuat di dalam <b>' + cur.name + '</b>';
+  const input = document.getElementById('lfnf-name-input');
+  input.value = '';
+  document.getElementById('localNewFolderModal').classList.add('show');
+  setTimeout(() => input.focus(), 50);
+}
+
+function confirmAddLocalFolder() {
+  const input = document.getElementById('lfnf-name-input');
+  const name = input.value.trim();
+  if (!name) { toast('Nama folder wajib diisi', 'error'); return; }
+  const cur = lfStack[lfStack.length - 1];
+  ensureLocalDir(cur.handle, name).then(() => {
+    closeModal('localNewFolderModal');
+    toast('Folder "' + name + '" dibuat ✓', 'success');
     renderLocalFolderList();
   }).catch(() => toast('Gagal bikin folder', 'error'));
 }
