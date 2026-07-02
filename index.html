@@ -3169,6 +3169,7 @@ function autoUpdateProjStatus(projId) {
   const list = getProjTasks(projId);
   if(!list.length) return; // kalau belum ada task, jangan ubah
 
+  const allPaid     = list.every(t => (t.taskStatus||'todo') === 'paid');
   const allDone     = list.every(t => TASK_DONE_LIKE.includes(t.taskStatus||'todo'));
   const noneStarted = list.every(t => (t.taskStatus||'todo') === 'todo');
   const hasRevision = list.some(t => (t.taskStatus||'todo') === 'review');
@@ -3176,7 +3177,9 @@ function autoUpdateProjStatus(projId) {
 
   let newStatus = p.status; // default keep
 
-  if(allDone) {
+  if(allPaid) {
+    newStatus = 'paid';
+  } else if(allDone) {
     newStatus = 'need-to-pay';
   } else if(noneStarted) {
     newStatus = 'need-work';
@@ -3190,6 +3193,7 @@ function autoUpdateProjStatus(projId) {
 
   if(p.status !== newStatus) {
     p.status = newStatus;
+    if(newStatus === 'paid' && !p.paidAt) p.paidAt = new Date().toISOString();
     saveState(); updateCounts();
     // re-render status chips if detail view open
     if(curProjId === projId) renderDetailStatus(p);
