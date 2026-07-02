@@ -67,7 +67,7 @@
       "name": "Mockup Livery",
       "price": "",
       "currency": "IDR",
-      "status": "need-to-pay",
+      "status": "invoice-sent",
       "startDate": "2026-06-27",
       "deadline": "2026-06-30",
       "notes": "Materi Semua ada di Whatsapp",
@@ -299,5 +299,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T09:27:31.167Z"
+  "_savedAt": "2026-07-02T09:27:38.187Z"
 }
