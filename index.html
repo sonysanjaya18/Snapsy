@@ -1323,6 +1323,12 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> <b id="dp-root">Snapsy.Std</b> › <b id="dp-client">-</b> › <b id="dp-proj">-</b><span id="dp-sub"></span>
             </div>
 
+            <div id="local-folder-panel" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;padding:8px 10px;background:var(--surface2,rgba(0,0,0,.03));border-radius:8px">
+              <span style="font-size:12px;color:var(--muted)">💻 Folder lokal:</span>
+              <button class="btn btn-ghost btn-xs" onclick="openLocalProjectFolder()">📂 Buka Folder Proyek</button>
+              <button class="btn btn-ghost btn-xs" onclick="syncFinalToDrive(curProjId)">🔄 Sync 03_FINAL ke Drive</button>
+            </div>
+
             <!-- Subfolder manager -->
             <div class="subfolder-bar" id="subfolder-bar">
               <div class="subfolder-chip active" data-sf="" onclick="selectSubfolder(this,'','Folder Utama')">
@@ -1470,6 +1476,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <div class="fg"><label class="fl">Client ID</label><input class="fi2" id="s-cid" placeholder="xxxx.apps.googleusercontent.com"></div>
     <div class="fg"><label class="fl">API Key</label><input class="fi2" id="s-key" placeholder="AIzaSy..."></div>
     <div style="font-size:12px;color:var(--muted)">Tersimpan di browser saja, tidak dikirim ke server.</div>
+    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">Folder Lokal (Disk Komputer)</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Hubungkan folder <b>SNAPSY</b> di komputermu. Setiap bikin proyek baru, app otomatis bikin struktur <code>Klien/Proyek/01_WORKING, 02_EXPORT, 03_FINAL, 04_ARCHIVE</code> di dalamnya. Fitur ini cuma jalan di Chrome/Edge versi laptop-PC.</div>
+    <div id="local-root-status" style="margin-bottom:6px"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('setupModal')">Batal</button>
       <button class="btn btn-primary" onclick="saveSetup()">Simpan</button>
@@ -1921,6 +1930,21 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   </div>
 </div>
 
+<!-- MODAL: Local Folder Browser -->
+<div class="overlay" id="localFolderModal">
+  <div class="modal" style="width:440px">
+    <div class="modal-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>💻 Folder Lokal</span>
+      <button class="btn btn-primary btn-xs" onclick="promptAddLocalFolder()">＋ Folder Baru</button>
+    </div>
+    <div id="lf-breadcrumb" style="font-size:12px;color:var(--muted);margin-bottom:10px"></div>
+    <div id="lf-list" style="max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:4px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('localFolderModal')">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <!-- Hidden iframe for PDF generation -->
 <iframe id="inv-pdf-frame" style="display:none;width:0;height:0;border:0"></iframe>
 
@@ -1976,6 +2000,7 @@ window.onload = async () => {
   if(migrated) saveState();
   updateCounts(); renderDashboard();
   if (cfg.clientId && cfg.apiKey) { initGapi(); document.getElementById('loginBtn').style.display='inline-flex'; }
+  restoreLocalRoot();
 
   // GitHub sync init — tunggu sampai selesai supaya ghFileSha sudah terisi
   await ghInit();
@@ -2119,7 +2144,244 @@ async function driveUpload(fileObj, folderId, onProgress) {
 }
 async function driveDelete(fileId) { return gapi.client.drive.files.delete({fileId}); }
 
-// ── SUBFOLDER MANAGEMENT ──────────────────────────────
+// ── LOCAL FILE SYSTEM (File System Access API) ────────
+// Cuma jalan di Chrome/Edge/Opera desktop. Browser lain (Safari/Firefox/mobile)
+// tidak mendukung showDirectoryPicker, jadi seluruh fitur ini auto nonaktif di sana.
+const LOCAL_FS_SUPPORTED = typeof window.showDirectoryPicker === 'function';
+const LOCAL_SUBDIRS = ['01_WORKING', '02_EXPORT', '03_FINAL', '04_ARCHIVE'];
+let localRootHandle = null;      // FileSystemDirectoryHandle folder SNAPSY yang aktif
+let localRootPending = null;     // handle tersimpan tapi izinnya perlu dikonfirmasi ulang
+
+function idbOpen() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('snapsy-fs', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('handles');
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+async function idbSet(key, val) {
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('handles', 'readwrite');
+    tx.objectStore('handles').put(val, key);
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('handles', 'readonly');
+    const req = tx.objectStore('handles').get(key);
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+
+function sanitizeFolderName(name) {
+  return (name || 'Untitled').replace(/[\\/:*?"<>|]/g, '-').trim() || 'Untitled';
+}
+
+function renderLocalRootStatus() {
+  const el = document.getElementById('local-root-status');
+  if (!el) return;
+  if (!LOCAL_FS_SUPPORTED) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--danger,#e05)">⚠️ Browser ini tidak mendukung akses folder lokal. Buka Snapsy pakai Chrome/Edge di laptop untuk fitur ini.</div>';
+  } else if (localRootHandle) {
+    el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:12px">📁 Terhubung: <b>${localRootHandle.name}</b></span>
+      <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="connectLocalRoot()">Ganti Folder</button>
+    </div>`;
+  } else if (localRootPending) {
+    el.innerHTML = `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--danger,#e05)">⚠️ Folder lokal perlu diizinkan ulang</span>
+      <button class="btn btn-primary" style="padding:4px 10px;font-size:11px" onclick="reconnectLocalRoot()">Izinkan Lagi</button>
+    </div>`;
+  } else {
+    el.innerHTML = `<button class="btn btn-primary" style="padding:6px 12px;font-size:12px" onclick="connectLocalRoot()">🔗 Hubungkan Folder SNAPSY</button>`;
+  }
+}
+
+async function connectLocalRoot() {
+  if (!LOCAL_FS_SUPPORTED) { toast('Browser ini tidak mendukung akses folder lokal. Pakai Chrome/Edge di laptop.', 'error'); return; }
+  try {
+    const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    localRootHandle = handle;
+    localRootPending = null;
+    await idbSet('localRoot', handle);
+    toast('Folder lokal "' + handle.name + '" terhubung ✓', 'success');
+  } catch (e) {
+    if (e.name !== 'AbortError') toast('Gagal menghubungkan folder', 'error');
+  }
+  renderLocalRootStatus();
+}
+
+async function reconnectLocalRoot() {
+  if (!localRootPending) return connectLocalRoot();
+  try {
+    const perm = await localRootPending.requestPermission({ mode: 'readwrite' });
+    if (perm === 'granted') {
+      localRootHandle = localRootPending;
+      localRootPending = null;
+      toast('Akses folder lokal diizinkan ✓', 'success');
+    } else {
+      toast('Izin ditolak', 'error');
+    }
+  } catch (e) { toast('Gagal minta izin', 'error'); }
+  renderLocalRootStatus();
+}
+
+async function restoreLocalRoot() {
+  if (!LOCAL_FS_SUPPORTED) return;
+  try {
+    const handle = await idbGet('localRoot');
+    if (!handle) return;
+    const perm = await handle.queryPermission({ mode: 'readwrite' });
+    if (perm === 'granted') { localRootHandle = handle; }
+    else { localRootPending = handle; }
+  } catch (e) { /* belum pernah connect, biarin */ }
+  renderLocalRootStatus();
+}
+
+async function ensureLocalDir(parentHandle, name) {
+  return parentHandle.getDirectoryHandle(sanitizeFolderName(name), { create: true });
+}
+
+// Dipanggil otomatis tiap ada proyek baru — bikin SNAPSY/Klien/Proyek/01-04
+async function createLocalProjectFolders(proj) {
+  if (!LOCAL_FS_SUPPORTED || !localRootHandle) return null;
+  try {
+    const cliDir  = await ensureLocalDir(localRootHandle, proj.client);
+    const projDir = await ensureLocalDir(cliDir, proj.name);
+    for (const sub of LOCAL_SUBDIRS) { await ensureLocalDir(projDir, sub); }
+    toast('Folder lokal proyek dibuat ✓', 'success');
+    return projDir;
+  } catch (e) {
+    console.error(e);
+    toast('Gagal bikin folder lokal (izin folder mungkin lepas)', 'error');
+    return null;
+  }
+}
+
+// Ambil handle folder proyek lokal yang sudah ada (tanpa create baru kalau belum ada)
+async function getLocalProjectDir(proj) {
+  if (!LOCAL_FS_SUPPORTED || !localRootHandle) return null;
+  try {
+    const cliDir  = await localRootHandle.getDirectoryHandle(sanitizeFolderName(proj.client));
+    const projDir = await cliDir.getDirectoryHandle(sanitizeFolderName(proj.name));
+    return projDir;
+  } catch (e) { return null; }
+}
+
+// Scan isi folder 03_FINAL lokal, lalu upload file yang belum pernah disync ke Drive
+async function syncFinalToDrive(projId) {
+  const p = getProj(projId); if (!p) return;
+  if (!LOCAL_FS_SUPPORTED || !localRootHandle) { toast('Hubungkan folder lokal dulu di Setup', 'error'); return; }
+  if (!accessToken) { toast('Login Google Drive dulu', 'error'); return; }
+  const projDir = await getLocalProjectDir(p);
+  if (!projDir) { toast('Folder lokal proyek ini belum ada', 'error'); return; }
+
+  let finalDir;
+  try { finalDir = await projDir.getDirectoryHandle('03_FINAL'); }
+  catch (e) { toast('Folder 03_FINAL belum ada', 'error'); return; }
+
+  if (!p.localSynced) p.localSynced = {}; // {namafile: driveFileId}
+  const folderId = await getProjFolder(p);
+  let uploaded = 0, skipped = 0;
+
+  for await (const [name, handle] of finalDir.entries()) {
+    if (handle.kind !== 'file') continue;
+    if (p.localSynced[name]) { skipped++; continue; }
+    try {
+      const file = await handle.getFile();
+      const res = await new Promise((resolve, reject) => {
+        const meta = { name: file.name, parents: [folderId] };
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
+        form.append('file', file);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        xhr.onload = () => xhr.status === 200 ? resolve(JSON.parse(xhr.responseText)) : reject(xhr.responseText);
+        xhr.onerror = () => reject('Network error');
+        xhr.send(form);
+      });
+      p.localSynced[name] = res.id;
+      uploaded++;
+    } catch (e) { console.error('Sync gagal untuk', name, e); }
+  }
+  saveState();
+  toast(uploaded ? `${uploaded} file di-sync ke Drive ✓` : 'Semua file sudah ter-sync', 'success');
+}
+
+// ── Browser folder lokal sederhana (dalam modal) ───────
+let lfStack = []; // [{handle, name}] jalur navigasi dari root folder proyek
+
+async function openLocalProjectFolder() {
+  const p = getProj(curProjId); if (!p) return;
+  if (!LOCAL_FS_SUPPORTED || !localRootHandle) { toast('Hubungkan folder lokal dulu di Setup (⚙️)', 'error'); return; }
+  let projDir = await getLocalProjectDir(p);
+  if (!projDir) projDir = await createLocalProjectFolders(p);
+  if (!projDir) { toast('Gagal membuka folder proyek', 'error'); return; }
+  lfStack = [{ handle: projDir, name: p.name }];
+  await renderLocalFolderList();
+  document.getElementById('localFolderModal').classList.add('show');
+}
+
+async function renderLocalFolderList() {
+  const cur = lfStack[lfStack.length - 1];
+  const bc = document.getElementById('lf-breadcrumb');
+  bc.innerHTML = lfStack.map((s, i) =>
+    `<span style="cursor:pointer;${i === lfStack.length - 1 ? 'font-weight:700;color:var(--text)' : 'text-decoration:underline'}" onclick="lfGoTo(${i})">${s.name}</span>`
+  ).join(' › ');
+
+  const list = document.getElementById('lf-list');
+  list.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Memuat…</div>';
+
+  const entries = [];
+  for await (const [name, handle] of cur.handle.entries()) entries.push({ name, handle });
+  entries.sort((a, b) => a.handle.kind === b.handle.kind ? a.name.localeCompare(b.name) : (a.handle.kind === 'directory' ? -1 : 1));
+
+  if (!entries.length) {
+    list.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:8px 0">Folder ini masih kosong.</div>';
+    return;
+  }
+  list.innerHTML = entries.map(e => {
+    const isDir = e.handle.kind === 'directory';
+    const icon = isDir
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+    const act = isDir ? `onclick="lfEnter('${e.name.replace(/'/g, "\\'")}')" style="cursor:pointer"` : '';
+    return `<div class="subfolder-chip" ${act} style="justify-content:flex-start;width:100%;box-sizing:border-box">${icon} ${e.name}</div>`;
+  }).join('');
+}
+
+async function lfEnter(name) {
+  const cur = lfStack[lfStack.length - 1];
+  try {
+    const sub = await cur.handle.getDirectoryHandle(name);
+    lfStack.push({ handle: sub, name });
+    renderLocalFolderList();
+  } catch (e) { toast('Gagal membuka folder', 'error'); }
+}
+
+function lfGoTo(index) {
+  lfStack = lfStack.slice(0, index + 1);
+  renderLocalFolderList();
+}
+
+function promptAddLocalFolder() {
+  const name = prompt('Nama folder baru:');
+  if (!name || !name.trim()) return;
+  const cur = lfStack[lfStack.length - 1];
+  ensureLocalDir(cur.handle, name.trim()).then(() => {
+    toast('Folder "' + name.trim() + '" dibuat ✓', 'success');
+    renderLocalFolderList();
+  }).catch(() => toast('Gagal bikin folder', 'error'));
+}
+
+
 function getSubfolders(projId) {
   const p = getProj(projId);
   return (p && p.subfolders) ? p.subfolders : [];
@@ -2387,6 +2649,7 @@ function saveProject() {
   } else {
     projects.unshift({id:'p_'+Date.now(), client: clientName, name, price:document.getElementById('f-price').value, currency: projCurrency, status:document.getElementById('f-status').value, startDate:document.getElementById('f-start').value, deadline:document.getElementById('f-deadline').value, notes:document.getElementById('f-notes').value, driveRootId:null, driveCliId:null, driveProjId:null, createdAt:new Date().toISOString()});
     toast('Proyek "'+name+'" ditambahkan!','success');
+    createLocalProjectFolders(projects[0]); // fire-and-forget, bikin 01-04 di disk lokal kalau sudah terhubung
   }
   saveState(); closeModal('projModal'); updateCounts(); renderDashboard();
   if(curProjId===editProjId) openDetail(editProjId); else renderProjects();
@@ -3319,6 +3582,8 @@ function openDetail(id) {
   if(lbl) lbl.innerHTML = 'Upload ke: <b>Folder Utama</b>';
   const dpSub = document.getElementById('dp-sub');
   if(dpSub) dpSub.innerHTML = '';
+  const lfPanel = document.getElementById('local-folder-panel');
+  if(lfPanel) lfPanel.style.display = (LOCAL_FS_SUPPORTED && localRootHandle) ? 'flex' : 'none';
   showView('detail',null);
 }
 function renderDetailStatus(p) {
@@ -3875,6 +4140,7 @@ function openSetup() {
   document.getElementById('s-root').value    = cfg.root    || 'Snapsy.Std';
   document.getElementById('s-cid').value     = cfg.clientId|| '';
   document.getElementById('s-key').value     = cfg.apiKey  || '';
+  renderLocalRootStatus();
   document.getElementById('setupModal').classList.add('show');
 }
 function saveSetup() {
