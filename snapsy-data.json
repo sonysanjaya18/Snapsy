@@ -242,6 +242,34 @@
       "driveId": "1ySQwSz3WqMcJe9PIApvixKzPLYEWG4XJ",
       "driveLink": "https://drive.google.com/file/d/1ySQwSz3WqMcJe9PIApvixKzPLYEWG4XJ/view?usp=drivesdk",
       "subfolderRef": "sf_1782711099771"
+    },
+    {
+      "id": "f_1782969712551tm0y1dkvib9",
+      "projId": "p_1782698452967",
+      "name": "R1-Palagan Mobil Mockup.pdf",
+      "size": 883932,
+      "type": "application/pdf",
+      "status": "pending",
+      "progress": 0,
+      "driveId": null,
+      "driveLink": null,
+      "subfolderRef": "",
+      "thumb": null,
+      "thumbFull": null
+    },
+    {
+      "id": "f_17829697125522lwv8t24uno",
+      "projId": "p_1782698452967",
+      "name": "R2-Palagan Mobil Mockup.pdf",
+      "size": 1408790,
+      "type": "application/pdf",
+      "status": "pending",
+      "progress": 0,
+      "driveId": null,
+      "driveLink": null,
+      "subfolderRef": "",
+      "thumb": null,
+      "thumbFull": null
     }
   ],
   "quotations": [],
@@ -257,5 +285,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T05:21:38.822Z"
+  "_savedAt": "2026-07-02T05:21:54.060Z"
 }
