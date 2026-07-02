@@ -71,9 +71,9 @@
       "startDate": "2026-06-27",
       "deadline": "2026-06-30",
       "notes": "Materi Semua ada di Whatsapp",
-      "driveRootId": null,
-      "driveCliId": null,
-      "driveProjId": null,
+      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
+      "driveCliId": "10_6lJh_R84SrXvNsWdoXbtZkL1bb2XdT",
+      "driveProjId": "1_WVAZwNqNhcETV0NmpJMrTUcEDkNhXh1",
       "createdAt": "2026-06-29T02:00:52.967Z",
       "paidAt": "2026-07-02T05:21:37.319Z"
     },
@@ -249,7 +249,7 @@
       "name": "R1-Palagan Mobil Mockup.pdf",
       "size": 883932,
       "type": "application/pdf",
-      "status": "pending",
+      "status": "uploading",
       "progress": 0,
       "driveId": null,
       "driveLink": null,
@@ -285,5 +285,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T05:21:54.060Z"
+  "_savedAt": "2026-07-02T05:22:01.221Z"
 }
