@@ -1937,6 +1937,8 @@ let files    = JSON.parse(localStorage.getItem('ssy_files') || '[]');
 let cfg      = JSON.parse(localStorage.getItem('ssy_cfg')   || '{"root":"Snapsy.Std"}');
 let quotations = JSON.parse(localStorage.getItem('ssy_qt') || '[]');
 let withdrawals = JSON.parse(localStorage.getItem('ssy_wd') || '[]');
+// Status task yang dianggap "selesai" — dipakai buat progress bar & auto status proyek
+const TASK_DONE_LIKE = ['done', 'invoiced', 'paid'];
 
 let curProjId = null;
 let curSubfolderId = '';    // '' = root proj folder, else Drive folder id
@@ -2584,7 +2586,7 @@ document.addEventListener('keydown', e => {
 // ── COMPLETED CARD ────────────────────────────────────
 function completedCard(p) {
   const taskList  = getProjTasks(p.id);
-  const doneTasks = taskList.filter(t=>(t.taskStatus||'todo')==='done').length;
+  const doneTasks = taskList.filter(t=>TASK_DONE_LIKE.includes(t.taskStatus||'todo')).length;
   const projFiles = files.filter(f=>f.projId===p.id);
   const taskTotal = taskList.reduce((s,t)=>s+(parseFloat(t.price)||0),0);
 
@@ -3167,7 +3169,7 @@ function autoUpdateProjStatus(projId) {
   const list = getProjTasks(projId);
   if(!list.length) return; // kalau belum ada task, jangan ubah
 
-  const allDone     = list.every(t => (t.taskStatus||'todo') === 'done');
+  const allDone     = list.every(t => TASK_DONE_LIKE.includes(t.taskStatus||'todo'));
   const noneStarted = list.every(t => (t.taskStatus||'todo') === 'todo');
   const hasRevision = list.some(t => (t.taskStatus||'todo') === 'review');
   const hasInProg   = list.some(t => (t.taskStatus||'todo') === 'inprogress');
@@ -3197,7 +3199,7 @@ function autoUpdateProjStatus(projId) {
 function updateTaskStatus(id, val, selectEl) {
   const t=tasks.find(x=>x.id===id); if(!t) return;
   t.taskStatus = val;
-  if(val==='done') { t.done=true; } else if(t.done && val!=='done') { t.done=false; }
+  t.done = TASK_DONE_LIKE.includes(val);
   saveState();
   if(selectEl) { selectEl.className = 'task-status-btn ts-'+val; }
   autoUpdateProjStatus(t.projId);
@@ -3742,7 +3744,7 @@ function filterByClient(clientName) {
 
 function projCard(p) {
   const taskList=getProjTasks(p.id);
-  const doneTasks=taskList.filter(t=>(t.taskStatus||'todo')==='done').length;
+  const doneTasks=taskList.filter(t=>TASK_DONE_LIKE.includes(t.taskStatus||'todo')).length;
   const projFiles=files.filter(f=>f.projId===p.id);
   const fileCount=projFiles.length;
   const days=p.deadline?Math.ceil((new Date(p.deadline)-new Date())/86400000):null;
