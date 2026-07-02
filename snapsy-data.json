@@ -67,7 +67,7 @@
       "name": "Mockup Livery",
       "price": "",
       "currency": "IDR",
-      "status": "need-to-pay",
+      "status": "ongoing",
       "startDate": "2026-06-27",
       "deadline": "2026-06-30",
       "notes": "Materi Semua ada di Whatsapp",
@@ -187,9 +187,9 @@
       "id": "t_1782698471019",
       "projId": "p_1782698452967",
       "name": "Design Mockup Livery",
-      "done": true,
+      "done": false,
       "price": "50000",
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "createdAt": "2026-06-29T02:01:11.019Z"
     },
     {
@@ -256,5 +256,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T05:21:14.561Z"
+  "_savedAt": "2026-07-02T05:21:28.247Z"
 }
