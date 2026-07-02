@@ -99,7 +99,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-06-09",
       "deadline": "2026-06-30",
       "notes": "",
@@ -109,7 +109,8 @@
       "createdAt": "2026-06-28T22:51:06.050Z",
       "localSynced": {
         ".DS_Store": "1TSbfTy7wTN9-8mENXZBWw5k9i6N2Pn7I"
-      }
+      },
+      "paidAt": "2026-07-02T23:49:51.108Z"
     }
   ],
   "clients": [
@@ -311,5 +312,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T23:49:48.543Z"
+  "_savedAt": "2026-07-02T23:49:52.613Z"
 }
