@@ -122,7 +122,9 @@
       "driveCliId": "1IVx_vR9Nxuszth95pn6_yRKAscCuz4To",
       "driveProjId": "1XZLutlZxk501oRZvP6gcFfA6-vfYWtfu",
       "createdAt": "2026-06-28T22:51:06.050Z",
-      "localSynced": {}
+      "localSynced": {
+        ".DS_Store": "1TSbfTy7wTN9-8mENXZBWw5k9i6N2Pn7I"
+      }
     }
   ],
   "clients": [
@@ -315,5 +317,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-02T22:41:22.647Z"
+  "_savedAt": "2026-07-02T22:41:26.699Z"
 }
