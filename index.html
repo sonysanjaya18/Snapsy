@@ -161,6 +161,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .b-ongoing { background: rgba(79,142,247,.12); color: #2563eb; }
 .b-done { background: rgba(22,163,74,.12); color: var(--green); }
 .b-pending { background: rgba(217,119,6,.12); color: var(--yellow); }
+.b-local { background: rgba(100,116,139,.12); color: #64748b; }
 .b-revision { background: rgba(234,108,26,.12); color: var(--orange); }
 .b-cancel { background: rgba(220,38,38,.12); color: var(--red); }
 .b-need-work { background: rgba(107,114,153,.12); color: #5c6494; }
@@ -2024,7 +2025,9 @@ window.onload = async () => {
   if(migrated) saveState();
   updateCounts(); renderDashboard();
   if (cfg.clientId && cfg.apiKey) { initGapi(); document.getElementById('loginBtn').style.display='inline-flex'; }
-  restoreLocalRoot();
+  restoreLocalRoot().then(() => {
+    if (LOCAL_FS_SUPPORTED && localRootHandle) scanAllLocalTracking();
+  });
 
   // GitHub sync init — tunggu sampai selesai supaya ghFileSha sudah terisi
   await ghInit();
@@ -2308,6 +2311,50 @@ async function getLocalProjectDir(proj) {
 }
 
 // Scan isi folder 03_FINAL lokal, lalu upload file yang belum pernah disync ke Drive
+// Scan SEMUA folder lokal (01-04) buat nyari gambar/PDF yang belum pernah "dikenal" app,
+// terus bikin thumbnail-nya buat kebutuhan tracking — TANPA upload ke Drive.
+// Ini yang bikin cover proyek & preview file tetep muncul walau file cuma ditaruh manual
+// (misal langsung dipindah ke 04_ARCHIVE pas proyek kelar, tanpa lewat Sync).
+// Scan semua proyek di background (dipanggil sekali pas app dibuka), biar thumbnail cover
+// kartu proyek keisi otomatis tanpa perlu buka detail proyeknya satu-satu dulu.
+async function scanAllLocalTracking() {
+  for (const proj of projects) {
+    await scanLocalTracking(proj.id);
+  }
+}
+
+// Scan folder lokal 03_FINAL doang buat nyari gambar/PDF, terus bikin thumbnail-nya buat
+// kebutuhan tracking (cover proyek & preview) — TANPA upload ke Drive.
+async function scanLocalTracking(projId) {
+  if (!LOCAL_FS_SUPPORTED || !localRootHandle) return;
+  const p = getProj(projId); if (!p) return;
+  const projDir = await getLocalProjectDir(p);
+  if (!projDir) return;
+
+  const sub = '03_FINAL';
+  let dirH;
+  try { dirH = await projDir.getDirectoryHandle(sub); } catch (e) { return; }
+
+  for await (const [name, handle] of dirH.entries()) {
+    if (handle.kind !== 'file') continue;
+    const ext = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+    if (!['jpg','jpeg','png','gif','webp','pdf'].includes(ext)) continue;
+    // sudah pernah ditrack dari folder yang sama? skip
+    if (files.find(x => x.projId === p.id && x.name === name && x.localFolder === sub)) continue;
+
+    try {
+      const file = await handle.getFile();
+      const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name, size: file.size, type: file.type, status: 'local', progress: 100, driveId: null, driveLink: null, subfolderRef: '', thumb: null, thumbFull: null, _raw: null, localFolder: sub };
+      files.push(fObj);
+      genThumb(file).then(result => {
+        if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); if (curProjId === p.id) renderDetailFiles(p.id); renderProjects(); renderDashboard(); }
+      });
+    } catch (e) { console.error('Gagal scan', name, e); }
+  }
+  saveState();
+  if (curProjId === p.id) renderDetailFiles(p.id);
+}
+
 async function syncFinalToDrive(projId) {
   const p = getProj(projId); if (!p) return;
   if (!LOCAL_FS_SUPPORTED || !localRootHandle) { toast('Hubungkan folder lokal dulu di Setup', 'error'); return; }
@@ -3714,7 +3761,7 @@ function addFiles(rawFiles) {
 }
 async function uploadSingleFile(fileId) { if(!accessToken) { if(!gapiReady) { toast('Setup Drive dulu','error'); return; } tokenClient.requestAccessToken({prompt:'consent'}); return; } const f=files.find(x=>x.id===fileId); if(!f||!f._raw) { toast('File tidak ada di memori','error'); return; } const proj = getProj(f.projId); f.status='uploading'; f.progress=0; renderDetailFiles(curProjId); try { const savedSf=curSubfolderId; const savedSfName=curSubfolderName; curSubfolderId=f.subfolderRef||''; const sf=(proj.subfolders||[]).find(s=>s.id===curSubfolderId); curSubfolderName=sf?sf.name:'Folder Utama'; const folderId = await getTargetFolderId(proj); curSubfolderId=savedSf; curSubfolderName=savedSfName; const res = await driveUpload(f, folderId, pct=>{ f.progress=pct; const bar=document.getElementById('pf_'+f.id); if(bar) bar.style.width=pct+'%'; }); f.status='done'; f.driveId=res.id; f.driveLink=res.webViewLink; saveState(); renderDetailFiles(curProjId); toast('Upload sukses!','success'); } catch(err) { f.status='error'; saveState(); renderDetailFiles(curProjId); toast('Upload gagal','error'); } }
 async function uploadAllFiles() { const pending=files.filter(f=>f.projId===curProjId&&f.status==='pending'); if(!pending.length) return; toast('Uploading...','info'); for(const f of pending) await uploadSingleFile(f.id); }
-function confirmDeleteFile(fileId) { const f=files.find(x=>x.id===fileId); if(!f) return; showConfirm('Hapus File?', `Yakin hapus "<b>${f.name}</b>"?`, async () => { if(f.driveId && accessToken) { try { await driveDelete(f.driveId); } catch(e) {} } files=files.filter(x=>x.id!==fileId); saveState(); renderDetailFiles(curProjId); toast('Dihapus','success'); }); }
+function confirmDeleteFile(fileId) { const f=files.find(x=>x.id===fileId); if(!f) return; const isLocalOnly = f.status==='local'; const sub = isLocalOnly ? `Hapus preview "<b>${f.name}</b>" dari tracking? File aslinya di disk <b>tidak ikut terhapus</b>.` : `Yakin hapus "<b>${f.name}</b>"?`; showConfirm('Hapus File?', sub, async () => { if(f.driveId && accessToken) { try { await driveDelete(f.driveId); } catch(e) {} } files=files.filter(x=>x.id!==fileId); saveState(); renderDetailFiles(curProjId); toast('Dihapus','success'); }); }
 function renderDetailFiles(projId) {
   const allFiles=files.filter(f=>f.projId===projId);
   const list = curSubfolderId
@@ -3733,6 +3780,7 @@ function renderDetailFiles(projId) {
     else if(f.status==='uploading') { badge='<span class="badge b-ongoing">Uploading</span>'; prog=`<div class="prog-bar"><div class="prog-fill" id="pf_${f.id}" style="width:${f.progress||0}%"></div></div>`; }
     else if(f.status==='done') { badge='<span class="badge b-done">Done</span>'; actions=(f.driveLink?`<a href="${f.driveLink}" target="_blank" class="btn btn-ghost btn-xs" title="Buka di Drive">${ILINK}</a>`:'')+`<button class="btn btn-danger btn-xs" onclick="confirmDeleteFile('${f.id}')" title="Hapus">${ITRASH}</button>`; }
     else if(f.status==='error') { badge='<span class="badge b-cancel">Error</span>'; actions=`<button class="btn btn-primary btn-xs" onclick="uploadSingleFile('${f.id}')" title="Coba lagi">${IRETRY}</button> <button class="btn btn-danger btn-xs" onclick="confirmDeleteFile('${f.id}')" title="Hapus">${ITRASH}</button>`; }
+    else if(f.status==='local') { badge=`<span class="badge b-local">Lokal · ${f.localFolder||''}</span>`; actions=`<button class="btn btn-danger btn-xs" onclick="confirmDeleteFile('${f.id}')" title="Hapus dari tracking (file asli di disk tidak terhapus)">${ITRASH}</button>`; }
     return `<div class="file-item"> <div class="fi-icon">${fIcon(f.name)}</div> <div class="fi-info"> <div class="fi-name">${f.name}</div> <div class="fi-size">${fSize(f.size)}${prog}</div> </div> <div class="fi-right">${badge} ${actions}</div> </div>`;
   }).join('');
 }
@@ -3761,6 +3809,7 @@ function openDetail(id) {
   if(dpSub) dpSub.innerHTML = '';
   const lfPanel = document.getElementById('local-folder-panel');
   if(lfPanel) lfPanel.style.display = (LOCAL_FS_SUPPORTED && localRootHandle) ? 'flex' : 'none';
+  if (LOCAL_FS_SUPPORTED && localRootHandle) scanLocalTracking(id); // fire-and-forget, isi thumbnail dari folder lokal
   showView('detail',null);
 }
 function renderDetailStatus(p) {
