@@ -98,7 +98,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "paid",
+      "status": "ongoing",
       "startDate": "2026-06-09",
       "deadline": "2026-06-30",
       "notes": "",
@@ -188,9 +188,9 @@
       "id": "t_1782698320938",
       "projId": "p_1782687066050",
       "name": "4x Social Media Size",
-      "done": true,
+      "done": false,
       "price": "20",
-      "taskStatus": "done",
+      "taskStatus": "todo",
       "createdAt": "2026-06-29T01:58:40.938Z"
     },
     {
@@ -332,5 +332,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-03T03:31:08.256Z"
+  "_savedAt": "2026-07-03T03:31:10.302Z"
 }
