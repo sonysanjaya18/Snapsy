@@ -959,11 +959,94 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   .nav-label-short { display: none !important; }
 }
 
+/* ── PORTAL KLIEN ──────────────────────────────────── */
+.portal-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--accent); cursor: pointer; transition: .15s; flex-shrink: 0;
+}
+.portal-btn:hover { background: rgba(108,99,255,.08); border-color: var(--accent); transform: translateY(-1px); }
+.portal-notif-dot {
+  position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red); border: 2px solid var(--surface); display: none;
+}
+.portal-notif-dot.show { display: block; animation: pulse 1.5s infinite; }
+.pc-portal-wrap { position: relative; display: inline-flex; }
+.project-card .pc-portal-wrap { margin-left: 6px; }
+
+.portal-link-box {
+  display: flex; align-items: center; gap: 8px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin: 12px 0;
+}
+.portal-link-box input {
+  flex: 1; border: none; background: transparent; font-size: 12px; color: var(--text);
+  font-family: monospace; outline: none;
+}
+.portal-warn {
+  font-size: 11.5px; color: var(--muted); background: rgba(217,119,6,.08);
+  border: 1px solid rgba(217,119,6,.2); border-radius: 8px; padding: 9px 11px; line-height: 1.5; margin-top: 10px;
+}
+.portal-warn b { color: var(--yellow); }
+.portal-inactive-box {
+  text-align: center; padding: 18px 10px; color: var(--muted); font-size: 12.5px;
+  background: var(--surface2); border-radius: 8px; margin: 12px 0;
+}
+
+/* ── PORTAL VIEW (halaman klien, tanpa login) ───────── */
+#portal-app { display: none; min-height: 100vh; background: var(--bg); }
+#portal-app.show { display: block; }
+.portal-topbar {
+  display: flex; align-items: center; justify-content: space-between; padding: 14px 20px;
+  background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 1px 6px rgba(108,99,255,.07);
+}
+.portal-topbar .brand { font-size: 16px; font-weight: 800; }
+.portal-topbar .brand span { color: var(--accent); }
+.portal-wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 60px; }
+.portal-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.portal-proj-name { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
+.portal-proj-client { font-size: 13px; color: var(--muted); }
+.portal-status-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+.portal-file-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border);
+}
+.portal-file-item:last-child { border-bottom: none; }
+.portal-file-name { font-size: 12.5px; font-weight: 600; flex: 1; }
+.portal-file-size { font-size: 11px; color: var(--muted); }
+.portal-center-msg {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 70vh; text-align: center; padding: 20px; color: var(--muted); gap: 10px;
+}
+.portal-loader {
+  width: 26px; height: 26px; border: 3px solid var(--surface3); border-top-color: var(--accent);
+  border-radius: 50%; animation: portal-spin .8s linear infinite;
+}
+@keyframes portal-spin { to { transform: rotate(360deg); } }
+.portal-footer-note { text-align: center; font-size: 11px; color: var(--muted); margin-top: 18px; }
+
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas-pro@2.2.1/dist/html2canvas-pro.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+
+<!-- PORTAL KLIEN — halaman khusus untuk klien, tanpa login -->
+<div id="portal-app">
+  <div class="portal-topbar">
+    <div class="brand">Snapsy<span>.</span>Std</div>
+    <div style="font-size:11px;color:var(--muted)" id="portal-studio-name"></div>
+  </div>
+  <div class="portal-wrap" id="portal-content">
+    <div class="portal-center-msg">
+      <div class="portal-loader"></div>
+      <div>Memuat portal proyek...</div>
+    </div>
+  </div>
+</div>
 
 <!-- GITHUB LOGIN SCREEN -->
 <div id="gh-login-screen" style="display:none">
@@ -1284,6 +1367,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
                 <div style="font-size:13px;color:var(--muted);margin-top:3px" id="d-client">-</div>
               </div>
               <div style="display:flex;gap:6px">
+                <button class="btn btn-secondary btn-sm" onclick="openPortalModal(curProjId)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Portal Klien</button>
                 <button class="btn btn-secondary btn-sm" onclick="editProject()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit</button>
                 <button class="btn btn-danger btn-sm" onclick="confirmDeleteProject()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
               </div>
@@ -1477,6 +1561,12 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
     <div class="fg"><label class="fl">Client ID</label><input class="fi2" id="s-cid" placeholder="xxxx.apps.googleusercontent.com"></div>
     <div class="fg"><label class="fl">API Key</label><input class="fi2" id="s-key" placeholder="AIzaSy..."></div>
     <div style="font-size:12px;color:var(--muted)">Tersimpan di browser saja, tidak dikirim ke server.</div>
+    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">🔗 Portal Klien</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Token khusus buat link portal klien (tanpa login). Terpisah dari token sync utama kamu, jadi bisa dicabut kapan saja tanpa ganggu sync app ini.</div>
+    <div class="fg"><label class="fl">Portal Access Token</label><input class="fi2" id="s-portal-token" type="password" placeholder="github_pat_..." autocomplete="off"></div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:4px">
+      Buat di <a href="https://github.com/settings/tokens?type=beta" target="_blank">github.com → Settings → Fine-grained tokens</a>, khusus untuk repo <b id="s-portal-repo-hint">data</b> kamu saja, permission <b>Contents: Read and Write</b>.
+    </div>
     <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">Folder Lokal (Disk Komputer)</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Hubungkan folder <b>SNAPSY</b> di komputermu. Setiap bikin proyek baru, app otomatis bikin struktur <code>Klien/Proyek/01_WORKING, 02_EXPORT, 03_FINAL, 04_ARCHIVE</code> di dalamnya. Fitur ini cuma jalan di Chrome/Edge versi laptop-PC.</div>
     <div id="local-root-status" style="margin-bottom:6px"></div>
@@ -1931,6 +2021,49 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   </div>
 </div>
 
+<!-- MODAL: Portal Klien -->
+<div class="overlay" id="portalModal">
+  <div class="modal">
+    <div class="modal-title" style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Portal Klien</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:4px" id="portal-modal-projname">-</div>
+
+    <div id="portal-no-token" style="display:none">
+      <div class="portal-inactive-box">
+        Kamu belum mengatur <b>Portal Access Token</b> di Setup. Token ini dibutuhkan supaya link portal bisa diakses klien tanpa login.
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('portalModal')">Tutup</button>
+        <button class="btn btn-primary" onclick="closeModal('portalModal');openSetup()">Atur di Setup</button>
+      </div>
+    </div>
+
+    <div id="portal-has-token" style="display:none">
+      <div id="portal-inactive-state" style="display:none">
+        <div class="portal-inactive-box">Belum ada link portal aktif untuk proyek ini.</div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('portalModal')">Batal</button>
+          <button class="btn btn-primary" onclick="generatePortalLink(curPortalProjId)">🔗 Buat Link Portal</button>
+        </div>
+      </div>
+
+      <div id="portal-active-state" style="display:none">
+        <div style="font-size:12px;color:var(--muted)">Klien bisa buka link ini tanpa login untuk lihat progres, status, dan file proyek.</div>
+        <div class="portal-link-box">
+          <input id="portal-link-input" readonly value="">
+          <button class="btn btn-primary btn-xs" onclick="copyPortalLink()">Salin</button>
+        </div>
+        <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:6px" onclick="sharePortalLinkWA()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Kirim via WhatsApp</button>
+        <div class="portal-warn"><b>Catatan:</b> siapa pun yang punya link ini bisa membuka portal proyek. Kalau link ke-share ke orang salah, klik "Buat Link Baru" di bawah untuk otomatis menonaktifkan link lama.</div>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" onclick="closeModal('portalModal')">Tutup</button>
+          <button class="btn btn-secondary btn-sm" onclick="regeneratePortalLink(curPortalProjId)">Buat Link Baru</button>
+          <button class="btn btn-danger btn-sm" onclick="revokePortalLink(curPortalProjId)">Nonaktifkan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: Local Folder Browser -->
 <div class="overlay" id="localFolderModal">
   <div class="modal" style="width:440px">
@@ -2014,6 +2147,12 @@ const STATUSES = [
 
 // ── INIT ──────────────────────────────────────────────
 window.onload = async () => {
+  // ── Mode Portal Klien: kalau URL mengandung #portal~..., render halaman klien saja ──
+  if (location.hash.startsWith('#portal~')) {
+    initPortalMode();
+    return;
+  }
+
   document.getElementById('f-start').value = today();
   document.getElementById('dp-root').textContent = cfg.root || 'Snapsy.Std';
   document.getElementById('dr-root').textContent = cfg.root || 'Snapsy.Std';
@@ -4342,7 +4481,13 @@ function projCard(p) {
     ${thumbStrip}
     <div class="pc-footer" style="margin-top:10px">
       <span style="display:flex;align-items:center;gap:4px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${fileCount} file</span>
-      ${dpill}
+      <span style="display:flex;align-items:center;gap:6px">
+        ${dpill}
+        <span class="pc-portal-wrap" onclick="event.stopPropagation();openPortalModal('${p.id}')" title="Portal Klien">
+          <button class="portal-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+          <span class="portal-notif-dot ${p.portal && p.portal.unread ? 'show' : ''}"></span>
+        </span>
+      </span>
     </div>
     ${invFab}
   </div>`;
@@ -4375,6 +4520,8 @@ function openSetup() {
   document.getElementById('s-root').value    = cfg.root    || 'Snapsy.Std';
   document.getElementById('s-cid').value     = cfg.clientId|| '';
   document.getElementById('s-key').value     = cfg.apiKey  || '';
+  document.getElementById('s-portal-token').value = localStorage.getItem('gh_portal_token') || '';
+  const repoHint = document.getElementById('s-portal-repo-hint'); if (repoHint) repoHint.textContent = ghCreds().repo || 'data';
   renderLocalRootStatus();
   document.getElementById('setupModal').classList.add('show');
 }
@@ -4389,6 +4536,9 @@ function saveSetup() {
   cfg.clientId    = document.getElementById('s-cid').value.trim();
   cfg.apiKey      = document.getElementById('s-key').value.trim();
   localStorage.setItem('ssy_cfg',JSON.stringify(cfg));
+  const portalToken = document.getElementById('s-portal-token').value.trim();
+  if (portalToken) localStorage.setItem('gh_portal_token', portalToken);
+  else localStorage.removeItem('gh_portal_token');
   closeModal('setupModal');
   document.getElementById('loginBtn').style.display='inline-flex';
   if(cfg.clientId && cfg.apiKey) initGapi();
@@ -5598,6 +5748,164 @@ async function ghRefreshSha() {
     );
     if (res.ok) { const j = await res.json(); ghFileSha = j.sha; }
   } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════
+// ── PORTAL KLIEN ──────────────────────────────────────
+// ══════════════════════════════════════════════════════
+let curPortalProjId = null;
+
+function getPortalToken() { return localStorage.getItem('gh_portal_token') || ''; }
+function hasPortalToken() { return !!getPortalToken(); }
+function randSlug() { return 'sp_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); }
+
+// ── OWNER SIDE: buka modal, generate/kelola link ─────
+function openPortalModal(projId) {
+  curPortalProjId = projId;
+  const p = getProj(projId); if (!p) return;
+  document.getElementById('portal-modal-projname').textContent = p.name + ' — ' + p.client;
+
+  const noToken = document.getElementById('portal-no-token');
+  const hasToken = document.getElementById('portal-has-token');
+  if (!hasPortalToken()) {
+    noToken.style.display = 'block';
+    hasToken.style.display = 'none';
+    document.getElementById('portalModal').classList.add('show');
+    return;
+  }
+  noToken.style.display = 'none';
+  hasToken.style.display = 'block';
+  renderPortalModalState(p);
+  document.getElementById('portalModal').classList.add('show');
+}
+
+function renderPortalModalState(p) {
+  const active = p.portal && p.portal.active;
+  document.getElementById('portal-inactive-state').style.display = active ? 'none' : 'block';
+  document.getElementById('portal-active-state').style.display = active ? 'block' : 'none';
+  if (active) document.getElementById('portal-link-input').value = buildPortalUrl(p);
+}
+
+function generatePortalLink(projId) {
+  const p = getProj(projId); if (!p) return;
+  p.portal = { id: randSlug(), active: true, unread: false, createdAt: new Date().toISOString() };
+  saveState();
+  renderPortalModalState(p);
+  renderProjects();
+  toast('Link portal dibuat ✓', 'success');
+}
+
+function regeneratePortalLink(projId) {
+  showConfirm('Buat Link Baru?', 'Link portal lama akan langsung tidak bisa dipakai lagi.', () => {
+    const p = getProj(projId); if (!p) return;
+    p.portal = { id: randSlug(), active: true, unread: false, createdAt: new Date().toISOString() };
+    saveState();
+    renderPortalModalState(p);
+    toast('Link portal baru dibuat, link lama sudah nonaktif ✓', 'success');
+  });
+}
+
+function revokePortalLink(projId) {
+  showConfirm('Nonaktifkan Portal?', 'Klien tidak akan bisa lagi membuka link portal untuk proyek ini.', () => {
+    const p = getProj(projId); if (!p || !p.portal) return;
+    p.portal.active = false;
+    saveState();
+    renderPortalModalState(p);
+    renderProjects();
+    toast('Portal dinonaktifkan', 'info');
+  });
+}
+
+function buildPortalUrl(p) {
+  const { username, repo } = ghCreds();
+  const token = getPortalToken();
+  const base = location.origin + location.pathname;
+  const parts = [username, repo, p.id, p.portal.id, token].map(x => encodeURIComponent(x || ''));
+  return base + '#portal~' + parts.join('~');
+}
+
+function copyPortalLink() {
+  const val = document.getElementById('portal-link-input').value;
+  if (!val) return;
+  copyTextToClipboard(val, 'Link portal disalin ✓');
+}
+
+function sharePortalLinkWA() {
+  const p = getProj(curPortalProjId); if (!p || !p.portal) return;
+  const url = document.getElementById('portal-link-input').value;
+  const client = clients.find(c => c.name === p.client);
+  const msg = encodeURIComponent(`Halo ${p.client}, berikut link portal untuk proyek "${p.name}". Kamu bisa lihat progres dan file di sini:\n${url}`);
+  const phone = client && client.phone ? client.phone.replace(/[^0-9]/g, '').replace(/^0/, '62') : '';
+  window.open(phone ? `https://wa.me/${phone}?text=${msg}` : `https://wa.me/?text=${msg}`, '_blank');
+}
+
+// ── KLIEN SIDE: render halaman portal (read-only, tanpa login) ──
+async function initPortalMode() {
+  document.getElementById('portal-app').classList.add('show');
+  const raw = decodeURIComponent(location.hash.slice(1)); // "portal~u~r~pid~sid~token"
+  const parts = location.hash.slice(1).split('~').map(decodeURIComponent);
+  const [, u, r, pid, sid, token] = parts;
+
+  if (!u || !r || !pid || !sid || !token) { renderPortalError('Link portal tidak lengkap atau rusak.'); return; }
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${u}/${r}/contents/${GH_DATA_FILE}?t=${Date.now()}`,
+      { headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json' } }
+    );
+    if (!res.ok) { renderPortalError('Portal tidak bisa diakses. Link mungkin sudah tidak berlaku.'); return; }
+    const json = await res.json();
+    const dataRaw = atob(json.content.replace(/\n/g, ''));
+    const data = JSON.parse(dataRaw);
+
+    const proj = (data.projects || []).find(x => x.id === pid);
+    if (!proj || !proj.portal || !proj.portal.active || proj.portal.id !== sid) {
+      renderPortalError('Link portal ini sudah tidak aktif. Hubungi ' + ((data.cfg && data.cfg.studio) || 'studio') + ' untuk link terbaru.');
+      return;
+    }
+
+    renderPortalView(proj, (data.files || []).filter(f => f.projId === pid), data.cfg || {});
+  } catch (e) {
+    renderPortalError('Gagal memuat portal: ' + e.message);
+  }
+}
+
+function renderPortalError(msg) {
+  document.getElementById('portal-content').innerHTML = `
+    <div class="portal-center-msg">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div style="font-weight:600;color:var(--text)">${msg}</div>
+    </div>`;
+}
+
+function renderPortalView(p, projFiles, portalCfg) {
+  document.getElementById('portal-studio-name').textContent = portalCfg.studio || '';
+  const statusInfo = STATUSES.find(s => s.v === p.status) || { l: p.status, c: 'var(--muted)' };
+  const doneFiles = projFiles.filter(f => f.status === 'done');
+
+  const filesHtml = doneFiles.length ? doneFiles.map(f => `
+    <div class="portal-file-item">
+      <div style="color:var(--muted)">${fIcon(f.name)}</div>
+      <div class="portal-file-name">${f.name}</div>
+      <div class="portal-file-size">${fSize(f.size)}</div>
+      ${f.driveLink ? `<a href="${f.driveLink}" target="_blank" class="btn btn-ghost btn-xs">Buka</a>` : ''}
+    </div>`).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;padding:10px 0">Belum ada file yang dibagikan</div>';
+
+  document.getElementById('portal-content').innerHTML = `
+    <div class="portal-card">
+      <div class="portal-proj-name">${p.name}</div>
+      <div class="portal-proj-client">${p.client}</div>
+      <div class="portal-status-row">
+        <span class="badge" style="background:${statusInfo.c}22;color:${statusInfo.c}">${statusInfo.l}</span>
+        ${p.deadline ? `<span style="font-size:11.5px;color:var(--muted)">Deadline: ${fDate(p.deadline)}</span>` : ''}
+      </div>
+    </div>
+    <div class="portal-card">
+      <div class="card-title" style="margin-bottom:8px">File Proyek</div>
+      ${filesHtml}
+    </div>
+    <div class="portal-footer-note">Portal ini dibuat oleh ${portalCfg.studio || 'studio'} — hanya untuk proyek ini.</div>
+  `;
 }
 
 // ── DEBOUNCED SYNC ───────────────────────────────────
