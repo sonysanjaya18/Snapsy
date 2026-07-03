@@ -2285,12 +2285,20 @@ async function ensureLocalDir(parentHandle, name) {
 }
 
 // Dipanggil otomatis tiap ada proyek baru — bikin SNAPSY/Klien/Proyek/01-04
+// Pastikan folder Klien/Proyek/01-04 ada di disk — silent, aman dipanggil berkali-kali (idempotent)
+async function ensureLocalProjectFolders(proj) {
+  if (!LOCAL_FS_SUPPORTED || !localRootHandle) return null;
+  const cliDir  = await ensureLocalDir(localRootHandle, proj.client);
+  const projDir = await ensureLocalDir(cliDir, proj.name);
+  for (const sub of LOCAL_SUBDIRS) { await ensureLocalDir(projDir, sub); }
+  return projDir;
+}
+
+// Versi dengan toast — dipakai pas user SENGAJA bikin proyek baru / klik tombol
 async function createLocalProjectFolders(proj) {
   if (!LOCAL_FS_SUPPORTED || !localRootHandle) return null;
   try {
-    const cliDir  = await ensureLocalDir(localRootHandle, proj.client);
-    const projDir = await ensureLocalDir(cliDir, proj.name);
-    for (const sub of LOCAL_SUBDIRS) { await ensureLocalDir(projDir, sub); }
+    const projDir = await ensureLocalProjectFolders(proj);
     toast('Folder lokal proyek dibuat ✓', 'success');
     return projDir;
   } catch (e) {
@@ -2328,7 +2336,8 @@ async function scanAllLocalTracking() {
 async function scanLocalTracking(projId) {
   if (!LOCAL_FS_SUPPORTED || !localRootHandle) return;
   const p = getProj(projId); if (!p) return;
-  const projDir = await getLocalProjectDir(p);
+  let projDir;
+  try { projDir = await ensureLocalProjectFolders(p); } catch (e) { console.error('Gagal siapin folder lokal', p.name, e); return; }
   if (!projDir) return;
 
   const sub = '03_FINAL';
