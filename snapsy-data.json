@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1783149522104",
+      "client": "Racha",
+      "name": "Compli Brand",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-04",
+      "deadline": "2026-07-07",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-04T07:18:42.104Z"
+    },
+    {
       "id": "p_1783123931099",
       "client": "Racha",
       "name": "Kingsmen Poster",
@@ -2649,5 +2664,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-04T02:45:18.296Z"
+  "_savedAt": "2026-07-04T07:18:45.086Z"
 }
