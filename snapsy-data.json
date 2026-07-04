@@ -2592,7 +2592,7 @@
       "projId": "p_1783149522104",
       "name": "Refine Logo",
       "done": false,
-      "price": "",
+      "price": "22",
       "taskStatus": "todo",
       "createdAt": "2026-07-04T07:19:27.717Z"
     },
@@ -2601,7 +2601,7 @@
       "projId": "p_1783149522104",
       "name": "Cover Page",
       "done": false,
-      "price": "",
+      "price": "11",
       "taskStatus": "todo",
       "createdAt": "2026-07-04T07:19:33.199Z"
     },
@@ -2718,5 +2718,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-04T07:20:29.917Z"
+  "_savedAt": "2026-07-04T07:20:35.745Z"
 }
