@@ -2628,7 +2628,7 @@
       "projId": "p_1783149522104",
       "name": "Capability Statement",
       "done": false,
-      "price": "11",
+      "price": "16",
       "taskStatus": "todo",
       "createdAt": "2026-07-04T07:20:23.862Z"
     }
@@ -2718,5 +2718,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-04T07:21:00.087Z"
+  "_savedAt": "2026-07-04T07:21:13.598Z"
 }
