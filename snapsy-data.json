@@ -1282,7 +1282,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "done",
+      "status": "ongoing",
       "startDate": "2026-06-09",
       "deadline": "2026-06-30",
       "notes": "",
@@ -2137,6 +2137,15 @@
       "price": "16",
       "taskStatus": "todo",
       "createdAt": "2026-07-04T07:20:23.862Z"
+    },
+    {
+      "id": "t_1783220328212",
+      "projId": "p_1782687066050",
+      "name": "Free Card Voucher",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-05T02:58:48.212Z"
     }
   ],
   "files": [
@@ -2228,7 +2237,6 @@
   ],
   "quotations": [],
   "withdrawals": [],
-  "invoices": [],
   "cfg": {
     "root": "Snapsy.Std",
     "studio": "Snapsy Std.",
@@ -2240,5 +2248,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T02:57:12.985Z"
+  "_savedAt": "2026-07-05T02:58:49.742Z"
 }
