@@ -1926,10 +1926,10 @@
       "name": "Front_Business Card-Rosebud.pdf",
       "size": 630617,
       "type": "application/pdf",
-      "status": "uploading",
+      "status": "done",
       "progress": 0,
-      "driveId": null,
-      "driveLink": null,
+      "driveId": "1VmSXP9lK7jvOo-aQn9gCPjZdPVakfeiD",
+      "driveLink": "https://drive.google.com/file/d/1VmSXP9lK7jvOo-aQn9gCPjZdPVakfeiD/view?usp=drivesdk",
       "subfolderRef": "sf_1783232262294",
       "thumb": null,
       "thumbFull": null
@@ -1940,10 +1940,10 @@
       "name": "Raised Metals_Business Card-Rosebud.pdf",
       "size": 659960,
       "type": "application/pdf",
-      "status": "pending",
+      "status": "done",
       "progress": 0,
-      "driveId": null,
-      "driveLink": null,
+      "driveId": "1fW7fpSvon4jHq4d9zyOYU-9vPFprT83r",
+      "driveLink": "https://drive.google.com/file/d/1fW7fpSvon4jHq4d9zyOYU-9vPFprT83r/view?usp=drivesdk",
       "subfolderRef": "sf_1783232262294",
       "thumb": null,
       "thumbFull": null
@@ -1962,5 +1962,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T06:18:18.483Z"
+  "_savedAt": "2026-07-05T06:18:25.044Z"
 }
