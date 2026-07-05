@@ -2631,7 +2631,7 @@
       "projId": "p_1782687066050",
       "name": "Free Card Voucher",
       "done": false,
-      "price": "",
+      "price": "5",
       "taskStatus": "todo",
       "createdAt": "2026-07-05T02:54:18.036Z"
     }
@@ -2737,5 +2737,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T02:54:19.566Z"
+  "_savedAt": "2026-07-05T02:54:22.961Z"
 }
