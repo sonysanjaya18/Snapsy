@@ -1630,6 +1630,7 @@ body.portal-mode { overflow-x: hidden; }
               <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Folder lokal:</span>
               <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="openLocalProjectFolder()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Buka Folder Proyek</button>
               <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="syncFinalToDrive(curProjId)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sync 03_FINAL ke Drive</button>
+              <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="openFolderLinksModal(curProjId)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link Folder Drive</button>
             </div>
 
             <!-- Subfolder manager -->
@@ -2342,6 +2343,18 @@ body.portal-mode { overflow-x: hidden; }
   </div>
 </div>
 
+<!-- MODAL: Daftar Link Folder Drive -->
+<div class="overlay" id="folderLinksModal">
+  <div class="modal" style="width:460px">
+    <div class="modal-title" style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link Folder Drive</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Link folder ini bisa langsung kamu kirim ke klien. Folder baru bakal muncul di sini otomatis tiap kali kamu klik "Sync ke Drive".</div>
+    <div id="folder-links-list" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('folderLinksModal')">Tutup</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: Nama Folder Lokal Baru -->
 <div class="overlay" id="localNewFolderModal" style="z-index:601">
   <div class="confirm-modal" style="width:360px">
@@ -2808,6 +2821,28 @@ async function scanLocalTracking(projId) {
   if (curProjId === p.id) renderDetailFiles(p.id);
 }
 
+let folderLinkCache = {};
+
+// Sama kayak ensureFolder(), tapi juga ambil/simpan webViewLink-nya (buat link folder yang bisa dibagikan)
+async function ensureDriveFolderWithLink(name, parentId) {
+  const key = (parentId || 'root') + '/' + name;
+  if (folderLinkCache[key]) return folderLinkCache[key];
+  const q = `mimeType='application/vnd.google-apps.folder' and name='${name.replace(/'/g,"\\'")}' and '${parentId||'root'}' in parents and trashed=false`;
+  const res = await gapi.client.drive.files.list({ q, fields: 'files(id,webViewLink)' });
+  let result;
+  if (res.result.files.length) {
+    result = { id: res.result.files[0].id, webViewLink: res.result.files[0].webViewLink };
+  } else {
+    const body = { name, mimeType: 'application/vnd.google-apps.folder' };
+    if (parentId) body.parents = [parentId];
+    const created = await gapi.client.drive.files.create({ resource: body, fields: 'id,webViewLink' });
+    result = { id: created.result.id, webViewLink: created.result.webViewLink };
+  }
+  folderLinkCache[key] = result;
+  folderCache[key] = result.id; // biar ensureFolder() lain yang manggil path sama nggak bikin folder duplikat
+  return result;
+}
+
 async function syncFinalToDrive(projId) {
   const p = getProj(projId); if (!p) return;
   if (!LOCAL_FS_SUPPORTED || !localRootHandle) { toast('Hubungkan folder lokal dulu di Setup', 'error'); return; }
@@ -2819,26 +2854,69 @@ async function syncFinalToDrive(projId) {
   try { finalDir = await projDir.getDirectoryHandle('03_FINAL'); }
   catch (e) { toast('Folder 03_FINAL belum ada', 'error'); return; }
 
-  if (!p.localSynced) p.localSynced = {}; // {namafile: driveFileId}
+  if (!p.localSynced) p.localSynced = {};        // {relPath: driveFileId}
+  if (!p.localSyncedFolders) p.localSyncedFolders = {}; // {relPath: {driveId, driveLink, name}}
 
-  let folderId;
+  let rootFolderId;
   try {
-    folderId = await getProjFolder(p);
+    rootFolderId = await getProjFolder(p);
   } catch (e) {
     console.error('Gagal siapkan folder Drive', e);
     toast('Gagal terhubung ke Drive — coba klik tombol Login Google Drive lagi (token mungkin kadaluarsa)', 'error');
     return;
   }
 
-  let uploaded = 0, skipped = 0, failed = 0;
+  const stats = { uploaded: 0, skipped: 0, failed: 0, folders: 0 };
+  try {
+    await syncDirRecursive(finalDir, rootFolderId, '', p, stats);
+  } catch (e) {
+    console.error('Sync rekursif gagal', e);
+  }
+  saveState();
+  if (curProjId === p.id) renderDetailFiles(p.id);
 
-  for await (const [name, handle] of finalDir.entries()) {
-    if (handle.kind !== 'file') continue;
-    if (p.localSynced[name]) { skipped++; continue; }
+  if (stats.failed && !stats.uploaded) {
+    toast(`Gagal sync ${stats.failed} file — coba login ulang Google Drive (token mungkin kadaluarsa)`, 'error');
+  } else if (stats.failed) {
+    toast(`${stats.uploaded} file ter-sync, ${stats.failed} gagal. Cek Console (F12) untuk detail error.`, 'error');
+  } else if (stats.uploaded || stats.folders) {
+    toast(`${stats.uploaded} file & ${stats.folders} folder baru di-sync ke Drive ✓`, 'success');
+  } else {
+    toast('Semua file & folder sudah ter-sync sebelumnya', 'success');
+  }
+}
+
+// Susuri folder lokal secara rekursif: subfolder dibikinin folder Drive yang sepadan (+link-nya
+// disimpan), file diupload ke folder Drive yang benar sesuai posisi nested-nya.
+async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats) {
+  for await (const [name, handle] of dirHandle.entries()) {
+    const childRelPath = relPath ? relPath + '/' + name : name;
+
+    if (handle.kind === 'directory') {
+      let folderId, folderLink;
+      const cached = p.localSyncedFolders[childRelPath];
+      if (cached) {
+        folderId = cached.driveId; folderLink = cached.driveLink;
+      } else {
+        try {
+          const res = await ensureDriveFolderWithLink(name, driveParentId);
+          folderId = res.id; folderLink = res.webViewLink || `https://drive.google.com/drive/folders/${res.id}`;
+          p.localSyncedFolders[childRelPath] = { driveId: folderId, driveLink: folderLink, name };
+          stats.folders++;
+        } catch (e) {
+          console.error('Gagal bikin folder Drive untuk', childRelPath, e);
+          continue;
+        }
+      }
+      await syncDirRecursive(handle, folderId, childRelPath, p, stats);
+      continue;
+    }
+
+    if (p.localSynced[childRelPath]) { stats.skipped++; continue; }
     try {
       const file = await handle.getFile();
       const res = await new Promise((resolve, reject) => {
-        const meta = { name: file.name, parents: [folderId] };
+        const meta = { name: file.name, parents: [driveParentId] };
         const form = new FormData();
         form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
         form.append('file', file);
@@ -2849,34 +2927,48 @@ async function syncFinalToDrive(projId) {
         xhr.onerror = () => reject(new Error('Network error'));
         xhr.send(form);
       });
-      p.localSynced[name] = res.id;
-      uploaded++;
+      p.localSynced[childRelPath] = res.id;
+      stats.uploaded++;
 
       // Munculkan juga di daftar "File Proyek" + generate thumbnail, biar sama kayak upload lewat app
-      if (!files.find(x => x.projId === p.id && x.name === file.name && !x.subfolderRef)) {
-        const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: '', thumb: null, thumbFull: null, _raw: null };
+      if (!files.find(x => x.projId === p.id && x.name === file.name && x.localFolder === childRelPath)) {
+        const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: '', thumb: null, thumbFull: null, _raw: null, localFolder: relPath ? '03_FINAL/' + relPath : '03_FINAL' };
         files.push(fObj);
         genThumb(file).then(result => {
           if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); if (curProjId === p.id) renderDetailFiles(p.id); }
         });
       }
     } catch (e) {
-      console.error('Sync gagal untuk', name, e);
-      failed++;
+      console.error('Sync gagal untuk', childRelPath, e);
+      stats.failed++;
     }
   }
-  saveState();
-  if (curProjId === p.id) renderDetailFiles(p.id);
+}
 
-  if (failed && !uploaded) {
-    toast(`Gagal sync ${failed} file — coba login ulang Google Drive (token mungkin kadaluarsa)`, 'error');
-  } else if (failed) {
-    toast(`${uploaded} file ter-sync, ${failed} gagal. Cek Console (F12) untuk detail error.`, 'error');
-  } else if (uploaded) {
-    toast(`${uploaded} file di-sync ke Drive ✓`, 'success');
-  } else {
-    toast('Semua file sudah ter-sync sebelumnya', 'success');
+function openFolderLinksModal(projId) {
+  const p = getProj(projId); if (!p) return;
+  const list = document.getElementById('folder-links-list');
+  const rootLink = p.driveProjId ? `https://drive.google.com/drive/folders/${p.driveProjId}` : null;
+
+  const rows = [];
+  if (rootLink) {
+    rows.push({ name: '📁 Folder Utama Proyek', link: rootLink });
   }
+  Object.entries(p.localSyncedFolders || {}).forEach(([relPath, f]) => {
+    rows.push({ name: relPath, link: f.driveLink });
+  });
+
+  if (!rows.length) {
+    list.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">Belum ada folder yang tersync. Klik "Sync 03_FINAL ke Drive" dulu.</div>';
+  } else {
+    list.innerHTML = rows.map(r => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2,rgba(0,0,0,.03));border-radius:8px">
+        <span style="flex:1;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(r.name)}</span>
+        <a href="${r.link}" target="_blank" class="btn btn-ghost btn-xs">Buka</a>
+        <button class="btn btn-primary btn-xs" onclick="copyTextToClipboard('${r.link}', 'Link folder disalin ✓')">Salin</button>
+      </div>`).join('');
+  }
+  document.getElementById('folderLinksModal').classList.add('show');
 }
 
 // ── Browser folder lokal sederhana (dalam modal) ───────
