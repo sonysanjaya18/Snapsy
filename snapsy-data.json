@@ -1907,20 +1907,6 @@
       "localFolder": "03_FINAL"
     },
     {
-      "id": "f_1783232269631pqugqvb5e1i",
-      "projId": "p_1782950521221",
-      "name": "Back-Sydney.pdf",
-      "size": 613898,
-      "type": "application/pdf",
-      "status": "pending",
-      "progress": 0,
-      "driveId": null,
-      "driveLink": null,
-      "subfolderRef": "",
-      "thumb": null,
-      "thumbFull": null
-    },
-    {
       "id": "f_178323226963208d5n8w1yhdr",
       "projId": "p_1782950521221",
       "name": "Front_Business Card-Rosebud.pdf",
@@ -1962,5 +1948,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T06:17:51.151Z"
+  "_savedAt": "2026-07-05T06:17:58.591Z"
 }
