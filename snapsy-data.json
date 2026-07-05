@@ -1679,9 +1679,9 @@
       "id": "t_1782687092871",
       "projId": "p_1782687066050",
       "name": "A5 Flyer Design",
-      "done": false,
+      "done": true,
       "price": "15",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-06-28T22:51:32.871Z",
       "previewFileId": "f_17832904576517jkniys0b97",
       "previewStatus": "needs_review",
@@ -1997,5 +1997,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T22:29:32.502Z"
+  "_savedAt": "2026-07-05T22:29:37.565Z"
 }
