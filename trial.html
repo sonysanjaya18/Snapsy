@@ -616,6 +616,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .subfolder-add-btn:hover { border-color:var(--accent); color:var(--accent); }
 .subfolder-target-label { font-size:11px; color:var(--muted); margin-bottom:6px; }
 .subfolder-target-label b { color:var(--accent); }
+.btn-disabled { opacity: .4; pointer-events: none; cursor: default; }
 
 .inv-modal { width: 680px; max-width: 96vw; }
 .inv-task-pick { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
@@ -1641,7 +1642,11 @@ body.portal-mode { overflow-x: hidden; }
               <!-- subfolder chips rendered here by JS -->
               <button class="subfolder-add-btn" onclick="promptAddSubfolder()">＋ Subfolder</button>
             </div>
-            <div class="subfolder-target-label" id="subfolder-target-label">Upload ke: <b>Folder Utama</b></div>
+            <div class="subfolder-target-label" id="subfolder-target-label" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span>Upload ke: <b id="sf-target-name">Folder Utama</b></span>
+              <button class="btn btn-ghost btn-xs" id="sf-copy-link-btn" onclick="copyCurrentFolderLink()" title="Salin link folder ini" style="display:inline-flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Salin Link</button>
+              <a class="btn btn-ghost btn-xs" id="sf-open-link-btn" href="#" target="_blank" onclick="return handleOpenCurrentFolder(event)" title="Buka folder ini di Drive" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Buka di Drive</a>
+            </div>
 
             <div class="upload-zone" onclick="triggerUpload()"
               ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
@@ -2859,6 +2864,33 @@ async function ensureDriveFolderWithLink(name, parentId) {
   return result;
 }
 
+// Gabungkan semua folder hasil "Sync 03_FINAL ke Drive" (p.localSyncedFolders, key = relPath
+// bertingkat spt "Folder A/Folder B") ke p.subfolders, supaya otomatis muncul sebagai chip
+// yang bisa diklik/dinavigasi — bukan cuma lewat modal "Link Folder Drive".
+function mergeSyncedFoldersIntoSubfolders(p) {
+  if (!p.subfolders) p.subfolders = [];
+  if (!p.localSyncedFolders) return;
+  const paths = Object.keys(p.localSyncedFolders).sort((a, b) => a.split('/').length - b.split('/').length);
+  paths.forEach(relPath => {
+    const info = p.localSyncedFolders[relPath];
+    const segs = relPath.split('/');
+    let parentId = null;
+    segs.forEach((segName, idx) => {
+      const isLast = idx === segs.length - 1;
+      let sf = p.subfolders.find(s => s.name.toLowerCase() === segName.toLowerCase() && (s.parentId || null) === parentId);
+      if (!sf) {
+        sf = { id: 'sf_' + Date.now() + Math.random().toString(36).slice(2, 6), name: segName, driveId: null, driveLink: null, parentId, source: 'synced' };
+        p.subfolders.push(sf);
+      }
+      if (isLast) {
+        sf.driveId = info.driveId;
+        sf.driveLink = info.driveLink || (info.driveId ? `https://drive.google.com/drive/folders/${info.driveId}` : sf.driveLink);
+      }
+      parentId = sf.id;
+    });
+  });
+}
+
 async function syncFinalToDrive(projId) {
   const p = getProj(projId); if (!p) return;
   if (!LOCAL_FS_SUPPORTED || !localRootHandle) { toast('Hubungkan folder lokal dulu di Setup', 'error'); return; }
@@ -2888,8 +2920,9 @@ async function syncFinalToDrive(projId) {
   } catch (e) {
     console.error('Sync rekursif gagal', e);
   }
+  mergeSyncedFoldersIntoSubfolders(p);
   saveState();
-  if (curProjId === p.id) renderDetailFiles(p.id);
+  if (curProjId === p.id) { renderDetailFiles(p.id); renderSubfolderBar(p.id); updateFolderLinkButtons(); }
 
   if (stats.failed && !stats.uploaded) {
     toast(`Gagal sync ${stats.failed} file — coba login ulang Google Drive (token mungkin kadaluarsa)`, 'error');
@@ -3328,14 +3361,47 @@ function selectSubfolder(el, sfId, sfName) {
   curSubfolderName = sfName;
   document.querySelectorAll('#subfolder-bar .subfolder-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  const lbl = document.getElementById('subfolder-target-label');
-  if (lbl) lbl.innerHTML = `Upload ke: <b>${sfName}</b>`;
+  const nameEl = document.getElementById('sf-target-name');
+  if (nameEl) nameEl.textContent = sfName;
   // update drive path breadcrumb suffix
   const dpSub = document.getElementById('dp-sub');
   if (dpSub) dpSub.innerHTML = sfId ? ` › <b>${sfName}</b>` : '';
   renderDetailFiles(curProjId);
   // update tombol add label
   renderSubfolderBar(curProjId);
+  updateFolderLinkButtons();
+}
+
+// ── Link folder yang lagi aktif di breadcrumb (root atau subfolder) ──
+function getCurrentFolderDriveLink(p) {
+  if (!p) return null;
+  if (!curSubfolderId) return p.driveProjId ? `https://drive.google.com/drive/folders/${p.driveProjId}` : null;
+  const sf = (p.subfolders || []).find(s => s.id === curSubfolderId);
+  if (!sf) return null;
+  return sf.driveLink || (sf.driveId ? `https://drive.google.com/drive/folders/${sf.driveId}` : null);
+}
+function updateFolderLinkButtons() {
+  const p = getProj(curProjId);
+  const link = getCurrentFolderDriveLink(p);
+  const copyBtn = document.getElementById('sf-copy-link-btn');
+  const openBtn = document.getElementById('sf-open-link-btn');
+  if (copyBtn) copyBtn.disabled = !link;
+  if (openBtn) {
+    if (link) { openBtn.href = link; openBtn.classList.remove('btn-disabled'); }
+    else { openBtn.href = '#'; openBtn.classList.add('btn-disabled'); }
+  }
+}
+function handleOpenCurrentFolder(e) {
+  const p = getProj(curProjId);
+  const link = getCurrentFolderDriveLink(p);
+  if (!link) { e.preventDefault(); toast('Folder ini belum tersinkron ke Drive', 'error'); return false; }
+  return true;
+}
+function copyCurrentFolderLink() {
+  const p = getProj(curProjId);
+  const link = getCurrentFolderDriveLink(p);
+  if (!link) { toast('Folder ini belum tersinkron ke Drive', 'error'); return; }
+  copyTextToClipboard(link, 'Link folder disalin ✓');
 }
 
 function promptAddSubfolder() {
@@ -3384,7 +3450,9 @@ async function addSubfolder(name) {
       // ensureFolder: cek dulu di Drive, kalau sudah ada pakai yang lama
       const driveId = await ensureFolder(name, parentDriveId);
       sfObj.driveId = driveId;
+      sfObj.driveLink = `https://drive.google.com/drive/folders/${driveId}`;
       saveState();
+      updateFolderLinkButtons();
       toast('Subfolder siap di Drive ✓', 'success');
     } catch(e) { toast('Subfolder lokal saja, Drive gagal', 'error'); }
   }
@@ -4580,10 +4648,11 @@ function openDetail(id) {
   // reset subfolder state
   curSubfolderId = ''; curSubfolderName = 'Folder Utama';
   renderSubfolderBar(id);
-  const lbl = document.getElementById('subfolder-target-label');
-  if(lbl) lbl.innerHTML = 'Upload ke: <b>Folder Utama</b>';
+  const sfNameEl = document.getElementById('sf-target-name');
+  if (sfNameEl) sfNameEl.textContent = 'Folder Utama';
   const dpSub = document.getElementById('dp-sub');
   if(dpSub) dpSub.innerHTML = '';
+  updateFolderLinkButtons();
   const lfPanel = document.getElementById('local-folder-panel');
   if(lfPanel) lfPanel.style.display = (LOCAL_FS_SUPPORTED && localRootHandle) ? 'flex' : 'none';
   if (LOCAL_FS_SUPPORTED && localRootHandle) scanLocalTracking(id); // fire-and-forget, isi thumbnail dari folder lokal
