@@ -82,6 +82,13 @@
       "subfolders": [],
       "localSynced": {
         ".DS_Store": "179AhQhbTVvTmBptQVqPqurXbjoAdr4KS"
+      },
+      "localSyncedFolders": {
+        "Digital Screen": {
+          "driveId": "19cJs6tNiCuaLHwPdIK02D2r4Oby8ZaSb",
+          "driveLink": "https://drive.google.com/drive/folders/19cJs6tNiCuaLHwPdIK02D2r4Oby8ZaSb",
+          "name": "Digital Screen"
+        }
       }
     },
     {
@@ -2273,5 +2280,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T22:52:19.603Z"
+  "_savedAt": "2026-07-05T22:53:07.039Z"
 }
