@@ -1631,7 +1631,6 @@ body.portal-mode { overflow-x: hidden; }
               <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Folder lokal:</span>
               <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="openLocalProjectFolder()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Buka Folder Proyek</button>
               <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="syncFinalToDrive(curProjId)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Sync 03_FINAL ke Drive</button>
-              <button class="btn btn-ghost btn-xs" style="display:inline-flex;align-items:center;gap:6px" onclick="openFolderLinksModal(curProjId)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link Folder Drive</button>
             </div>
 
             <!-- Subfolder manager -->
@@ -2364,18 +2363,6 @@ body.portal-mode { overflow-x: hidden; }
   </div>
 </div>
 
-<!-- MODAL: Daftar Link Folder Drive -->
-<div class="overlay" id="folderLinksModal">
-  <div class="modal" style="width:460px">
-    <div class="modal-title" style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link Folder Drive</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Link folder ini bisa langsung kamu kirim ke klien. Folder baru bakal muncul di sini otomatis tiap kali kamu klik "Sync ke Drive".</div>
-    <div id="folder-links-list" style="max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('folderLinksModal')">Tutup</button>
-    </div>
-  </div>
-</div>
-
 <!-- MODAL: Nama Folder Lokal Baru -->
 <div class="overlay" id="localNewFolderModal" style="z-index:601">
   <div class="confirm-modal" style="width:360px">
@@ -2916,11 +2903,12 @@ async function syncFinalToDrive(projId) {
 
   const stats = { uploaded: 0, skipped: 0, failed: 0, folders: 0 };
   try {
-    await syncDirRecursive(finalDir, rootFolderId, '', p, stats);
+    await syncDirRecursive(finalDir, rootFolderId, '', p, stats, null);
   } catch (e) {
     console.error('Sync rekursif gagal', e);
   }
   mergeSyncedFoldersIntoSubfolders(p);
+  repairSyncedFileSubfolderRefs(p);
   saveState();
   if (curProjId === p.id) { renderDetailFiles(p.id); renderSubfolderBar(p.id); updateFolderLinkButtons(); }
 
@@ -2935,9 +2923,40 @@ async function syncFinalToDrive(projId) {
   }
 }
 
+// Pastikan ada entri p.subfolders yang cocok utk folder hasil sync ini, dan kembalikan id internalnya
+// supaya bisa dipakai sbg subfolderRef file2 di dalamnya (bukan cuma tersimpan di localSyncedFolders).
+function ensureSyncedSubfolderEntry(p, name, parentSfId, driveId, driveLink) {
+  if (!p.subfolders) p.subfolders = [];
+  let sf = p.subfolders.find(s => s.name.toLowerCase() === name.toLowerCase() && (s.parentId || null) === (parentSfId || null));
+  if (!sf) {
+    sf = { id: 'sf_' + Date.now() + Math.random().toString(36).slice(2, 6), name, driveId: null, driveLink: null, parentId: parentSfId || null, source: 'synced' };
+    p.subfolders.push(sf);
+  }
+  sf.driveId = driveId;
+  sf.driveLink = driveLink;
+  return sf;
+}
+
+// Perbaikan buat file yang SEBELUMNYA sudah ke-sync dengan subfolderRef salah (selalu '' / Folder
+// Utama walau sebenarnya nested). Dicocokkan lewat field localFolder ("03_FINAL/A/B") ke chain subfolder.
+function repairSyncedFileSubfolderRefs(p) {
+  files.filter(f => f.projId === p.id && f.localFolder && f.localFolder !== '03_FINAL').forEach(f => {
+    const relPath = f.localFolder.replace(/^03_FINAL\//, '');
+    if (!relPath || relPath === f.localFolder) return; // gak ada subfolder di path-nya
+    const segs = relPath.split('/');
+    let parentId = null, sf = null;
+    for (const segName of segs) {
+      sf = (p.subfolders || []).find(s => s.name.toLowerCase() === segName.toLowerCase() && (s.parentId || null) === parentId);
+      if (!sf) return; // gak ketemu chain-nya, biarin apa adanya
+      parentId = sf.id;
+    }
+    if (sf && f.subfolderRef !== sf.id) f.subfolderRef = sf.id;
+  });
+}
+
 // Susuri folder lokal secara rekursif: subfolder dibikinin folder Drive yang sepadan (+link-nya
 // disimpan), file diupload ke folder Drive yang benar sesuai posisi nested-nya.
-async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats) {
+async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats, parentSfId) {
   for await (const [name, handle] of dirHandle.entries()) {
     if (['.ds_store', 'thumbs.db', 'desktop.ini'].includes(name.toLowerCase())) continue;
     const childRelPath = relPath ? relPath + '/' + name : name;
@@ -2958,7 +2977,8 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats) {
           continue;
         }
       }
-      await syncDirRecursive(handle, folderId, childRelPath, p, stats);
+      const sf = ensureSyncedSubfolderEntry(p, name, parentSfId, folderId, folderLink);
+      await syncDirRecursive(handle, folderId, childRelPath, p, stats, sf.id);
       continue;
     }
 
@@ -2982,7 +3002,7 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats) {
 
       // Munculkan juga di daftar "File Proyek" + generate thumbnail, biar sama kayak upload lewat app
       if (!files.find(x => x.projId === p.id && x.name === file.name && x.localFolder === childRelPath)) {
-        const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: '', thumb: null, thumbFull: null, _raw: null, localFolder: relPath ? '03_FINAL/' + relPath : '03_FINAL' };
+        const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: parentSfId || '', thumb: null, thumbFull: null, _raw: null, localFolder: relPath ? '03_FINAL/' + relPath : '03_FINAL' };
         files.push(fObj);
         genThumb(file).then(result => {
           if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); if (curProjId === p.id) renderDetailFiles(p.id); }
@@ -2993,32 +3013,6 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats) {
       stats.failed++;
     }
   }
-}
-
-function openFolderLinksModal(projId) {
-  const p = getProj(projId); if (!p) return;
-  const list = document.getElementById('folder-links-list');
-  const rootLink = p.driveProjId ? `https://drive.google.com/drive/folders/${p.driveProjId}` : null;
-
-  const rows = [];
-  if (rootLink) {
-    rows.push({ name: '📁 Folder Utama Proyek', link: rootLink });
-  }
-  Object.entries(p.localSyncedFolders || {}).forEach(([relPath, f]) => {
-    rows.push({ name: relPath, link: f.driveLink });
-  });
-
-  if (!rows.length) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--muted);text-align:center;padding:14px 0">Belum ada folder yang tersync. Klik "Sync 03_FINAL ke Drive" dulu.</div>';
-  } else {
-    list.innerHTML = rows.map(r => `
-      <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2,rgba(0,0,0,.03));border-radius:8px">
-        <span style="flex:1;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(r.name)}</span>
-        <a href="${r.link}" target="_blank" class="btn btn-ghost btn-xs">Buka</a>
-        <button class="btn btn-primary btn-xs" onclick="copyTextToClipboard('${r.link}', 'Link folder disalin ✓')">Salin</button>
-      </div>`).join('');
-  }
-  document.getElementById('folderLinksModal').classList.add('show');
 }
 
 // ── Browser folder lokal sederhana (dalam modal) ───────
