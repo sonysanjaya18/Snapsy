@@ -2602,9 +2602,21 @@ function loginGoogle() {
   tokenClient.requestAccessToken({ prompt: 'consent' });
 }
 
+// Cek apakah suatu Drive file/folder ID masih beneran ada (belum dihapus/di-trash manual di Drive).
+// Dipakai supaya app gak "kejebak" percaya cache lama padahal usernya udah hapus manual di Drive.
+async function driveIdExists(id) {
+  if (!id) return false;
+  try {
+    const res = await gapi.client.drive.files.get({ fileId: id, fields: 'id,trashed' });
+    return !!(res.result && res.result.id && !res.result.trashed);
+  } catch (e) {
+    return false; // 404 / no access dianggap sudah tidak ada
+  }
+}
 async function ensureFolder(name, parentId=null) {
   const key = (parentId||'root')+'/'+name;
-  if (folderCache[key]) return folderCache[key];
+  if (folderCache[key] && await driveIdExists(folderCache[key])) return folderCache[key];
+  if (folderCache[key]) delete folderCache[key]; // cache basi (folder-nya udah dihapus manual di Drive)
   const q = `mimeType='application/vnd.google-apps.folder' and name='${name.replace(/'/g,"\\'")}' and '${parentId||'root'}' in parents and trashed=false`;
   const res = await gapi.client.drive.files.list({q, fields:'files(id)'});
   if (res.result.files.length) { folderCache[key]=res.result.files[0].id; return folderCache[key]; }
@@ -2834,7 +2846,8 @@ let folderLinkCache = {};
 // Sama kayak ensureFolder(), tapi juga ambil/simpan webViewLink-nya (buat link folder yang bisa dibagikan)
 async function ensureDriveFolderWithLink(name, parentId) {
   const key = (parentId || 'root') + '/' + name;
-  if (folderLinkCache[key]) return folderLinkCache[key];
+  if (folderLinkCache[key] && await driveIdExists(folderLinkCache[key].id)) return folderLinkCache[key];
+  if (folderLinkCache[key]) { delete folderLinkCache[key]; delete folderCache[key]; }
   const q = `mimeType='application/vnd.google-apps.folder' and name='${name.replace(/'/g,"\\'")}' and '${parentId||'root'}' in parents and trashed=false`;
   const res = await gapi.client.drive.files.list({ q, fields: 'files(id,webViewLink)' });
   let result;
@@ -2964,7 +2977,7 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats, par
     if (handle.kind === 'directory') {
       let folderId, folderLink;
       const cached = p.localSyncedFolders[childRelPath];
-      if (cached) {
+      if (cached && await driveIdExists(cached.driveId)) {
         folderId = cached.driveId; folderLink = cached.driveLink;
       } else {
         try {
@@ -2982,7 +2995,7 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats, par
       continue;
     }
 
-    if (p.localSynced[childRelPath]) { stats.skipped++; continue; }
+    if (p.localSynced[childRelPath] && await driveIdExists(p.localSynced[childRelPath])) { stats.skipped++; continue; }
     try {
       const file = await handle.getFile();
       const res = await new Promise((resolve, reject) => {
@@ -3000,8 +3013,15 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats, par
       p.localSynced[childRelPath] = res.id;
       stats.uploaded++;
 
-      // Munculkan juga di daftar "File Proyek" + generate thumbnail, biar sama kayak upload lewat app
-      if (!files.find(x => x.projId === p.id && x.name === file.name && x.localFolder === childRelPath)) {
+      // Munculkan/perbarui juga di daftar "File Proyek". Kalau sebelumnya udah ada entrinya
+      // (misal krn file lamanya kehapus manual di Drive lalu di-upload ulang), update driveId/link-nya
+      // biar gak nyangkut ke link mati — bukan bikin duplikat baru.
+      const existingF = files.find(x => x.projId === p.id && x.name === file.name && x.localFolder === (relPath ? '03_FINAL/' + relPath : '03_FINAL'));
+      if (existingF) {
+        existingF.driveId = res.id; existingF.driveLink = res.webViewLink; existingF.status = 'done';
+        existingF.subfolderRef = parentSfId || ''; existingF.size = file.size;
+        saveState();
+      } else {
         const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: parentSfId || '', thumb: null, thumbFull: null, _raw: null, localFolder: relPath ? '03_FINAL/' + relPath : '03_FINAL' };
         files.push(fObj);
         genThumb(file).then(result => {
@@ -3385,11 +3405,21 @@ function updateFolderLinkButtons() {
     else { openBtn.href = '#'; openBtn.classList.add('btn-disabled'); }
   }
 }
-function handleOpenCurrentFolder(e) {
+async function handleOpenCurrentFolder(e) {
+  e.preventDefault();
   const p = getProj(curProjId);
   const link = getCurrentFolderDriveLink(p);
-  if (!link) { e.preventDefault(); toast('Folder ini belum tersinkron ke Drive', 'error'); return false; }
-  return true;
+  if (!link) { toast('Folder ini belum tersinkron ke Drive', 'error'); return false; }
+  if (!accessToken) { window.open(link, '_blank'); return false; }
+  const id = link.split('/folders/')[1];
+  toast('Mengecek folder...', 'info');
+  const ok = await driveIdExists(id);
+  if (!ok) {
+    toast('Folder ini sudah tidak ada di Drive (mungkin kehapus manual) — coba "Sync 03_FINAL ke Drive" lagi buat bikin ulang', 'error');
+    return false;
+  }
+  window.open(link, '_blank');
+  return false;
 }
 function copyCurrentFolderLink() {
   const p = getProj(curProjId);
