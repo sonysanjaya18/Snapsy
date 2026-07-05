@@ -1702,10 +1702,10 @@
       "taskStatus": "done",
       "createdAt": "2026-06-29T01:58:40.938Z",
       "previewFileId": "f_17832221551778sorfimg1rv",
-      "previewStatus": "needs_review",
+      "previewStatus": "approved",
       "previewAnnotations": [],
       "previewNote": "",
-      "previewUnread": false
+      "previewUnread": true
     },
     {
       "id": "t_1782698471019",
