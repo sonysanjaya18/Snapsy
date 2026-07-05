@@ -1702,10 +1702,10 @@
       "taskStatus": "done",
       "createdAt": "2026-06-29T01:58:40.938Z",
       "previewFileId": "f_17832221551778sorfimg1rv",
-      "previewStatus": "approved",
+      "previewStatus": "needs_review",
       "previewAnnotations": [],
       "previewNote": "",
-      "previewUnread": true
+      "previewUnread": false
     },
     {
       "id": "t_1782698471019",
@@ -2005,5 +2005,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T03:34:39.049Z"
+  "_savedAt": "2026-07-05T03:35:34.355Z"
 }
