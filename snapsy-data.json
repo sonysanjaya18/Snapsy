@@ -1282,7 +1282,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "done",
       "startDate": "2026-06-09",
       "deadline": "2026-06-30",
       "notes": "",
@@ -1297,9 +1297,9 @@
       "portal": {
         "id": "sp_1x1j0s7qjo9i",
         "active": true,
-        "unread": false,
+        "unread": true,
         "createdAt": "2026-07-03T07:13:07.734Z",
-        "notifType": "revision",
+        "notifType": "approved",
         "lastRevision": {
           "fileId": "f_1783049466188i9ig0nsglq",
           "fileName": "Voucher Winterfests-100x65mm-01.jpg",
@@ -1934,8 +1934,24 @@
             "note": "",
             "annCount": 6,
             "at": "2026-07-05T02:56:06.857Z"
+          },
+          {
+            "id": "ph_1783220262596uwqj7nr6y2",
+            "type": "approval",
+            "taskId": "t_1782698320938",
+            "fileId": "f_1783049466188i9ig0nsglq",
+            "fileName": "Voucher Winterfests-100x65mm-01.jpg",
+            "note": "",
+            "annCount": 0,
+            "at": "2026-07-05T02:57:40.904Z"
           }
-        ]
+        ],
+        "lastApproval": {
+          "fileId": "f_1783049466188i9ig0nsglq",
+          "fileName": "Voucher Winterfests-100x65mm-01.jpg",
+          "taskId": "t_1782698320938",
+          "at": "2026-07-05T02:57:40.904Z"
+        }
       }
     }
   ],
