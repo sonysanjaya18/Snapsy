@@ -79,7 +79,16 @@
       "driveCliId": "1vwzE_JZX0m5ZFByitJAI6rEqL5sQGUOG",
       "driveProjId": "1cqZ6l_0Ao-3i_jVjDpoQo76QVkZSKDNX",
       "createdAt": "2026-06-30T06:14:20.321Z",
-      "subfolders": [],
+      "subfolders": [
+        {
+          "id": "sf_1783292756352r8wh",
+          "name": "Digital Screen",
+          "driveId": "19cJs6tNiCuaLHwPdIK02D2r4Oby8ZaSb",
+          "driveLink": "https://drive.google.com/drive/folders/19cJs6tNiCuaLHwPdIK02D2r4Oby8ZaSb",
+          "parentId": null,
+          "source": "synced"
+        }
+      ],
       "localSynced": {
         ".DS_Store": "179AhQhbTVvTmBptQVqPqurXbjoAdr4KS",
         "Digital Screen/R10-1-All Page-Screen Menu-sammy-Screenmenu-030726.pdf": "1ZTNZzTLpalcdnjfBPis5gjw8IRa34E5j"
@@ -2281,5 +2290,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-05T23:05:53.573Z"
+  "_savedAt": "2026-07-05T23:05:57.874Z"
 }
