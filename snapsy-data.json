@@ -58,7 +58,7 @@
       "name": "Kingsmen Business Card",
       "price": "",
       "currency": "USD",
-      "status": "invoice-sent",
+      "status": "paid",
       "startDate": "2026-07-02",
       "deadline": "2026-07-03",
       "notes": "",
@@ -95,7 +95,8 @@
         ],
         "isMulti": true,
         "createdAt": "2026-07-05T23:37:57.622Z"
-      }
+      },
+      "paidAt": "2026-07-06T05:04:12.254Z"
     },
     {
       "id": "p_1782800060321",
@@ -2105,7 +2106,7 @@
       "name": "Business Card Design",
       "done": true,
       "price": "11",
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "createdAt": "2026-07-02T00:02:24.024Z"
     },
     {
@@ -2387,5 +2388,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-06T04:59:20.706Z"
+  "_savedAt": "2026-07-06T05:04:13.793Z"
 }
