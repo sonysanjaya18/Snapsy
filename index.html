@@ -6345,7 +6345,7 @@ async function ghLoadData() {
 
     const json = await res.json();
     ghFileSha = json.sha;
-    const raw  = atob(json.content.replace(/\n/g,''));
+    const raw  = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
     const data = JSON.parse(raw);
 
     // Load into app state
@@ -6387,7 +6387,7 @@ async function ghSilentPull() {
 
     dbg('silentPull: SHA CHANGED → pulling data');
     ghFileSha = json.sha;
-    const raw  = atob(json.content.replace(/\n/g,''));
+    const raw  = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
     const data = JSON.parse(raw);
 
     if (data.projects)   projects   = data.projects;
