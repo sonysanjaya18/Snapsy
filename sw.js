@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snapsy-v3';
+const CACHE_NAME = 'snapsy-v4';
 const ASSETS = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
@@ -16,17 +16,32 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('api.github.com')) {
-    e.respondWith(fetch(e.request));
+  const req = e.request;
+  const url = req.url;
+
+  // Selalu network-only untuk API dinamis — jangan pernah di-cache/di-intercept
+  if (url.includes('api.github.com') || url.includes('googleapis.com') || url.includes('accounts.google.com')) {
+    e.respondWith(fetch(req));
     return;
   }
+
+  // Cuma coba cache untuk GET request dengan skema http/https (skip chrome-extension:// dll)
+  const isCacheable = req.method === 'GET' && url.startsWith('http');
+  if (!isCacheable) {
+    e.respondWith(fetch(req).catch(() => caches.match(req)));
+    return;
+  }
+
   e.respondWith(
-    fetch(e.request)
+    fetch(req)
       .then(res => {
-        const clone = res.clone();
-        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+        // Jangan cache response yang gagal/bukan basic (opaque, redirect, dll juga aman di-skip)
+        if (res.ok && res.type === 'basic') {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(c => c.put(req, clone)).catch(() => {});
+        }
         return res;
       })
-      .catch(() => caches.match(e.request))
+      .catch(() => caches.match(req))
   );
 });
