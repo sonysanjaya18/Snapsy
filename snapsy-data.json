@@ -21,7 +21,7 @@
       "name": "Kingsmen Poster",
       "price": "",
       "currency": "USD",
-      "status": "invoice-sent",
+      "status": "paid",
       "startDate": "2026-07-04",
       "deadline": "2026-07-06",
       "notes": "Update For recent ",
@@ -50,7 +50,8 @@
         "active": true,
         "unread": false,
         "createdAt": "2026-07-06T02:42:46.937Z"
-      }
+      },
+      "paidAt": "2026-07-06T05:04:49.982Z"
     },
     {
       "id": "p_1782950521221",
@@ -2115,7 +2116,7 @@
       "name": "Poster Design Update",
       "done": true,
       "price": "11",
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "createdAt": "2026-07-04T00:12:29.815Z",
       "previewFileId": "f_1783306116444mk1l0neweo",
       "previewStatus": "needs_review",
@@ -2388,5 +2389,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-06T05:04:24.904Z"
+  "_savedAt": "2026-07-06T05:04:51.521Z"
 }
