@@ -6345,8 +6345,18 @@ async function ghLoadData() {
 
     const json = await res.json();
     ghFileSha = json.sha;
-    const raw  = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
-    const data = JSON.parse(raw);
+    let data;
+    if (json.content) {
+      const raw = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
+      data = JSON.parse(raw);
+    } else if (json.download_url) {
+      // File data sudah cukup besar sehingga GitHub tidak mengirim isinya langsung — ambil via download_url
+      const rawRes = await fetch(json.download_url + '?t=' + Date.now());
+      if (!rawRes.ok) throw new Error('Gagal memuat data (file besar).');
+      data = await rawRes.json();
+    } else {
+      throw new Error('Format data tidak dikenali.');
+    }
 
     // Load into app state
     if (data.projects)   projects   = data.projects;
@@ -6387,8 +6397,19 @@ async function ghSilentPull() {
 
     dbg('silentPull: SHA CHANGED → pulling data');
     ghFileSha = json.sha;
-    const raw  = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
-    const data = JSON.parse(raw);
+    let data;
+    if (json.content) {
+      const raw = decodeURIComponent(escape(atob(json.content.replace(/\n/g,''))));
+      data = JSON.parse(raw);
+    } else if (json.download_url) {
+      // File data sudah cukup besar sehingga GitHub tidak mengirim isinya langsung — ambil via download_url
+      const rawRes = await fetch(json.download_url + '?t=' + Date.now());
+      if (!rawRes.ok) { dbg('silentPull: download_url fetch failed ' + rawRes.status); return; }
+      data = await rawRes.json();
+    } else {
+      dbg('silentPull: no content and no download_url, skip');
+      return;
+    }
 
     if (data.projects)   projects   = data.projects;
     if (data.clients)    clients    = data.clients;
