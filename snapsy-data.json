@@ -1,6 +1,17 @@
 {
   "projects": [
     {
+      "id": "p_1783383815133kb162rke1e",
+      "name": "Logo MidLevel",
+      "client": "Yusva",
+      "price": 250000,
+      "currency": "IDR",
+      "status": "pending",
+      "startDate": "2026-07-07",
+      "deadline": "2026-07-14",
+      "notes": "From quotation QT-DTXUV"
+    },
+    {
       "id": "p_1783149522104",
       "client": "Racha",
       "name": "Compli Brand",
@@ -2214,6 +2225,14 @@
       "price": "5",
       "taskStatus": "done",
       "createdAt": "2026-07-05T02:58:48.212Z"
+    },
+    {
+      "id": "tk_1783383815133nyqmk5su1pe",
+      "projId": "p_1783383815133kb162rke1e",
+      "name": "Logo MidLevel",
+      "price": 250000,
+      "done": false,
+      "taskStatus": "todo"
     }
   ],
   "files": [
@@ -2429,7 +2448,7 @@
       "currency": "IDR",
       "notes": "",
       "validUntil": "2026-07-14",
-      "status": "pending",
+      "status": "accepted",
       "createdAt": "2026-07-07",
       "items": [
         {
@@ -2455,5 +2474,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-07T00:23:14.957Z"
+  "_savedAt": "2026-07-07T00:23:36.693Z"
 }
