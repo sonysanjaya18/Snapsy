@@ -1746,6 +1746,14 @@
       "currency": "USD",
       "status": "aktif",
       "createdAt": "2026-06-28T22:49:13.431Z"
+    },
+    {
+      "id": "c_17833837933788d25inw94yu",
+      "name": "Yusva",
+      "phone": "",
+      "email": "",
+      "status": "on-quotation",
+      "currency": "IDR"
     }
   ],
   "tasks": [
@@ -2411,7 +2419,30 @@
       "localFolder": "03_FINAL/_Top Sign Nonna Maria Pasta"
     }
   ],
-  "quotations": [],
+  "quotations": [
+    {
+      "id": "qt_1783383793378gjpsqzv399n",
+      "num": "QT-DTXUV",
+      "clientName": "Yusva",
+      "phone": "",
+      "email": "",
+      "currency": "IDR",
+      "notes": "",
+      "validUntil": "2026-07-14",
+      "status": "pending",
+      "createdAt": "2026-07-07",
+      "items": [
+        {
+          "name": "Logo MidLevel",
+          "qty": 1,
+          "price": 250000,
+          "desc": "- 3 Opsi Logo\n- File Lengkap Logo (.ai, .jpeg, . png, pdf, eps)\n- Estimasi 4- 5 hari pengerjaan",
+          "printMeta": null
+        }
+      ],
+      "total": 250000
+    }
+  ],
   "withdrawals": [],
   "cfg": {
     "root": "Snapsy.Std",
@@ -2424,5 +2455,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-06T23:07:46.205Z"
+  "_savedAt": "2026-07-07T00:23:14.957Z"
 }
