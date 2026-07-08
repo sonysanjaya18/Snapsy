@@ -2257,6 +2257,15 @@
       "price": 250000,
       "done": false,
       "taskStatus": "todo"
+    },
+    {
+      "id": "t_1783490969005",
+      "projId": "p_1783490938548",
+      "name": "Update Menu Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-08T06:09:29.005Z"
     }
   ],
   "files": [
@@ -2498,5 +2507,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-08T06:09:18.259Z"
+  "_savedAt": "2026-07-08T06:09:30.564Z"
 }
