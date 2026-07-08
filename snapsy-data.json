@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1783490938548",
+      "client": "Mahmoud",
+      "name": "Menu Design Update",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-07",
+      "deadline": "2026-07-08",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-08T06:08:58.548Z"
+    },
+    {
       "id": "p_1783383815133kb162rke1e",
       "name": "Logo MidLevel",
       "client": "Yusva",
@@ -2483,5 +2498,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-08T06:08:34.134Z"
+  "_savedAt": "2026-07-08T06:09:00.105Z"
 }
