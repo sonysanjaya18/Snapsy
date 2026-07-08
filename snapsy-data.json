@@ -6,7 +6,7 @@
       "client": "Yusva",
       "price": 250000,
       "currency": "IDR",
-      "status": "need-work",
+      "status": "pending",
       "startDate": "2026-07-07",
       "deadline": "2026-07-14",
       "notes": "From quotation QT-DTXUV"
@@ -1714,6 +1714,15 @@
   ],
   "clients": [
     {
+      "id": "c_1783490912579",
+      "name": "Mahmoud",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-07-08T06:08:32.579Z"
+    },
+    {
       "id": "c_1782799862014",
       "name": "Sammy",
       "phone": "",
@@ -2474,5 +2483,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-08T06:05:11.648Z"
+  "_savedAt": "2026-07-08T06:08:34.134Z"
 }
