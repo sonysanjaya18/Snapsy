@@ -18,7 +18,20 @@
         "Final-Menu spudhole - Update 080726.pdf": "1Xj9MMKnFjeMO59isKlnFFpWY3J8T8uoO"
       },
       "localSyncedFolders": {},
-      "subfolders": []
+      "subfolders": [],
+      "lastInvoice": {
+        "invNum": "SNP-V9XZNI",
+        "invDate": "2026-07-08",
+        "payment": "",
+        "note": "",
+        "currency": "USD",
+        "total": 11,
+        "taskIds": [
+          "t_1783490969005"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-08T06:15:15.770Z"
+      }
     },
     {
       "id": "p_1783383815133kb162rke1e",
@@ -2527,5 +2540,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-08T06:15:09.608Z"
+  "_savedAt": "2026-07-08T06:15:17.402Z"
 }
