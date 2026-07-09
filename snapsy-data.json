@@ -2312,6 +2312,15 @@
       "price": "6",
       "taskStatus": "todo",
       "createdAt": "2026-07-09T03:04:49.253Z"
+    },
+    {
+      "id": "t_1783566333684",
+      "projId": "p_1783149522104",
+      "name": "Folder Presentation Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-09T03:05:33.684Z"
     }
   ],
   "files": [
@@ -2568,5 +2577,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-09T03:05:16.264Z"
+  "_savedAt": "2026-07-09T03:05:35.241Z"
 }
