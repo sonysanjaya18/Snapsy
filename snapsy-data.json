@@ -51,7 +51,7 @@
       "name": "Compli Brand",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "revision",
       "startDate": "2026-07-04",
       "deadline": "2026-07-07",
       "notes": "",
@@ -2541,5 +2541,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-09T03:01:40.509Z"
+  "_savedAt": "2026-07-09T03:01:45.317Z"
 }
