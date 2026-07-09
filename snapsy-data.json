@@ -2565,7 +2565,18 @@
       "total": 250000
     }
   ],
-  "withdrawals": [],
+  "withdrawals": [
+    {
+      "id": "wd_1783591248210",
+      "date": "2026-07-09",
+      "amount": 44,
+      "rate": 17000,
+      "idrReceived": 748000,
+      "method": "BCA",
+      "note": "",
+      "createdAt": "2026-07-09T10:00:48.210Z"
+    }
+  ],
   "cfg": {
     "root": "Snapsy.Std",
     "studio": "Snapsy Std.",
@@ -2577,5 +2588,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-09T03:42:19.187Z"
+  "_savedAt": "2026-07-09T10:00:49.909Z"
 }
