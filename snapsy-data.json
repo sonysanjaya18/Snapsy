@@ -1404,7 +1404,20 @@
           "parentId": null,
           "source": "synced"
         }
-      ]
+      ],
+      "lastInvoice": {
+        "invNum": "SNP-Q3Q534",
+        "invDate": "2026-07-09",
+        "payment": "https://www.paypal.me/sonysanjaya18",
+        "note": "",
+        "currency": "USD",
+        "total": 20,
+        "taskIds": [
+          "t_1782687269087"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-09T23:41:03.601Z"
+      }
     },
     {
       "id": "p_1782687066050",
@@ -2135,7 +2148,7 @@
       "name": "Sign Design",
       "done": true,
       "price": "20",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-06-28T22:54:29.087Z"
     },
     {
@@ -2588,5 +2601,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-09T23:40:30.831Z"
+  "_savedAt": "2026-07-09T23:41:05.377Z"
 }
