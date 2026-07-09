@@ -38,11 +38,11 @@
       "id": "p_1783383815133kb162rke1e",
       "name": "Logo MidLevel",
       "client": "Yusva",
-      "price": 250000,
+      "price": "250000",
       "currency": "IDR",
-      "status": "pending",
+      "status": "",
       "startDate": "2026-07-07",
-      "deadline": "2026-07-14",
+      "deadline": "2026-07-12",
       "notes": "From quotation QT-DTXUV"
     },
     {
@@ -2588,5 +2588,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-09T13:25:34.588Z"
+  "_savedAt": "2026-07-09T13:25:51.860Z"
 }
