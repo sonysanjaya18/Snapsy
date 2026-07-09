@@ -2300,7 +2300,7 @@
       "projId": "p_1783149522104",
       "name": "CV Template",
       "done": false,
-      "price": "",
+      "price": "11",
       "taskStatus": "todo",
       "createdAt": "2026-07-09T03:04:09.132Z"
     }
@@ -2559,5 +2559,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-09T03:04:10.692Z"
+  "_savedAt": "2026-07-09T03:04:17.372Z"
 }
