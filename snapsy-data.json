@@ -151,7 +151,7 @@
       "driveProjId": null,
       "createdAt": "2026-07-04T07:18:42.104Z",
       "lastInvoice": {
-        "invNum": "SNP-EL0TWC",
+        "invNum": "SNP-4GC49M",
         "invDate": "2026-07-13",
         "payment": "",
         "note": "",
@@ -170,7 +170,7 @@
           "t_1783566333684"
         ],
         "isMulti": false,
-        "createdAt": "2026-07-13T23:26:55.293Z"
+        "createdAt": "2026-07-13T23:27:17.313Z"
       }
     },
     {
@@ -1931,5 +1931,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-13T23:27:16.488Z"
+  "_savedAt": "2026-07-13T23:27:23.777Z"
 }
