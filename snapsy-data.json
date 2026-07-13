@@ -142,7 +142,7 @@
       "name": "Compli Brand",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "ongoing",
       "startDate": "2026-07-04",
       "deadline": "2026-07-07",
       "notes": "LinkedIn Banner:\nhttps://canva.link/dak8h1hked2ttv5\n\nNewsletter Template:\nhttps://canva.link/ov4glsnl8eo364x\n\nCapability Statement  4 Page:\nhttps://canva.link/loniheuiji9uae0\n\nCV Template:\nhttps://canva.link/loniheuiji9uae0\n\nLetter Head:\nhttps://canva.link/l0i2gcs222i9xss",
@@ -1138,9 +1138,9 @@
       "id": "t_1783149546226",
       "projId": "p_1783149522104",
       "name": "Business Card Design",
-      "done": false,
+      "done": true,
       "price": "11",
-      "taskStatus": "review",
+      "taskStatus": "done",
       "createdAt": "2026-07-04T07:19:06.226Z"
     },
     {
@@ -1909,5 +1909,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-13T23:26:22.175Z"
+  "_savedAt": "2026-07-13T23:26:38.835Z"
 }
