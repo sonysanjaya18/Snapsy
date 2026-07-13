@@ -2450,6 +2450,7 @@ window.onload = async () => {
   projects.forEach(p => { if(p.status === 'pending') { p.status = 'need-work'; migrated = true; } });
   if(migrated) saveState();
   updateCounts(); renderDashboard();
+  rehydrateThumbsFromIdb(); // thumbnail gambar disimpen di IndexedDB, bukan localStorage — tempelin balik ke memori
   if (cfg.clientId && cfg.apiKey) {
     initGapi();
     const lb = document.getElementById('loginBtn');
@@ -2698,6 +2699,76 @@ async function idbGet(key) {
   });
 }
 
+// ── THUMBNAIL STORAGE (IndexedDB) ──────────────────────
+// thumb/thumbFull (base64 JPEG) dulu disimpen bareng data lain di localStorage lewat
+// key 'ssy_files' — localStorage cuma muat ~5-10MB, jadi lama-lama numpuk dan bikin
+// QuotaExceededError begitu banyak file/gambar ke-upload. IndexedDB muat jauh lebih
+// besar (ratusan MB), jadi thumbnail dipindah ke sini. localStorage cuma nyimpen
+// data ringan (nama, size, status, dll) — lihat saveLocalOnly().
+function thumbDbOpen() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('snapsy-thumbs', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('thumbs');
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+async function thumbSet(id, val) {
+  try {
+    const db = await thumbDbOpen();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction('thumbs', 'readwrite');
+      tx.objectStore('thumbs').put(val, id);
+      tx.oncomplete = () => res(true);
+      tx.onerror = () => rej(tx.error);
+    });
+  } catch (e) { console.error('thumbSet gagal untuk', id, e); return false; }
+}
+async function thumbDelete(id) {
+  try {
+    const db = await thumbDbOpen();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction('thumbs', 'readwrite');
+      tx.objectStore('thumbs').delete(id);
+      tx.oncomplete = () => res(true);
+      tx.onerror = () => rej(tx.error);
+    });
+  } catch (e) { console.error('thumbDelete gagal untuk', id, e); return false; }
+}
+async function thumbGetAll() {
+  try {
+    const db = await thumbDbOpen();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction('thumbs', 'readonly');
+      const out = {};
+      const req = tx.objectStore('thumbs').openCursor();
+      req.onsuccess = (e) => {
+        const cur = e.target.result;
+        if (cur) { out[cur.key] = cur.value; cur.continue(); } else res(out);
+      };
+      req.onerror = () => rej(req.error);
+    });
+  } catch (e) { console.error('thumbGetAll gagal:', e); return {}; }
+}
+// Simpen thumbnail 1 file ke IndexedDB (dipanggil tiap kali thumb baru dibuat)
+function persistThumb(f) {
+  if (f && f.id && (f.thumb || f.thumbFull)) thumbSet(f.id, { thumb: f.thumb || null, thumbFull: f.thumbFull || null });
+}
+// Dipanggil sehabis pull data dari GitHub — data dari GitHub masih bawa thumbnail lengkap,
+// simpen ke IndexedDB lokal juga biar bisa dipakai offline tanpa perlu narik ulang dari GitHub
+function persistAllThumbsFromFiles() { files.forEach(persistThumb); }
+// Ambil semua thumbnail dari IndexedDB dan tempelin balik ke array `files` di memori
+// (dipanggil sekali pas app baru kebuka, karena localStorage gak nyimpen thumbnail lagi)
+async function rehydrateThumbsFromIdb() {
+  const all = await thumbGetAll();
+  let changed = false;
+  files.forEach(f => {
+    const t = all[f.id];
+    if (t && (!f.thumb && !f.thumbFull)) { f.thumb = t.thumb; f.thumbFull = t.thumbFull; changed = true; }
+  });
+  if (changed) { renderDashboard(); if (curProjId) renderDetailFiles(curProjId); renderProjects(); }
+}
+
 function sanitizeFolderName(name) {
   return (name || 'Untitled').replace(/[\\/:*?"<>|]/g, '-').trim() || 'Untitled';
 }
@@ -2839,7 +2910,7 @@ async function scanLocalTracking(projId) {
       const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name, size: file.size, type: file.type, status: 'local', progress: 100, driveId: null, driveLink: null, subfolderRef: '', thumb: null, thumbFull: null, _raw: null, localFolder: sub };
       files.push(fObj);
       genThumb(file).then(result => {
-        if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); if (curProjId === p.id) renderDetailFiles(p.id); renderProjects(); renderDashboard(); }
+        if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; persistThumb(fObj); saveState(); if (curProjId === p.id) renderDetailFiles(p.id); renderProjects(); renderDashboard(); }
       });
     } catch (e) { console.error('Gagal scan', name, e); }
   }
@@ -3037,7 +3108,7 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats, par
         const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: parentSfId || '', thumb: null, thumbFull: null, _raw: null, localFolder: localFolderLabel };
         files.push(fObj);
         genThumb(file).then(result => {
-          if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); if (curProjId === p.id) renderDetailFiles(p.id); }
+          if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; persistThumb(fObj); saveState(); if (curProjId === p.id) renderDetailFiles(p.id); }
         });
       }
     } catch (e) {
@@ -3203,7 +3274,7 @@ async function lfSyncUpload() {
           const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: 'done', progress: 100, driveId: res.id, driveLink: res.webViewLink, subfolderRef: parentChain.sfId || '', thumb: null, thumbFull: null, _raw: null, localFolder: localFolderLabel };
           files.push(fObj);
           genThumb(file).then(result => {
-            if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); if (curProjId === p.id) renderDetailFiles(p.id); }
+            if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; persistThumb(fObj); saveState(); if (curProjId === p.id) renderDetailFiles(p.id); }
           });
         }
       }
@@ -3370,7 +3441,7 @@ async function lfPickThisFile(name) {
     files.push(fObj);
 
     const result = await genThumb(file);
-    if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; }
+    if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; persistThumb(fObj); }
 
     // Kirim preview baru = reset status & anotasi lama (versi baru, coretan lama gak relevan lagi)
     t.previewFileId = fObj.id;
@@ -3842,7 +3913,7 @@ function saveProject() {
 
 function confirmDeleteProject() {
   showConfirm('Hapus Proyek?', `Proyek "<b>${getProj(curProjId)?.name}</b>" dan semua task-nya akan dihapus.<br><br>File di Drive <b>tidak</b> otomatis terhapus.`, async () => {
-    tasks = tasks.filter(t=>t.projId!==curProjId); files = files.filter(f=>f.projId!==curProjId); projects = projects.filter(p=>p.id!==curProjId);
+    const _delFileIds = files.filter(f=>f.projId===curProjId).map(f=>f.id); tasks = tasks.filter(t=>t.projId!==curProjId); files = files.filter(f=>f.projId!==curProjId); projects = projects.filter(p=>p.id!==curProjId); _delFileIds.forEach(thumbDelete);
     saveState(); updateCounts(); showView('projects',null); renderProjects(); toast('Proyek dihapus','info');
   });
 }
@@ -4674,6 +4745,7 @@ function updateTaskStatus(id, val, selectEl) {
   if(selectEl) { selectEl.className = 'task-status-btn ts-'+val; }
   autoUpdateProjStatus(t.projId);
   renderTasks(curProjId);
+  if(curProjId === t.projId) { const p = getProj(t.projId); if(p) renderDetailStatus(p); }
 }
 
 function toggleTask(id) {
@@ -4683,6 +4755,7 @@ function toggleTask(id) {
   saveState();
   autoUpdateProjStatus(t.projId);
   renderTasks(curProjId);
+  if(curProjId === t.projId) { const p = getProj(t.projId); if(p) renderDetailStatus(p); }
 }
 function renderTaskTotal(projId) { 
   const p = getProj(projId); const list = getProjTasks(projId); const total = list.reduce((s,t)=>s+(parseFloat(t.price)||0),0); 
@@ -4819,13 +4892,13 @@ function addFiles(rawFiles) {
   // generate thumbnails async (lightweight, non-blocking)
   added.forEach(({fObj, raw}) => {
     genThumb(raw).then(result => {
-      if(result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; saveState(); }
+      if(result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; persistThumb(fObj); saveState(); }
     });
   });
 }
 async function uploadSingleFile(fileId) { if(!accessToken) { if(!gapiReady) { toast('Setup Drive dulu','error'); return; } tokenClient.requestAccessToken({prompt:'consent'}); return; } const f=files.find(x=>x.id===fileId); if(!f||!f._raw) { toast('File tidak ada di memori (mungkin halaman sempat di-refresh) — hapus lalu drag & drop ulang filenya','error'); return; } const proj = getProj(f.projId); f.status='uploading'; f.progress=0; renderDetailFiles(curProjId); try { const savedSf=curSubfolderId; const savedSfName=curSubfolderName; curSubfolderId=f.subfolderRef||''; const sf=(proj.subfolders||[]).find(s=>s.id===curSubfolderId); curSubfolderName=sf?sf.name:'Folder Utama'; const folderId = await getTargetFolderId(proj); curSubfolderId=savedSf; curSubfolderName=savedSfName; const res = await driveUpload(f, folderId, pct=>{ f.progress=pct; const bar=document.getElementById('pf_'+f.id); if(bar) bar.style.width=pct+'%'; }); f.status='done'; f.driveId=res.id; f.driveLink=res.webViewLink; saveState(); renderDetailFiles(curProjId); toast('Upload sukses!','success'); } catch(err) { f.status='error'; saveState(); renderDetailFiles(curProjId); console.error('Upload gagal untuk', f.name, err); toast('Upload gagal: ' + (err && err.message ? err.message : 'cek Console (F12) untuk detail'), 'error'); } }
 async function uploadAllFiles() { const pending=files.filter(f=>f.projId===curProjId&&f.status==='pending'); if(!pending.length) return; toast('Uploading...','info'); for(const f of pending) await uploadSingleFile(f.id); }
-function confirmDeleteFile(fileId) { const f=files.find(x=>x.id===fileId); if(!f) return; const isLocalOnly = f.status==='local'; const sub = isLocalOnly ? `Hapus preview "<b>${f.name}</b>" dari tracking? File aslinya di disk <b>tidak ikut terhapus</b>.` : `Yakin hapus "<b>${f.name}</b>"?`; showConfirm('Hapus File?', sub, async () => { if(f.driveId && accessToken) { try { await driveDelete(f.driveId); } catch(e) {} } files=files.filter(x=>x.id!==fileId); saveState(); renderDetailFiles(curProjId); toast('Dihapus','success'); }); }
+function confirmDeleteFile(fileId) { const f=files.find(x=>x.id===fileId); if(!f) return; const isLocalOnly = f.status==='local'; const sub = isLocalOnly ? `Hapus preview "<b>${f.name}</b>" dari tracking? File aslinya di disk <b>tidak ikut terhapus</b>.` : `Yakin hapus "<b>${f.name}</b>"?`; showConfirm('Hapus File?', sub, async () => { if(f.driveId && accessToken) { try { await driveDelete(f.driveId); } catch(e) {} } files=files.filter(x=>x.id!==fileId); thumbDelete(fileId); saveState(); renderDetailFiles(curProjId); toast('Dihapus','success'); }); }
 function renderDetailFiles(projId) {
   const allFiles=files.filter(f=>f.projId===projId);
   const list = curSubfolderId
@@ -5469,14 +5542,31 @@ function showConfirm(title, sub, onOk) { document.getElementById('cm-title').inn
 // ── HELPERS ───────────────────────────────────────────
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 function updateCliSuggest() { document.getElementById('cli-suggest').innerHTML=clients.map(c=>`<option value="${c.name}">`).join(''); }
+// Simpan 1 key ke localStorage dengan aman — kalau quota penuh (QuotaExceededError),
+// jangan sampai nge-block key lain yang mau disave sesudahnya.
+// TIDAK menghapus/mengubah data apapun — cuma nahan errornya biar gak nge-crash saveLocalOnly().
+let _storageWarned = false;
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (e) {
+    console.error('safeSetItem gagal untuk key "' + key + '":', e);
+    if (!_storageWarned) {
+      _storageWarned = true; // cuma tampil sekali per sesi biar gak spam toast
+      toast('Penyimpanan lokal penuh (localStorage). Perubahan pada "' + key + '" belum tersimpan — hubungi admin untuk bersihin data lama.', 'error');
+    }
+    return false;
+  }
+}
 function saveLocalOnly() {
-  const sf=files.map(({_raw,...r})=>r);
-  localStorage.setItem('ssy_proj',JSON.stringify(projects));
-  localStorage.setItem('ssy_clients',JSON.stringify(clients));
-  localStorage.setItem('ssy_tasks',JSON.stringify(tasks));
-  localStorage.setItem('ssy_files',JSON.stringify(sf));
-  localStorage.setItem('ssy_qt',JSON.stringify(quotations));
-  localStorage.setItem('ssy_wd',JSON.stringify(withdrawals));
+  const sf=files.map(({_raw,thumb,thumbFull,...r})=>r);
+  safeSetItem('ssy_proj',JSON.stringify(projects));
+  safeSetItem('ssy_clients',JSON.stringify(clients));
+  safeSetItem('ssy_tasks',JSON.stringify(tasks));
+  safeSetItem('ssy_files',JSON.stringify(sf));
+  safeSetItem('ssy_qt',JSON.stringify(quotations));
+  safeSetItem('ssy_wd',JSON.stringify(withdrawals));
 }
 function saveState() {
   saveLocalOnly();
@@ -6561,6 +6651,7 @@ async function ghLoadData() {
     if (data.quotations) quotations = data.quotations;
     if (data.withdrawals) withdrawals = data.withdrawals;
     if (data.cfg)        Object.assign(cfg, data.cfg);
+    persistAllThumbsFromFiles();
 
     // Sync to localStorage too
     saveLocalOnly();
@@ -6613,6 +6704,7 @@ async function ghSilentPull() {
     if (data.quotations) quotations = data.quotations;
     if (data.withdrawals) withdrawals = data.withdrawals;
     if (data.cfg)        Object.assign(cfg, data.cfg);
+    persistAllThumbsFromFiles();
 
     saveLocalOnly();
     updateCounts();
