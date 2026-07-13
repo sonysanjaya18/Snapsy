@@ -149,7 +149,29 @@
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-04T07:18:42.104Z"
+      "createdAt": "2026-07-04T07:18:42.104Z",
+      "lastInvoice": {
+        "invNum": "SNP-EL0TWC",
+        "invDate": "2026-07-13",
+        "payment": "",
+        "note": "",
+        "currency": "USD",
+        "total": 161,
+        "taskIds": [
+          "t_1783149546226",
+          "t_1783149567717",
+          "t_1783149590145",
+          "t_1783149605668",
+          "t_1783149623862",
+          "t_1783566181987",
+          "t_1783566225310",
+          "t_1783566249132",
+          "t_1783566289253",
+          "t_1783566333684"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-13T23:26:55.293Z"
+      }
     },
     {
       "id": "p_1783123931099",
@@ -1140,7 +1162,7 @@
       "name": "Business Card Design",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-04T07:19:06.226Z"
     },
     {
@@ -1149,7 +1171,7 @@
       "name": "Refine Logo",
       "done": true,
       "price": "22",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-04T07:19:27.717Z"
     },
     {
@@ -1158,7 +1180,7 @@
       "name": "Ending Page",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-04T07:19:50.145Z"
     },
     {
@@ -1167,7 +1189,7 @@
       "name": "Brand Guideline",
       "done": true,
       "price": "26",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-04T07:20:05.668Z"
     },
     {
@@ -1176,7 +1198,7 @@
       "name": "Capability Statement",
       "done": true,
       "price": "16",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-04T07:20:23.862Z"
     },
     {
@@ -1211,7 +1233,7 @@
       "name": "News Letter Design",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-09T03:03:01.987Z"
     },
     {
@@ -1220,7 +1242,7 @@
       "name": "4 Cover Page Design",
       "done": true,
       "price": "25",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-09T03:03:45.310Z"
     },
     {
@@ -1229,7 +1251,7 @@
       "name": "CV Template",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-09T03:04:09.132Z"
     },
     {
@@ -1238,7 +1260,7 @@
       "name": "LinkedIn Banner",
       "done": true,
       "price": "6",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-09T03:04:49.253Z"
     },
     {
@@ -1247,7 +1269,7 @@
       "name": "Folder Presentation Design",
       "done": true,
       "price": "22",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-09T03:05:33.684Z"
     }
   ],
@@ -1909,5 +1931,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-13T23:26:51.438Z"
+  "_savedAt": "2026-07-13T23:26:56.943Z"
 }
