@@ -40,10 +40,11 @@
       "client": "Yusva",
       "price": "250000",
       "currency": "IDR",
-      "status": "ongoing",
+      "status": "paid",
       "startDate": "2026-07-07",
       "deadline": "2026-07-12",
-      "notes": "From quotation QT-DTXUV"
+      "notes": "From quotation QT-DTXUV",
+      "paidAt": "2026-07-13T03:16:32.052Z"
     },
     {
       "id": "p_1783149522104",
@@ -2278,8 +2279,8 @@
       "projId": "p_1783383815133kb162rke1e",
       "name": "Logo MidLevel",
       "price": 250000,
-      "done": false,
-      "taskStatus": "inprogress"
+      "done": true,
+      "taskStatus": "paid"
     },
     {
       "id": "t_1783490969005",
@@ -2601,5 +2602,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-13T03:16:21.589Z"
+  "_savedAt": "2026-07-13T03:16:33.641Z"
 }
