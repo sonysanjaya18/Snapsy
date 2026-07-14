@@ -767,6 +767,14 @@
       "email": "",
       "status": "on-quotation",
       "currency": "IDR"
+    },
+    {
+      "id": "c_1784001600133yx9p3xnj84h",
+      "name": "Hamaza",
+      "phone": "",
+      "email": "",
+      "status": "on-quotation",
+      "currency": "USD"
     }
   ],
   "tasks": [
@@ -1886,6 +1894,28 @@
   ],
   "quotations": [
     {
+      "id": "qt_1784001600134o2ux7zpn51h",
+      "num": "QT-SNYO6",
+      "clientName": "Hamaza",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "notes": "",
+      "validUntil": "2026-07-23",
+      "status": "pending",
+      "createdAt": "2026-07-14",
+      "items": [
+        {
+          "name": "Menu Design",
+          "qty": 1,
+          "price": 11,
+          "desc": "1 Menu Design",
+          "printMeta": null
+        }
+      ],
+      "total": 11
+    },
+    {
       "id": "qt_1783383793378gjpsqzv399n",
       "num": "QT-DTXUV",
       "clientName": "Yusva",
@@ -1931,5 +1961,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-13T23:27:50.926Z"
+  "_savedAt": "2026-07-14T04:00:01.645Z"
 }
