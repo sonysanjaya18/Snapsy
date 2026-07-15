@@ -713,6 +713,22 @@
           "taskId": "t_1782698320938",
           "at": "2026-07-05T02:57:40.904Z"
         }
+      },
+      "lastInvoice": {
+        "invNum": "SNP-DBKL11",
+        "invDate": "2026-07-15",
+        "payment": "",
+        "note": "",
+        "currency": "USD",
+        "total": 45,
+        "taskIds": [
+          "t_1782687092871",
+          "t_1782698320938",
+          "t_1782707350121",
+          "t_1783220328212"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-15T22:10:09.516Z"
       }
     }
   ],
@@ -795,7 +811,7 @@
       "name": "A5 Flyer Design",
       "done": true,
       "price": "15",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-06-28T22:51:32.871Z",
       "previewFileId": "f_1783291632601a01tfnpsf1r",
       "previewStatus": "revision",
@@ -1122,7 +1138,7 @@
       "name": "4x Social Media Size",
       "done": true,
       "price": "20",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-06-29T01:58:40.938Z"
     },
     {
@@ -1131,7 +1147,7 @@
       "name": "Canva Countdown",
       "done": true,
       "price": "5",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-06-29T04:29:10.121Z"
     },
     {
@@ -1226,7 +1242,7 @@
       "name": "Free Card Voucher",
       "done": true,
       "price": "5",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-05T02:58:48.212Z"
     },
     {
@@ -1980,5 +1996,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-15T22:09:58.699Z"
+  "_savedAt": "2026-07-15T22:10:11.034Z"
 }
