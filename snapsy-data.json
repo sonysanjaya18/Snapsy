@@ -6,7 +6,7 @@
       "client": "Hamaza",
       "price": 11,
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-07-14",
       "deadline": "2026-07-23",
       "notes": "From quotation QT-SNYO6"
@@ -1426,7 +1426,7 @@
       "name": "Menu Design",
       "price": 11,
       "done": false,
-      "taskStatus": "todo"
+      "taskStatus": "review"
     }
   ],
   "files": [
@@ -2529,5 +2529,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-16T22:09:08.076Z"
+  "_savedAt": "2026-07-16T22:09:16.685Z"
 }
