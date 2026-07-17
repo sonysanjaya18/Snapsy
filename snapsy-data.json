@@ -6,10 +6,23 @@
       "client": "Hamaza",
       "price": 11,
       "currency": "USD",
-      "status": "revision",
+      "status": "need-to-pay",
       "startDate": "2026-07-14",
       "deadline": "2026-07-23",
-      "notes": "From quotation QT-SNYO6"
+      "notes": "From quotation QT-SNYO6",
+      "lastInvoice": {
+        "invNum": "SNP-SNJ7FQ",
+        "invDate": "2026-07-17",
+        "payment": "",
+        "note": "",
+        "currency": "USD",
+        "total": 11,
+        "taskIds": [
+          "tk_1784001912520cx60x10jsv7"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-17T03:16:31.076Z"
+      }
     },
     {
       "id": "p_1783490938548",
@@ -1425,8 +1438,8 @@
       "projId": "p_1784001912520a66vpc3ji1a",
       "name": "Menu Design",
       "price": 11,
-      "done": false,
-      "taskStatus": "review"
+      "done": true,
+      "taskStatus": "invoiced"
     }
   ],
   "files": [
@@ -2529,5 +2542,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-17T03:16:24.557Z"
+  "_savedAt": "2026-07-17T03:16:32.596Z"
 }
