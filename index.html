@@ -1327,6 +1327,10 @@ body.portal-mode { overflow-x: hidden; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>if (typeof pdfjsLib !== 'undefined') pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+<!-- Firebase (opsional) — cuma dipakai buat nyalain notifikasi realtime pas klien kirim revisi/approve.
+     Kalau owner belum setup Firebase, semuanya tetep jalan normal kayak biasa (polling 15 detik). -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <script>if (location.hash.indexOf('#portal~') === 0) document.body.classList.add('portal-mode');</script>
@@ -1883,6 +1887,34 @@ body.portal-mode { overflow-x: hidden; }
     <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">Folder Lokal (Disk Komputer)</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Hubungkan folder <b>SNAPSY</b> di komputermu. Setiap bikin proyek baru, app otomatis bikin struktur <code>Klien/Proyek/01_WORKING, 02_EXPORT, 03_FINAL, 04_ARCHIVE</code> di dalamnya. Fitur ini cuma jalan di Chrome/Edge versi laptop-PC.</div>
     <div id="local-root-status" style="margin-bottom:6px"></div>
+    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">⚡ Notifikasi Realtime (opsional)</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">
+      Tanpa ini, notifikasi revisi klien tetep masuk tapi lewat cek berkala tiap ±15 detik (gak instan). Kalau mau notifikasi BENERAN realtime (langsung kedengeran begitu klien kirim), hubungkan Firebase gratisan:<br><br>
+      1. Buka <a href="https://console.firebase.google.com/" target="_blank">console.firebase.google.com</a> → buat project baru (gratis, gak perlu kartu kredit).<br>
+      2. Di project itu, buka menu <b>Build → Firestore Database</b> → klik "Create database" → pilih mode <b>production</b>.<br>
+      3. Buka tab <b>Rules</b> di Firestore, ganti isinya jadi:<br>
+      <code style="display:block;background:var(--surface2);padding:8px;border-radius:6px;margin:4px 0;font-size:11px;white-space:pre-wrap">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notifications/{doc} {
+      allow read, create: if true;
+      allow update, delete: if false;
+    }
+  }
+}</code>
+      lalu klik <b>Publish</b>.<br>
+      4. Kembali ke Project Overview (klik ikon ⚙️ di kiri atas → Project settings) → scroll ke "Your apps" → klik ikon web <b>&lt;/&gt;</b> buat daftarin app baru → kasih nama bebas → jangan centang Hosting → klik "Register app".<br>
+      5. Copy semua isi objek <code>firebaseConfig</code> yang muncul, tempel utuh-utuh ke kotak di bawah ini.
+    </div>
+    <div class="fg"><label class="fl">Firebase Config (paste dari langkah 5)</label><textarea class="ft" id="s-fb-config" rows="5" placeholder='{
+  apiKey: "AIzaSy...",
+  authDomain: "xxx.firebaseapp.com",
+  projectId: "xxx",
+  storageBucket: "xxx.appspot.com",
+  messagingSenderId: "...",
+  appId: "..."
+}'></textarea></div>
+    <div id="fb-status" style="font-size:12px;margin-bottom:4px"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('setupModal')">Batal</button>
       <button class="btn btn-primary" onclick="saveSetup()">Simpan</button>
@@ -2588,6 +2620,9 @@ window.onload = async () => {
 
   // GitHub sync init — tunggu sampai selesai supaya ghFileSha sudah terisi
   await ghInit();
+
+  // ── Notifikasi realtime (Firebase, kalau udah disetup) — jauh lebih cepet drpd nunggu polling 15 detik ──
+  fbStartOwnerListener();
 
   // ── Auto-sync: pull dari GitHub setiap 15 detik ──
   setInterval(() => {
@@ -5899,6 +5934,76 @@ function updateCounts() {
 }
 
 // ── SETUP & CONFIRM ───────────────────────────────────
+// ══════════════════════════════════════════════════════
+// ── NOTIFIKASI REALTIME (Firebase Firestore, opsional) ──
+// ══════════════════════════════════════════════════════
+// Dipakai SATU ARAH doang: cuma buat "bel" — nandain "ada yang baru nih, tolong di-refresh".
+// Data asli (gambar, coretan, catatan) TETAP di GitHub seperti biasa; Firestore cuma sinyal kecil
+// {projId, taskId, taskName, status, at} biar owner gak perlu nunggu polling 15 detik lagi.
+let fbApp = null, fbDb = null, fbUnsub = null, fbListenerReady = false;
+
+function fbGetConfig() {
+  // Owner: dari cfg lokal. Portal klien: dari data.cfg yang di-fetch (di-set manual pas portal load).
+  return (typeof cfg !== 'undefined' && cfg && cfg.firebaseConfig) || window._portalFirebaseConfig || null;
+}
+
+function fbInit(explicitConfig) {
+  const conf = explicitConfig || fbGetConfig();
+  if (!conf || typeof firebase === 'undefined') return null;
+  try {
+    fbApp = firebase.apps && firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(conf);
+    fbDb = firebase.firestore();
+    return fbDb;
+  } catch (e) {
+    console.warn('Firebase init gagal:', e);
+    return null;
+  }
+}
+
+// OWNER SIDE: dengerin koleksi "notifications" secara realtime. Begitu ada dokumen baru masuk
+// (dari klien yang baru aja approve/revisi), langsung toast + refresh data asli dari GitHub.
+function fbStartOwnerListener() {
+  if (fbUnsub) { fbUnsub(); fbUnsub = null; }
+  const db = fbInit();
+  if (!db) return; // Firebase belum disetup — gapapa, tetep jalan normal pakai polling 15 detik
+  fbListenerReady = false;
+  try {
+    fbUnsub = db.collection('notifications').orderBy('at', 'desc').limit(25)
+      .onSnapshot(snap => {
+        if (!fbListenerReady) {
+          // Snapshot pertama = hydration data lama, bukan event baru — jangan di-toast-in semua.
+          fbListenerReady = true;
+          return;
+        }
+        snap.docChanges().forEach(change => {
+          if (change.type !== 'added') return;
+          const d = change.doc.data();
+          const lang = 'id';
+          const isApproved = d.status === 'approved';
+          toast((isApproved ? '✓ ' : '⚡ ') + (isApproved ? 'Klien approve' : 'Klien kirim revisi') + ` untuk "${d.taskName || ''}" — memuat...`, isApproved ? 'success' : 'info');
+          ghSilentPull(); // tarik data asli (gambar+coretan+status) dari GitHub sesegera mungkin
+        });
+      }, err => {
+        console.warn('Firestore listener error (cek Firestore Rules kalau ini muncul terus):', err);
+      });
+  } catch (e) {
+    console.warn('Gagal mulai listener Firebase:', e);
+  }
+}
+
+// KLIEN SIDE (jalan di browser klien, dalam mode portal): kirim sinyal kecil ke Firestore
+// setelah berhasil submit approve/revisi ke GitHub. Best-effort — kalau gagal (mis. belum disetup
+// owner-nya), gak masalah sama sekali, submit ke GitHub tadi udah pasti berhasil duluan.
+async function fbNotifyOwner(projId, taskId, taskName, status) {
+  try {
+    const db = fbInit();
+    if (!db) return;
+    await db.collection('notifications').add({ projId, taskId, taskName, status, at: Date.now() });
+  } catch (e) {
+    console.warn('Gagal kirim notifikasi realtime (gak masalah, data utama tetep aman di GitHub):', e);
+  }
+}
+
 function openSetup() {
   document.getElementById('s-studio').value  = cfg.studio  || 'Snapsy Std.';
   document.getElementById('s-owner').value   = cfg.owner   || 'Sony Sanjaya';
@@ -5910,6 +6015,8 @@ function openSetup() {
   document.getElementById('s-cid').value     = cfg.clientId|| '';
   document.getElementById('s-key').value     = cfg.apiKey  || '';
   document.getElementById('s-portal-token').value = localStorage.getItem('gh_portal_token') || '';
+  document.getElementById('s-fb-config').value = cfg.firebaseConfig ? JSON.stringify(cfg.firebaseConfig, null, 2) : '';
+  document.getElementById('fb-status').textContent = cfg.firebaseConfig ? '✓ Firebase tersambung — notifikasi realtime aktif.' : '';
   const repoHint = document.getElementById('s-portal-repo-hint'); if (repoHint) repoHint.textContent = ghCreds().repo || 'data';
   renderLocalRootStatus();
   document.getElementById('setupModal').classList.add('show');
@@ -5928,6 +6035,30 @@ function saveSetup() {
   const portalToken = document.getElementById('s-portal-token').value.trim();
   if (portalToken) localStorage.setItem('gh_portal_token', portalToken);
   else localStorage.removeItem('gh_portal_token');
+
+  const fbRaw = document.getElementById('s-fb-config').value.trim();
+  const fbStatusEl = document.getElementById('fb-status');
+  if (!fbRaw) {
+    cfg.firebaseConfig = null;
+  } else {
+    try {
+      // Dibiarin lenient (bukan JSON.parse ketat) krn orang biasanya copy-paste objek JS asli dari Firebase console
+      // (key-nya gak dikutip, ada trailing comma dll) — bukan JSON valid tapi tetep JS object literal yang sah.
+      const parsed = new Function('return (' + fbRaw + ')')();
+      if (!parsed || !parsed.apiKey || !parsed.projectId) throw new Error('Config gak lengkap (minimal butuh apiKey & projectId)');
+      cfg.firebaseConfig = parsed;
+      fbStatusEl.textContent = '✓ Firebase config tersimpan.';
+      fbStatusEl.style.color = 'var(--green)';
+    } catch (e) {
+      toast('Format Firebase config gak valid: ' + e.message, 'error');
+      fbStatusEl.textContent = '✗ Gagal parse config — cek lagi format-nya.';
+      fbStatusEl.style.color = 'var(--red)';
+    }
+  }
+  localStorage.setItem('ssy_cfg',JSON.stringify(cfg));
+  ghScheduleSync(); // biar cfg.firebaseConfig ikut ke-sync & bisa dibaca dari sisi portal klien juga
+  fbStartOwnerListener(); // langsung (re)aktifin listener realtime pakai config terbaru
+
   closeModal('setupModal');
   document.getElementById('loginBtn').style.display='inline-flex';
   if(cfg.clientId && cfg.apiKey) initGapi();
@@ -7354,6 +7485,7 @@ async function portalLoadAndRender(openTaskId) {
     portalCurTasks = (data.tasks || []).filter(t => t.projId === pid);
     portalCurClient = (data.clients || []).find(c => c.name === proj.client) || { name: proj.client };
     portalCurProj = proj; portalCurCfg = data.cfg || {};
+    if (data.cfg && data.cfg.firebaseConfig) window._portalFirebaseConfig = data.cfg.firebaseConfig;
 
     const jump = openTaskId || portalDeepLinkTaskId;
     portalDeepLinkTaskId = null;
@@ -7628,6 +7760,7 @@ async function portalSubmitTask(taskId, newStatus, payload) {
         portalCurTasks = (data.tasks || []).filter(x => x.projId === pid);
         portalCurClient = (data.clients || []).find(c => c.name === proj.client) || { name: proj.client };
         portalCurProj = proj; portalCurCfg = data.cfg || {};
+        fbNotifyOwner(pid, taskId, t.name, newStatus); // sinyal realtime ke owner (best-effort, gak nge-block apapun)
         portalOpenTask(taskId);
         return;
       }
