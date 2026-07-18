@@ -28,7 +28,10 @@
         "active": true,
         "unread": false,
         "createdAt": "2026-07-17T23:42:07.104Z"
-      }
+      },
+      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
+      "driveCliId": "1WFTdY1Z4bHGSty8f4HBDseVa0MeD-NHa",
+      "driveProjId": "1E4ma3nkMI6uGnJz11uVDOo5Hg0jzlvMy"
     },
     {
       "id": "p_1783490938548",
@@ -3153,5 +3156,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-18T02:54:22.584Z"
+  "_savedAt": "2026-07-18T02:54:28.267Z"
 }
