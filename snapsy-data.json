@@ -974,7 +974,7 @@
       "name": "4x Social Media Size",
       "done": true,
       "price": "20",
-      "taskStatus": "invoiced",
+      "taskStatus": "done",
       "createdAt": "2026-06-29T01:58:40.938Z",
       "previewFileId": "f_1784373534476unf9efwut1l",
       "previewStatus": "needs_review",
@@ -3191,5 +3191,5 @@
     "clientId": "351699260787-769c6lbf2va5mcpe9ls3hg6a8rascq8r.apps.googleusercontent.com",
     "apiKey": "AIzaSyBFtz_gxHCpVa7d_W_End7iyOL4iG8IL3g"
   },
-  "_savedAt": "2026-07-18T11:18:56.267Z"
+  "_savedAt": "2026-07-18T11:19:33.134Z"
 }
