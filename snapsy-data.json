@@ -2694,7 +2694,8 @@
       "previewNote": "",
       "previewUnread": false,
       "previewSentAt": "2026-07-19T09:08:51.414Z",
-      "previewRespondedAt": null
+      "previewRespondedAt": null,
+      "previewLinkShared": true
     }
   ],
   "files": [
@@ -3881,5 +3882,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-19T09:08:57.432Z"
+  "_savedAt": "2026-07-19T09:09:03.181Z"
 }
