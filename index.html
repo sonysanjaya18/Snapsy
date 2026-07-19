@@ -1888,13 +1888,15 @@ body.portal-mode { overflow-x: hidden; }
     <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">Folder Lokal (Disk Komputer)</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Hubungkan folder <b>SNAPSY</b> di komputermu. Setiap bikin proyek baru, app otomatis bikin struktur <code>Klien/Proyek/01_WORKING, 02_EXPORT, 03_FINAL, 04_ARCHIVE</code> di dalamnya. Fitur ini cuma jalan di Chrome/Edge versi laptop-PC.</div>
     <div id="local-root-status" style="margin-bottom:6px"></div>
-    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">⚡ Notifikasi Realtime (opsional)</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px">
-      Tanpa ini, notifikasi revisi klien tetep masuk tapi lewat cek berkala tiap ±15 detik (gak instan). Kalau mau notifikasi BENERAN realtime (langsung kedengeran begitu klien kirim), hubungkan Firebase gratisan:<br><br>
+    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 4px">⚡ Notifikasi Realtime (opsional)</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">
+      Tanpa ini, notifikasi revisi klien tetep masuk otomatis tiap ±10 detik (gak instan tapi reliable). Ini cuma buat yang mau lebih instan lagi. <a href="#" onclick="document.getElementById('fb-setup-guide').style.display=document.getElementById('fb-setup-guide').style.display==='none'?'block':'none';return false" style="font-weight:700">Lihat cara setup ▾</a>
+    </div>
+    <div id="fb-setup-guide" style="display:none;font-size:12px;color:var(--muted);margin-bottom:10px;background:var(--surface2);padding:10px;border-radius:8px">
       1. Buka <a href="https://console.firebase.google.com/" target="_blank">console.firebase.google.com</a> → buat project baru (gratis, gak perlu kartu kredit).<br>
       2. Di project itu, buka menu <b>Build → Firestore Database</b> → klik "Create database" → pilih mode <b>production</b>.<br>
       3. Buka tab <b>Rules</b> di Firestore, ganti isinya jadi:<br>
-      <code style="display:block;background:var(--surface2);padding:8px;border-radius:6px;margin:4px 0;font-size:11px;white-space:pre-wrap">rules_version = '2';
+      <code style="display:block;background:var(--surface);padding:8px;border-radius:6px;margin:4px 0;font-size:11px;white-space:pre-wrap">rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /notifications/{doc} {
@@ -1905,9 +1907,9 @@ service cloud.firestore {
 }</code>
       lalu klik <b>Publish</b>.<br>
       4. Kembali ke Project Overview (klik ikon ⚙️ di kiri atas → Project settings) → scroll ke "Your apps" → klik ikon web <b>&lt;/&gt;</b> buat daftarin app baru → kasih nama bebas → jangan centang Hosting → klik "Register app".<br>
-      5. Copy semua isi objek <code>firebaseConfig</code> yang muncul, tempel utuh-utuh ke kotak di bawah ini.
+      5. Copy semua isi objek <code>firebaseConfig</code> yang muncul, tempel utuh-utuh ke kotak di bawah ini (boleh sekalian sama "const firebaseConfig = ...").
     </div>
-    <div class="fg"><label class="fl">Firebase Config (paste dari langkah 5)</label><textarea class="ft" id="s-fb-config" rows="5" placeholder='{
+    <div class="fg"><label class="fl">Firebase Config (opsional — kosongin aja kalau gak mau pakai)</label><textarea class="ft" id="s-fb-config" rows="5" placeholder='{
   apiKey: "AIzaSy...",
   authDomain: "xxx.firebaseapp.com",
   projectId: "xxx",
@@ -2483,7 +2485,8 @@ service cloud.firestore {
   <div class="modal">
     <div class="modal-title" id="history-modal-title">Riwayat Revisi</div>
     <div id="history-modal-list" style="max-height:50vh;overflow-y:auto;margin-top:4px"></div>
-    <div class="modal-footer">
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn btn-ghost btn-xs" id="history-refresh-btn" onclick="refreshHistoryModal()" style="display:none">🔄 Refresh data terbaru</button>
       <button class="btn btn-ghost" onclick="closeModal('historyModal')">Tutup</button>
     </div>
   </div>
@@ -2628,18 +2631,20 @@ window.onload = async () => {
   // ── Notifikasi realtime (Firebase, kalau udah disetup) — jauh lebih cepet drpd nunggu polling 15 detik ──
   fbStartOwnerListener();
 
-  // ── Auto-sync: pull dari GitHub setiap 15 detik ──
+  // ── Auto-sync: pull dari GitHub setiap 10 detik (jadi baseline yang GAK butuh Firebase sama sekali) ──
   setInterval(() => {
     dbg('⏱ interval tick, connected=' + ghConnected());
     if (ghConnected()) ghSilentPull();
-  }, 15000);
+  }, 10000);
 
-  // ── Auto-sync saat tab/app aktif kembali dari background ──
+  // ── Auto-sync begitu tab/app aktif lagi (dua event sekaligus biar gak ada yang kelewat di browser manapun) ──
   document.addEventListener('visibilitychange', () => {
     dbg('👁 visibility=' + document.visibilityState);
-    if (document.visibilityState === 'visible' && ghConnected()) {
-      ghSilentPull();
-    }
+    if (document.visibilityState === 'visible' && ghConnected()) ghSilentPull();
+  });
+  window.addEventListener('focus', () => {
+    dbg('👁 window focus');
+    if (ghConnected()) ghSilentPull();
   });
 };
 
@@ -5152,9 +5157,25 @@ function buildCurrentRoundFromTask(t) {
 }
 
 // Buka riwayat revisi langsung dari baris task, tanpa perlu masuk ke layar annotator dulu.
+let historyModalTaskId = null;
 function openTaskHistoryModal(taskId) {
   const t = tasks.find(x => x.id === taskId); if (!t) return;
+  historyModalTaskId = taskId;
+  const refreshBtn = document.getElementById('history-refresh-btn');
+  if (refreshBtn) refreshBtn.style.display = 'inline-flex'; // cuma ada kalau dibuka dari sisi owner (bukan dari portal klien)
   renderHistoryModal(t.previewHistory || [], 'id', buildCurrentRoundFromTask(t));
+}
+
+// Kalau data yang keliatan di histori kerasa "ketinggalan" (misal klien udah respon tapi di sini masih
+// keliatan "belum direspon"), klik ini buat langsung tarik data terbaru dari GitHub — gak perlu nunggu
+// polling 15 detik atau notifikasi realtime (yang mungkin belum sempet nyampe).
+async function refreshHistoryModal() {
+  const btn = document.getElementById('history-refresh-btn');
+  const taskId = historyModalTaskId;
+  if (btn) { btn.disabled = true; btn.textContent = '🔄 Memuat...'; }
+  await ghSilentPull();
+  if (btn) { btn.disabled = false; btn.textContent = '🔄 Refresh data terbaru'; }
+  if (taskId) openTaskHistoryModal(taskId);
 }
 
 function renderHistoryModal(rounds, lang, currentRound) {
@@ -8277,6 +8298,9 @@ function annTriggerUploadRevision() {
 
 function annOpenHistoryModal() {
   if (!annState) return;
+  historyModalTaskId = null;
+  const refreshBtn = document.getElementById('history-refresh-btn');
+  if (refreshBtn) refreshBtn.style.display = 'none';
   const current = annState.getCurrentRound ? annState.getCurrentRound() : null;
   renderHistoryModal(annState.history || [], annState.lang || 'id', current);
 }
