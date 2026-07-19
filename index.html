@@ -189,16 +189,6 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 }
 .task-card { margin-bottom: 6px; }
 .task-card .task-item { margin-bottom: 0; border-radius: 8px 8px 0 0; }
-.task-preview-row {
-  display: flex; align-items: center; gap: 8px; padding: 7px 12px;
-  background: var(--surface3, rgba(0,0,0,.02)); border-radius: 0 0 8px 8px;
-  border: 1px solid var(--border); border-top: none;
-}
-.tpr-unread-dot {
-  display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--red);
-  margin-right: 5px; animation: tpr-pulse 1.4s ease-in-out infinite;
-}
-@keyframes tpr-pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
 .task-item:hover { background: var(--surface3); border-color: var(--border); }
 .task-checkbox {
   width: 18px; height: 18px; border-radius: 5px; border: 2px solid var(--border);
@@ -979,18 +969,6 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   background: var(--surface); color: var(--accent); cursor: pointer; transition: .15s; flex-shrink: 0;
 }
 .portal-btn:hover { background: rgba(108,99,255,.08); border-color: var(--accent); transform: translateY(-1px); }
-.portal-notif-dot {
-  position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; border-radius: 50%;
-  background: var(--red); border: 2px solid var(--surface); display: none;
-}
-.portal-notif-dot.show { display: block; animation: pulse 1.5s infinite; }
-.portal-notif-badge {
-  position: absolute; top: -8px; right: -8px; min-width: 19px; height: 19px; padding: 0 4px;
-  border-radius: 10px; background: var(--red); color: #fff; border: 2px solid var(--surface);
-  font-size: 10.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;
-  animation: pulse 1.5s infinite; line-height: 1;
-}
-.portal-notif-badge.notif-approved { background: var(--green); }
 .pc-portal-wrap { position: relative; display: inline-flex; }
 .project-card .pc-portal-wrap { margin-left: 6px; }
 
@@ -1057,260 +1035,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .portal-progress-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--accent), #22c55e); transition: width .3s; }
 .portal-progress-pct { font-size: 12px; font-weight: 700; color: var(--text); width: 36px; text-align: right; }
 
-.portal-task-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 14px;
-}
-.portal-task-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.04); display: flex; flex-direction: column;
-}
-.portal-task-thumb {
-  width: 100%; aspect-ratio: 1/1; background: var(--surface2); cursor: pointer; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-}
-.portal-task-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.portal-task-thumb-empty { color: var(--muted); opacity: .5; }
-.portal-task-body { padding: 10px 10px 6px; }
-.portal-task-name { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.portal-task-status-none { background: rgba(100,116,139,.12); color: #64748b; }
-.portal-task-status-needs_review { background: rgba(59,130,246,.12); color: #3b82f6; }
-.portal-task-status-revision { background: rgba(220,38,38,.12); color: var(--red); }
-.portal-task-status-approved { background: rgba(22,163,74,.15); color: #14532d; }
-.portal-task-btn {
-  margin: 8px 10px 10px; padding: 9px 10px; border-radius: 8px; border: none; cursor: pointer;
-  font-size: 12px; font-weight: 700; color: #fff; text-align: center;
-}
-.portal-task-btn.btn-primary { background: var(--accent); }
-.portal-task-btn.btn-secondary { background: var(--orange, #f97316); }
-.portal-task-btn.btn-approved { background: var(--surface2); color: var(--muted); cursor: pointer; }
 .portal-invoice-wrap { overflow-x: auto; }
 @media (max-width: 480px) {
-  .portal-task-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
   .portal-home-head { flex-direction: column; }
-}
-
-/* ── ANNOTATOR (coret-coret gambar) ─────────────────── */
-.ann-overlay { z-index: 2000; }
-.ann-overlay .ann-modal {
-  background: var(--surface); border-radius: 14px; width: 96vw; max-width: 1160px; height: 90vh;
-  display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 70px rgba(20,22,40,.22);
-}
-.ann-header {
-  display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--surface);
-}
-.ann-title { font-weight: 700; font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
-.ann-hbtn {
-  width: 30px; height: 30px; border: 1px solid var(--border); background: var(--surface); border-radius: 8px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; color: var(--muted); flex-shrink: 0; transition: .12s;
-}
-.ann-hbtn:hover { background: rgba(108,99,255,.08); color: var(--accent); border-color: var(--accent); }
-.ann-hbtn:disabled { opacity: .35; cursor: default; pointer-events: none; }
-.ann-zoom-controls { display: flex; align-items: center; gap: 2px; background: var(--surface2); border-radius: 9px; padding: 3px; }
-.ann-zoom-controls .ann-hbtn { border: none; background: transparent; width: 26px; height: 26px; }
-.ann-zoom-controls .ann-hbtn:hover { background: var(--surface); }
-.ann-zoom-pct { font-size: 11px; color: var(--muted); width: 38px; text-align: center; font-variant-numeric: tabular-nums; }
-.ann-close { background: var(--surface2); }
-.ann-close:hover { background: rgba(220,38,38,.1); color: var(--red); border-color: rgba(220,38,38,.3); }
-
-.ann-body { display: flex; flex: 1; min-height: 0; }
-.ann-stage-wrap {
-  flex: 1; overflow: hidden; position: relative;
-  background:
-    linear-gradient(45deg, #f0f1f6 25%, transparent 25%), linear-gradient(-45deg, #f0f1f6 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #f0f1f6 75%), linear-gradient(-45deg, transparent 75%, #f0f1f6 75%);
-  background-size: 22px 22px; background-position: 0 0, 0 11px, 11px -11px, -11px 0px; background-color: #fafafd;
-  cursor: crosshair; touch-action: none; user-select: none;
-}
-.ann-stage-wrap.pan-mode { cursor: grab; }
-.ann-stage-wrap.readonly-mode { cursor: grab; }
-.ann-stage-wrap.panning { cursor: grabbing; }
-.ann-stage-wrap.no-img { cursor: default; }
-/* Posisi & ukuran stage sepenuhnya dikontrol lewat transform (panX/panY/zoom) di JS —
-   jangan dikasih centering dari CSS/flexbox juga, soalnya nanti dobel offset & gambar jadi mepet pojok. */
-.ann-stage { position: absolute; top: 0; left: 0; transform-origin: 0 0; touch-action: none; }
-.ann-stage img { display: block; max-width: none; user-select: none; -webkit-user-drag: none; box-shadow: 0 2px 24px rgba(0,0,0,.12); }
-.ann-stage svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; }
-.ann-hint-chip {
-  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 5;
-  background: rgba(26,29,46,.72); color: #fff; font-size: 11px; padding: 6px 12px; border-radius: 20px;
-  display: flex; align-items: center; gap: 6px; white-space: nowrap; pointer-events: none; transition: opacity .3s;
-}
-.ann-hint-chip svg { flex-shrink: 0; opacity: .85; }
-.ann-tool-dock {
-  position: absolute; top: 14px; right: 14px; z-index: 6; display: flex; flex-direction: column; gap: 6px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 6px;
-  box-shadow: 0 6px 20px rgba(20,22,40,.14);
-}
-.ann-tbtn {
-  width: 34px; height: 34px; border: none; background: transparent; border-radius: 8px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; color: var(--muted); transition: .12s;
-}
-.ann-tbtn:hover { background: rgba(108,99,255,.08); color: var(--accent); }
-.ann-tbtn.active { background: var(--accent); color: #fff; }
-.ann-tool-sep { height: 1px; background: var(--border); margin: 2px 4px; }
-
-.ann-sidebar {
-  width: 300px; flex-shrink: 0; border-left: 1px solid var(--border); background: var(--surface);
-  display: grid; grid-template-rows: minmax(0,1fr) auto; min-height: 0;
-}
-.ann-sidebar-scroll { display: grid; grid-template-rows: auto minmax(0,1fr) auto; min-height: 0; }
-.ann-overlay .ann-modal.has-tasknav { max-width: 1320px; }
-.ann-tasknav {
-  width: 190px; flex-shrink: 0; border-right: 1px solid var(--border); background: var(--surface2);
-  display: none; flex-direction: column; min-height: 0;
-}
-.ann-tasknav.show { display: flex; }
-.ann-tasknav-greet { padding: 14px 14px 4px; font-size: 12.5px; font-weight: 700; color: var(--text); }
-.ann-tasknav-tasklabel { padding: 0 14px; font-size: 13px; font-weight: 800; color: var(--accent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ann-tasknav-sublabel { padding: 6px 14px 10px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); }
-.ann-tasknav-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 5px; }
-.ann-tasknav-item {
-  padding: 9px 10px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: .12s;
-}
-.ann-tasknav-item:hover { background: var(--surface3, rgba(0,0,0,.03)); }
-.ann-tasknav-item.active { background: var(--surface); border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
-.ann-tasknav-item-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ann-tasknav-foot { padding: 10px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
-.ann-tasknav-foot button { width: 100%; }
-@media (max-width: 900px) {
-  .ann-tasknav { width: 100%; border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; max-height: 74px; }
-  .ann-tasknav-greet, .ann-tasknav-tasklabel, .ann-tasknav-sublabel, .ann-tasknav-foot { display: none; }
-  .ann-tasknav-list { flex-direction: row; overflow-x: auto; overflow-y: hidden; padding: 8px; }
-  .ann-tasknav-item { flex-shrink: 0; min-width: 130px; }
-}
-.ann-list-head {
-  display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 8px;
-  font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
-}
-.ann-list { overflow-y: auto; min-height: 0; padding: 0 10px; }
-.ann-history-btn {
-  border: none; background: rgba(108,99,255,.1); color: var(--accent); font-size: 10.5px; font-weight: 800;
-  text-transform: none; letter-spacing: 0; padding: 4px 9px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 4px;
-}
-.ann-history-btn:hover { background: rgba(108,99,255,.18); }
-
-/* ── Modal Riwayat Revisi ── */
-.history-modal .modal { width: 420px; max-width: 92vw; }
-.history-round {
-  display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border);
-}
-.history-round:last-child { border-bottom: none; }
-.history-round-thumb {
-  width: 52px; height: 52px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--surface2);
-  display: flex; align-items: center; justify-content: center;
-}
-.history-round-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.history-round-body { min-width: 0; flex: 1; }
-.history-round-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-.history-round-name { font-size: 12.5px; font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.history-round-dates { font-size: 11px; color: var(--muted); margin-top: 3px; }
-.history-round-note { font-size: 11.5px; color: var(--text); margin-top: 5px; background: var(--surface2); padding: 6px 8px; border-radius: 6px; }
-.history-round-annn { font-size: 10.5px; color: var(--muted); margin-top: 4px; }
-.history-round.is-current { background: rgba(108,99,255,.05); margin: 0 -14px; padding: 11px 14px; border-radius: 8px; }
-.history-round.is-current .history-round-name { color: var(--accent); }
-.ann-item { display: flex; gap: 9px; padding: 9px 4px; border-bottom: 1px solid var(--border); }
-.ann-item:last-child { border-bottom: none; }
-.ann-pin {
-  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 10px; font-weight: 800; margin-top: 1px;
-}
-.ann-item-body { flex: 1; min-width: 0; }
-.ann-item-toprow { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
-.ann-item-label { font-size: 11px; font-weight: 700; color: var(--text); flex: 1; }
-.ann-item-del {
-  border: none; background: none; color: var(--muted); cursor: pointer; padding: 2px; border-radius: 5px;
-  display: flex; align-items: center; opacity: .6; transition: .12s;
-}
-.ann-item-del:hover { opacity: 1; color: var(--red); background: rgba(220,38,38,.08); }
-.ann-item textarea {
-  width: 100%; font-size: 12.5px; border: 1px solid var(--border); border-radius: 7px; padding: 6px 8px;
-  resize: none; font-family: inherit; background: var(--surface2); color: var(--text); box-sizing: border-box; line-height: 1.4;
-}
-.ann-item textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
-.ann-item p { margin: 0; font-size: 12.5px; color: var(--text); line-height: 1.45; }
-.ann-empty-hint { font-size: 12px; color: var(--muted); text-align: center; padding: 22px 10px; line-height: 1.5; }
-.ann-note-wrap { padding: 10px 14px; border-top: 1px solid var(--border); }
-.ann-note-wrap label { display: block; font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
-.ann-note-wrap textarea {
-  width: 100%; font-size: 12.5px; border: 1px solid var(--border); border-radius: 8px; padding: 8px;
-  font-family: inherit; resize: none; box-sizing: border-box; background: var(--surface2); color: var(--text);
-}
-.ann-note-wrap textarea:focus { outline: none; border-color: var(--accent); background: var(--surface); }
-.ann-note-wrap textarea[readonly] { background: var(--surface2); color: var(--muted); }
-.ann-actions { display: flex; gap: 8px; padding: 10px 14px 14px; border-top: 1px solid var(--border); }
-.ann-abtn {
-  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: 9px;
-  padding: 10px 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; color: #fff; transition: .12s; font-family: inherit;
-}
-.ann-abtn:hover { filter: brightness(1.06); transform: translateY(-1px); }
-.ann-abtn.approve { background: var(--green); }
-.ann-abtn.revise { background: var(--red); }
-.ann-abtn.read { background: var(--accent); width: 100%; }
-.ann-locked-note {
-  width: 100%; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--green);
-  background: rgba(34,197,94,.1); border-radius: 9px; padding: 10px 12px; font-weight: 600;
-}
-
-@media (max-width: 720px) {
-  .ann-overlay .ann-modal { width: 100vw; height: 100vh; border-radius: 0; max-width: none; }
-  .ann-body { flex-direction: column; min-height: 0; }
-  /* Canvas coret-coret jadi prioritas utama — ambil semua sisa ruang, bukan cuma potongan kecil */
-  .ann-stage-wrap { flex: 1 1 auto; min-height: 0; }
-  /* Sidebar (komentar/anotasi) jadi bottom sheet yang bisa dibuka-tutup, defaultnya kecil biar canvas tetep full.
-     Tombol Approve/Revisi TETAP kelihatan walau panel catatan lagi ditutup. */
-  .ann-sidebar {
-    width: 100%; flex: 0 0 auto; border-left: none; border-top: 1px solid var(--border);
-    display: flex; flex-direction: column;
-  }
-  .ann-sidebar-scroll { max-height: 42vh; overflow-y: auto; transition: max-height .2s ease; display: block; }
-  .ann-sidebar.collapsed .ann-sidebar-scroll { max-height: 0; overflow: hidden; }
-  .ann-sidebar-toggle {
-    display: flex; align-items: center; justify-content: center; gap: 6px; padding: 9px;
-    font-size: 12px; font-weight: 700; color: var(--accent); background: var(--surface2); border: none;
-    border-top: 1px solid var(--border); flex-shrink: 0; cursor: pointer;
-  }
-}
-@media (min-width: 721px) {
-  .ann-sidebar-toggle { display: none; }
-}
-
-/* ── Kartu feedback klien di detail proyek (owner) ──── */
-.pfc-revision { border-left: 3px solid var(--orange); }
-.pfc-approved { border-left: 3px solid var(--green); }
-.pfc-thumb { width: 100%; border-radius: 8px; margin: 8px 0; border: 1px solid var(--border); max-height: 160px; object-fit: cover; }
-
-.portal-notif-dot.notif-approved { background: var(--green); }
-
-/* ── Bell notifikasi aktivitas klien (revisi/approve) di topbar owner ── */
-.notif-bell-wrap { position: relative; }
-.notif-bell-btn { position: relative; padding: 6px 8px !important; }
-.notif-bell-dot {
-  position: absolute; top: 3px; right: 3px; min-width: 15px; height: 15px; padding: 0 3px; border-radius: 20px;
-  background: var(--red); color: #fff; font-size: 9.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;
-  animation: pulse 1.5s infinite; box-shadow: 0 0 0 2px var(--surface);
-}
-.notif-bell-panel {
-  position: absolute; top: calc(100% + 8px); left: 0; width: 320px; max-height: 380px; overflow-y: auto;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 12px 34px rgba(20,22,40,.18);
-  z-index: 500;
-}
-.notif-bell-head { padding: 12px 14px; font-size: 12px; font-weight: 800; color: var(--text); border-bottom: 1px solid var(--border); }
-.notif-bell-item {
-  display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: .12s;
-}
-.notif-bell-item:last-child { border-bottom: none; }
-.notif-bell-item:hover { background: rgba(108,99,255,.06); }
-.notif-bell-icon {
-  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; margin-top: 1px;
-}
-.notif-bell-icon.revision { background: var(--orange); }
-.notif-bell-icon.approved { background: var(--green); }
-.notif-bell-body { min-width: 0; flex: 1; }
-.notif-bell-title { font-size: 12.5px; font-weight: 700; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.notif-bell-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
-.notif-bell-empty { padding: 22px 14px; font-size: 12px; color: var(--muted); text-align: center; }
-@media (max-width: 720px) {
-  .notif-bell-panel { position: fixed; top: 56px; left: 10px; right: 10px; width: auto; }
 }
 
 /* ── ISOLASI MODE PORTAL — sembunyikan total UI internal owner ── */
@@ -1319,7 +1046,7 @@ body.portal-mode .layout,
 body.portal-mode #gh-login-screen,
 body.portal-mode #mobile-nav,
 body.portal-mode #fab-add,
-body.portal-mode .overlay:not(.ann-overlay) { display: none !important; }
+body.portal-mode .overlay { display: none !important; }
 body.portal-mode { overflow-x: hidden; }
 
 </style>
@@ -1327,10 +1054,6 @@ body.portal-mode { overflow-x: hidden; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>if (typeof pdfjsLib !== 'undefined') pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
-<!-- Firebase (opsional) — cuma dipakai buat nyalain notifikasi realtime pas klien kirim revisi/approve.
-     Kalau owner belum setup Firebase, semuanya tetep jalan normal kayak biasa (polling 15 detik). -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <script>if (location.hash.indexOf('#portal~') === 0) document.body.classList.add('portal-mode');</script>
@@ -1387,17 +1110,6 @@ body.portal-mode { overflow-x: hidden; }
 <div class="topbar">
   <div class="brand" id="brand-tap">Snapsy<span>.</span>Std</div>
   <div class="topbar-right">
-    <div class="notif-bell-wrap" id="notif-bell-wrap">
-      <button class="btn btn-ghost btn-sm notif-bell-btn" onclick="toggleNotifBell()" title="Aktivitas klien">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span class="notif-bell-dot" id="notif-bell-dot" style="display:none"></span>
-      </button>
-      <div class="notif-bell-panel" id="notif-bell-panel" style="display:none">
-        <div class="notif-bell-head">Aktivitas Klien</div>
-        <div class="notif-bell-list" id="notif-bell-list"></div>
-      </div>
-    </div>
-    <span id="fb-live-badge" class="badge" style="display:none;cursor:pointer" onclick="openSetup()" title="Klik buat buka pengaturan Firebase"></span>
     <span id="authBadge" class="badge b-cancel">● Belum terhubung</span>
     <span id="gh-sync-badge" class="gh-sync-badge" style="display:none"></span>
     <button class="btn btn-ghost btn-sm" id="gh-disconnect-btn" onclick="ghDisconnect()" style="display:none;color:var(--muted)" title="Putuskan GitHub">
@@ -1888,39 +1600,6 @@ body.portal-mode { overflow-x: hidden; }
     <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 10px">Folder Lokal (Disk Komputer)</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Hubungkan folder <b>SNAPSY</b> di komputermu. Setiap bikin proyek baru, app otomatis bikin struktur <code>Klien/Proyek/01_WORKING, 02_EXPORT, 03_FINAL, 04_ARCHIVE</code> di dalamnya. Fitur ini cuma jalan di Chrome/Edge versi laptop-PC.</div>
     <div id="local-root-status" style="margin-bottom:6px"></div>
-    <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 4px">⚡ Notifikasi Realtime (opsional)</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:8px">
-      Tanpa ini, notifikasi revisi klien tetep masuk otomatis tiap ±10 detik (gak instan tapi reliable). Ini cuma buat yang mau lebih instan lagi. <a href="#" onclick="document.getElementById('fb-setup-guide').style.display=document.getElementById('fb-setup-guide').style.display==='none'?'block':'none';return false" style="font-weight:700">Lihat cara setup ▾</a>
-    </div>
-    <div id="fb-setup-guide" style="display:none;font-size:12px;color:var(--muted);margin-bottom:10px;background:var(--surface2);padding:10px;border-radius:8px">
-      1. Buka <a href="https://console.firebase.google.com/" target="_blank">console.firebase.google.com</a> → buat project baru (gratis, gak perlu kartu kredit).<br>
-      2. Di project itu, buka menu <b>Build → Firestore Database</b> → klik "Create database" → pilih mode <b>production</b>.<br>
-      3. Buka tab <b>Rules</b> di Firestore, ganti isinya jadi:<br>
-      <code style="display:block;background:var(--surface);padding:8px;border-radius:6px;margin:4px 0;font-size:11px;white-space:pre-wrap">rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /notifications/{doc} {
-      allow read, create: if true;
-      allow update, delete: if false;
-    }
-  }
-}</code>
-      lalu klik <b>Publish</b>.<br>
-      4. Kembali ke Project Overview (klik ikon ⚙️ di kiri atas → Project settings) → scroll ke "Your apps" → klik ikon web <b>&lt;/&gt;</b> buat daftarin app baru → kasih nama bebas → jangan centang Hosting → klik "Register app".<br>
-      5. Copy semua isi objek <code>firebaseConfig</code> yang muncul, tempel utuh-utuh ke kotak di bawah ini (boleh sekalian sama "const firebaseConfig = ...").
-    </div>
-    <div class="fg"><label class="fl">Firebase Config (opsional — kosongin aja kalau gak mau pakai)</label><textarea class="ft" id="s-fb-config" rows="5" placeholder='{
-  apiKey: "AIzaSy...",
-  authDomain: "xxx.firebaseapp.com",
-  projectId: "xxx",
-  storageBucket: "xxx.appspot.com",
-  messagingSenderId: "...",
-  appId: "..."
-}'></textarea></div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-      <button class="btn btn-secondary btn-xs" type="button" onclick="fbTestConnection()">Tes Koneksi</button>
-      <div id="fb-status" style="font-size:12px"></div>
-    </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('setupModal')">Batal</button>
       <button class="btn btn-primary" onclick="saveSetup()">Simpan</button>
@@ -2403,7 +2082,6 @@ service cloud.firestore {
           <input id="portal-link-input" readonly value="">
           <button class="btn btn-primary btn-xs" onclick="copyPortalLink()">Salin</button>
         </div>
-        <div id="portal-shorten-status" style="font-size:11px;color:var(--muted);margin:-4px 0 8px;display:none"></div>
         <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:6px" onclick="sharePortalLinkWA()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Kirim via WhatsApp</button>
         <div class="portal-warn"><b>Catatan:</b> siapa pun yang punya link ini bisa membuka portal proyek. Kalau link ke-share ke orang salah, klik "Buat Link Baru" di bawah untuk otomatis menonaktifkan link lama.</div>
         <div class="modal-footer">
@@ -2412,82 +2090,6 @@ service cloud.firestore {
           <button class="btn btn-danger btn-sm" onclick="revokePortalLink(curPortalProjId)">Nonaktifkan</button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- OVERLAY: Annotator (coret-coret gambar) — dipakai portal (edit) & owner (view) -->
-<div class="overlay ann-overlay" id="annotatorOverlay">
-  <div class="ann-modal">
-    <div class="ann-header">
-      <div class="ann-title" id="ann-filename">-</div>
-      <div class="ann-zoom-controls" id="ann-zoom-controls">
-        <button class="ann-hbtn" onclick="annZoom(-0.25)" title="Zoom out"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-        <span class="ann-zoom-pct" id="ann-zoom-pct">100%</span>
-        <button class="ann-hbtn" onclick="annZoom(0.25)" title="Zoom in"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-        <button class="ann-hbtn" onclick="annResetView()" title="Sesuaikan ke layar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></button>
-      </div>
-      <button class="ann-hbtn ann-close" onclick="closeAnnotator()" title="Tutup"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="ann-body">
-      <div class="ann-tasknav" id="ann-tasknav"></div>
-      <div class="ann-stage-wrap" id="ann-stage-wrap">
-        <div class="ann-stage" id="ann-stage">
-          <img id="ann-img" src="" draggable="false">
-          <svg id="ann-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-        </div>
-        <div class="ann-tool-dock" id="ann-tool-dock">
-          <button class="ann-tbtn active" id="ann-tool-draw" onclick="annSetTool('draw')" title="Gambar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg></button>
-          <button class="ann-tbtn" id="ann-tool-pan" onclick="annSetTool('pan')" title="Geser gambar"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M6 14v0a6 6 0 0 0 6 6h1a7 7 0 0 0 7-7v-2a2 2 0 0 0-4 0"/></svg></button>
-          <div class="ann-tool-sep"></div>
-          <button class="ann-tbtn" id="ann-tool-undo" onclick="annUndo()" title="Undo coretan terakhir"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg></button>
-        </div>
-        <div class="ann-hint-chip" id="ann-hint-chip"></div>
-      </div>
-      <button class="ann-sidebar-toggle" id="ann-sidebar-toggle" onclick="annToggleSidebar()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="ann-sidebar-toggle-icon"><polyline points="18 15 12 9 6 15"/></svg>
-        <span id="ann-sidebar-toggle-label">Lihat Catatan &amp; Coretan</span>
-      </button>
-      <div class="ann-sidebar collapsed" id="ann-sidebar">
-        <div class="ann-sidebar-scroll" id="ann-sidebar-scroll">
-          <div class="ann-list-head"><span id="ann-list-label">Coretan</span><button class="ann-history-btn" id="ann-history-btn" style="display:none" onclick="annOpenHistoryModal()"></button></div>
-          <div class="ann-list" id="ann-list"></div>
-          <div class="ann-note-wrap" id="ann-note-wrap">
-            <label id="ann-note-label">Catatan Umum</label>
-            <textarea id="ann-general-note" placeholder="Tulis catatan revisi secara umum..." rows="3"></textarea>
-          </div>
-        </div>
-        <div class="ann-actions" id="ann-actions"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Input file tersembunyi buat kirim preview task langsung dari perangkat (HP/desktop, browser apapun) -->
-<input type="file" id="taskPreviewFileInput" accept="image/*,application/pdf" style="display:none" onchange="onTaskPreviewFileChosen(event)">
-
-<!-- MODAL: Pilih sumber gambar preview (upload langsung vs folder proyek lokal) -->
-<div class="overlay" id="previewSourceModal">
-  <div class="modal" style="width:340px">
-    <div class="modal-title">Kirim Preview Dari Mana?</div>
-    <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
-      <button class="btn btn-primary" style="justify-content:flex-start;gap:8px" onclick="previewSourceUseUpload()">📤 Upload dari Perangkat (foto/galeri)</button>
-      <button class="btn btn-secondary" style="justify-content:flex-start;gap:8px" onclick="previewSourceUseLocalFolder()">📁 Pilih dari Folder Proyek</button>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('previewSourceModal')">Batal</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Riwayat Revisi -->
-<div class="overlay history-modal" id="historyModal">
-  <div class="modal">
-    <div class="modal-title" id="history-modal-title">Riwayat Revisi</div>
-    <div id="history-modal-list" style="max-height:50vh;overflow-y:auto;margin-top:4px"></div>
-    <div class="modal-footer" style="justify-content:space-between">
-      <button class="btn btn-ghost btn-xs" id="history-refresh-btn" onclick="refreshHistoryModal()" style="display:none">🔄 Refresh data terbaru</button>
-      <button class="btn btn-ghost" onclick="closeModal('historyModal')">Tutup</button>
     </div>
   </div>
 </div>
@@ -2510,23 +2112,6 @@ service cloud.firestore {
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="lfCloseModal()">Tutup</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Link Preview Task (buat dibagikan ke klien) -->
-<div class="overlay" id="taskPreviewLinkModal">
-  <div class="modal" style="width:420px">
-    <div class="modal-title" style="display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Preview Terkirim</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Link ini langsung membuka halaman review task <b id="tpl-task-name">-</b> — klien nggak perlu cari-cari lagi.</div>
-    <div class="portal-link-box" style="margin:10px 0">
-      <input id="tpl-link-input" readonly value="">
-      <button class="btn btn-primary btn-xs" onclick="copyTextToClipboard(document.getElementById('tpl-link-input').value, 'Link disalin ✓')">Salin</button>
-    </div>
-    <div id="tpl-shorten-status" style="font-size:11px;color:var(--muted);margin:-6px 0 8px;display:none"></div>
-    <button class="btn btn-secondary btn-sm" id="tpl-wa-btn" style="width:100%"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Kirim via WhatsApp</button>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('taskPreviewLinkModal')">Tutup</button>
     </div>
   </div>
 </div>
@@ -2571,6 +2156,8 @@ let quotations = JSON.parse(localStorage.getItem('ssy_qt') || '[]');
 let withdrawals = JSON.parse(localStorage.getItem('ssy_wd') || '[]');
 // Status task yang dianggap "selesai" — dipakai buat progress bar & auto status proyek
 const TASK_DONE_LIKE = ['done', 'invoiced', 'paid'];
+// Status proyek yang dianggap "selesai" — deadline countdown gak relevan lagi buat status ini
+const PROJECT_TERMINAL_STATUSES = ['done', 'paid', 'cancel'];
 
 let curProjId = null;
 let curSubfolderId = '';    // '' = root proj folder, else Drive folder id
@@ -2628,23 +2215,18 @@ window.onload = async () => {
   // GitHub sync init — tunggu sampai selesai supaya ghFileSha sudah terisi
   await ghInit();
 
-  // ── Notifikasi realtime (Firebase, kalau udah disetup) — jauh lebih cepet drpd nunggu polling 15 detik ──
-  fbStartOwnerListener();
-
-  // ── Auto-sync: pull dari GitHub setiap 10 detik (jadi baseline yang GAK butuh Firebase sama sekali) ──
+  // ── Auto-sync: pull dari GitHub setiap 15 detik ──
   setInterval(() => {
     dbg('⏱ interval tick, connected=' + ghConnected());
     if (ghConnected()) ghSilentPull();
-  }, 10000);
+  }, 15000);
 
-  // ── Auto-sync begitu tab/app aktif lagi (dua event sekaligus biar gak ada yang kelewat di browser manapun) ──
+  // ── Auto-sync saat tab/app aktif kembali dari background ──
   document.addEventListener('visibilitychange', () => {
     dbg('👁 visibility=' + document.visibilityState);
-    if (document.visibilityState === 'visible' && ghConnected()) ghSilentPull();
-  });
-  window.addEventListener('focus', () => {
-    dbg('👁 window focus');
-    if (ghConnected()) ghSilentPull();
+    if (document.visibilityState === 'visible' && ghConnected()) {
+      ghSilentPull();
+    }
   });
 };
 
@@ -3288,7 +2870,7 @@ async function syncDirRecursive(dirHandle, driveParentId, relPath, p, stats, par
 
 // ── Browser folder lokal sederhana (dalam modal) ───────
 let lfStack = []; // [{handle, name}] jalur navigasi dari root folder proyek
-let lfPickTaskId = null; // kalau terisi, browser lagi dalam mode "pilih gambar buat preview task ini"
+let lfPickTaskId = null; // sudah tidak dipakai (fitur pick-preview-per-task sudah dihapus), dibiarkan null
 let lfSyncMode = false;          // true = mode checklist "pilih & sync ke Drive"
 let lfSyncSelected = new Map();  // relPath (dari root proyek) -> 'file' | 'directory'
 let lfSyncProj = null;           // project yang lagi di-browse dalam mode sync
@@ -3303,163 +2885,6 @@ async function openLocalProjectFolder() {
   lfStack = [{ handle: projDir, name: p.name }];
   await renderLocalFolderList();
   document.getElementById('localFolderModal').classList.add('show');
-}
-
-// Dipanggil dari tombol "Kirim Preview" di task.
-// Diutamakan pakai <input type=file> biasa (kerja di HP & desktop apapun browsernya).
-// Kalau folder lokal proyek sudah tersambung (desktop, Chrome/Edge), tawarkan juga opsi pilih dari folder proyek.
-async function openTaskPreviewPicker(taskId) {
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  const p = getProj(t.projId); if (!p) return;
-  if (LOCAL_FS_SUPPORTED && localRootHandle) {
-    openPreviewSourceChoice(taskId);
-  } else {
-    triggerPreviewFileUpload(taskId);
-  }
-}
-
-// Modal kecil buat milih sumber gambar preview: upload langsung dari perangkat, atau dari folder proyek lokal.
-let previewSourceTaskId = null;
-function openPreviewSourceChoice(taskId) {
-  previewSourceTaskId = taskId;
-  document.getElementById('previewSourceModal').classList.add('show');
-}
-
-async function previewSourceUseUpload() {
-  const taskId = previewSourceTaskId;
-  closeModal('previewSourceModal');
-  triggerPreviewFileUpload(taskId);
-}
-
-async function previewSourceUseLocalFolder() {
-  const taskId = previewSourceTaskId;
-  closeModal('previewSourceModal');
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  const p = getProj(t.projId); if (!p) return;
-  lfPickTaskId = taskId;
-  let projDir = await getLocalProjectDir(p);
-  if (!projDir) projDir = await createLocalProjectFolders(p);
-  if (!projDir) { toast('Gagal membuka folder proyek', 'error'); return; }
-  lfStack = [{ handle: projDir, name: p.name }];
-  await renderLocalFolderList();
-  document.getElementById('localFolderModal').classList.add('show');
-}
-
-// Buka file picker native (foto/galeri di HP, file explorer di desktop) buat 1 task tertentu.
-let pendingPreviewTaskId = null;
-function triggerPreviewFileUpload(taskId) {
-  pendingPreviewTaskId = taskId;
-  const inp = document.getElementById('taskPreviewFileInput');
-  inp.value = '';
-  inp.click();
-}
-
-async function onTaskPreviewFileChosen(e) {
-  const file = e.target.files && e.target.files[0];
-  const taskId = pendingPreviewTaskId;
-  pendingPreviewTaskId = null;
-  if (!file || !taskId) return;
-  await sendTaskPreviewFile(taskId, file);
-}
-
-// Inti proses kirim preview: terima File apapun sumbernya (upload langsung / folder lokal),
-// upload ke Drive, buat/isi file entry, kaitkan ke task, reset status review.
-async function sendTaskPreviewFile(taskId, file) {
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  const p = getProj(t.projId); if (!p) return;
-  toast('Menyiapkan preview...', 'info');
-  try {
-    let driveId = null, driveLink = null;
-    if (accessToken) {
-      try {
-        const folderId = await getProjFolder(p);
-        const res = await new Promise((resolve, reject) => {
-          const meta = { name: file.name, parents: [folderId] };
-          const form = new FormData();
-          form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
-          form.append('file', file);
-          const xhr = new XMLHttpRequest();
-          xhr.open('POST', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink');
-          xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-          xhr.onload = () => (xhr.status >= 200 && xhr.status < 300) ? resolve(JSON.parse(xhr.responseText)) : reject(new Error('HTTP ' + xhr.status));
-          xhr.onerror = () => reject(new Error('Network error'));
-          xhr.send(form);
-        });
-        driveId = res.id; driveLink = res.webViewLink;
-      } catch (e) { console.error('Upload preview ke Drive gagal', e); }
-    }
-
-    const fObj = { id: 'f_' + Date.now() + Math.random().toString(36).slice(2), projId: p.id, name: file.name, size: file.size, type: file.type, status: driveId ? 'done' : 'local', progress: 100, driveId, driveLink, subfolderRef: '', thumb: null, thumbFull: null, _raw: null, localFolder: 'PREVIEW' };
-    files.push(fObj);
-
-    const result = await genThumb(file);
-    if (result) { fObj.thumb = result.thumb; fObj.thumbFull = result.thumbFull; persistThumb(fObj); }
-    // Catatan: gambar yang dilihat klien di portal itu dari thumb/thumbFull (base64) yang ke-embed langsung
-    // di data yang ke-sync — BUKAN dari link Drive. Jadi link ke klien harus tetap kekirim walau Drive gagal/belum konek;
-    // Drive cuma dipakai buat nyimpen file originalnya di folder proyek aja.
-    const hasViewableImage = !!(fObj.thumbFull || fObj.thumb);
-
-    // Kalau sebelumnya udah ada preview yang sempet dikirim (apalagi udah direspon klien),
-    // simpen dulu ke riwayat sebelum ditimpa versi baru — biar histori tiap ronde revisi kecatat.
-    if (t.previewFileId) {
-      if (!Array.isArray(t.previewHistory)) t.previewHistory = [];
-      const oldFile = files.find(x => x.id === t.previewFileId);
-      t.previewHistory.push({
-        id: 'h_' + Date.now() + Math.random().toString(36).slice(2),
-        fileId: t.previewFileId,
-        fileName: oldFile ? oldFile.name : '',
-        thumb: oldFile ? (oldFile.thumb || null) : null,
-        status: t.previewStatus || 'needs_review',
-        annotations: t.previewAnnotations || [],
-        note: t.previewNote || '',
-        sentAt: t.previewSentAt || null,
-        respondedAt: t.previewRespondedAt || null,
-      });
-    }
-
-    // Kirim preview baru = reset status & anotasi lama (versi baru, coretan lama udah kesimpen di histori)
-    t.previewFileId = fObj.id;
-    t.previewStatus = 'needs_review';
-    t.previewAnnotations = [];
-    t.previewNote = '';
-    t.previewUnread = false;
-    t.previewSentAt = new Date().toISOString();
-    t.previewRespondedAt = null;
-    ensurePortalActive(p);
-    saveState();
-    renderTasks(p.id);
-
-    if (!hasViewableImage) {
-      // Gagal total bikin gambar yang bisa dilihat (misal file rusak / format aneh) — ini baru beneran gak bisa dikirim.
-      toast('Gagal membuat preview dari file ini — coba file gambar lain (jpg/png/webp)', 'error');
-      return;
-    }
-    if (!driveId) {
-      // Drive gak konek/gagal upload — gapapa, klien tetap bisa lihat & coret preview-nya (pakai gambar yang udah ke-embed).
-      // Drive cuma buat nyimpen salinan file original di folder proyek, bukan syarat wajib buat kirim preview ke klien.
-      console.warn('Upload ke Drive gagal/tidak tersambung — preview tetap dikirim pakai gambar lokal (base64).');
-    }
-
-    // PENTING: tunggu push ke GitHub bener2 KELAR (bukan cuma di-debounce/dijadwalin) sebelum ngirim sinyal
-    // realtime ke klien. Kalau nembak sinyalnya duluan, klien bisa refresh & masih ketemu data LAMA
-    // (soalnya ghScheduleSync() itu nunda 1.5 detik dulu baru upload, belum tentu udah kelar).
-    await ghPushData();
-    fbNotifyClient(p.id, taskId, t.name); // sinyal realtime ke klien (best-effort, gak nge-block apapun kalau gagal)
-
-    if (!t.previewLinkShared) {
-      // Pertama kali kirim preview utk task ini → tampilkan link buat dibagikan ke klien
-      t.previewLinkShared = true;
-      saveState(); ghScheduleSync();
-      toast(driveId ? 'Preview terkirim ke klien ✓' : 'Preview terkirim ke klien ✓ (Drive belum konek — file original belum ke-backup ke Drive)', 'success');
-      openTaskPreviewLinkModal(p, t);
-    } else {
-      // Bukan pertama kali → link portalnya SAMA kayak sebelumnya, gak perlu kirim link baru lagi (anti-spam)
-      toast('Preview revisi terkirim ✓ — link portal ke klien masih sama seperti sebelumnya', 'success');
-    }
-  } catch (e) {
-    console.error(e);
-    toast('Gagal menyiapkan preview', 'error');
-  }
 }
 
 // Buka browser folder lokal dalam mode "checklist" — user bisa centang folder/file mana aja
@@ -3619,11 +3044,7 @@ async function renderLocalFolderList() {
 
   const pickBanner = document.getElementById('lf-pick-banner');
   if (pickBanner) {
-    if (lfPickTaskId) {
-      const t = tasks.find(x => x.id === lfPickTaskId);
-      pickBanner.style.display = 'flex';
-      pickBanner.innerHTML = `${ICO_LINK} Pilih gambar untuk dikirim sebagai preview task <b>"${escHtml(t ? t.name : '')}"</b>`;
-    } else if (lfSyncMode) {
+    if (lfSyncMode) {
       pickBanner.style.display = 'flex';
       pickBanner.innerHTML = `${ICO_UPLOAD} Centang folder/file yang mau di-upload ke Drive — bisa dari folder mana aja, gak harus 03_FINAL.`;
     } else {
@@ -3668,15 +3089,6 @@ async function renderLocalFolderList() {
       : isImg ? `<span id="lf-thumb-${idx}" style="display:inline-flex;width:22px;height:22px;border-radius:4px;overflow:hidden;background:var(--surface2,rgba(0,0,0,.06));flex-shrink:0"></span>`
       : `<span style="display:inline-flex;flex-shrink:0;color:var(--muted)">${ICO_FILE}</span>`;
 
-    // Mode pilih aktif + file gambar → tombol "Pilih" gantiin aksi biasa
-    if (lfPickTaskId && isImg) {
-      const pickBtn = `<button class="btn btn-primary btn-xs" onclick="event.stopPropagation();lfPickThisFile('${safeName}')">Pilih</button>`;
-      return `<div class="subfolder-chip" style="justify-content:space-between;width:100%;box-sizing:border-box">
-        <span style="display:flex;align-items:center;gap:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${iconHtml} ${e.name}</span>
-        ${pickBtn}
-      </div>`;
-    }
-
     // Mode checklist sync — checkbox di kiri, tombol "Buka" khusus buat masuk ke dalam folder
     if (lfSyncMode) {
       const kind = isDir ? 'directory' : 'file';
@@ -3691,9 +3103,9 @@ async function renderLocalFolderList() {
       </div>`;
     }
 
-    const rowAct = isDir ? `onclick="lfEnter('${safeName}')"` : lfPickTaskId ? '' : `onclick="lfOpenFile('${safeName}')"`;
-    const dlBtn  = (isDir || lfPickTaskId) ? '' : `<button onclick="event.stopPropagation();lfDownload('${safeName}')" title="Unduh" style="flex-shrink:0;display:inline-flex;align-items:center;background:none;border:none;color:var(--muted);cursor:pointer;padding:2px 6px;line-height:1">${ICO_DOWNLOAD}</button>`;
-    const delBtn = lfPickTaskId ? '' : `<button onclick="event.stopPropagation();lfDelete('${safeName}','${e.handle.kind}')" title="Hapus" style="flex-shrink:0;display:inline-flex;align-items:center;background:none;border:none;color:var(--danger,#e05555);cursor:pointer;padding:2px 6px;line-height:1">${ICO_TRASH}</button>`;
+    const rowAct = isDir ? `onclick="lfEnter('${safeName}')"` : `onclick="lfOpenFile('${safeName}')"`;
+    const dlBtn  = isDir ? '' : `<button onclick="event.stopPropagation();lfDownload('${safeName}')" title="Unduh" style="flex-shrink:0;display:inline-flex;align-items:center;background:none;border:none;color:var(--muted);cursor:pointer;padding:2px 6px;line-height:1">${ICO_DOWNLOAD}</button>`;
+    const delBtn = `<button onclick="event.stopPropagation();lfDelete('${safeName}','${e.handle.kind}')" title="Hapus" style="flex-shrink:0;display:inline-flex;align-items:center;background:none;border:none;color:var(--danger,#e05555);cursor:pointer;padding:2px 6px;line-height:1">${ICO_TRASH}</button>`;
 
     return `<div class="subfolder-chip" ${rowAct} style="justify-content:space-between;width:100%;box-sizing:border-box;cursor:pointer">
       <span style="display:flex;align-items:center;gap:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${iconHtml} ${e.name}</span>
@@ -3711,84 +3123,6 @@ async function renderLocalFolderList() {
         const url = URL.createObjectURL(file);
         el.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover">`;
       }).catch(() => {});
-    }
-  });
-}
-
-// User pilih gambar dari folder lokal buat dijadikan preview task — reuse logika upload yang sama
-// dengan jalur upload langsung (sendTaskPreviewFile), biar konsisten & gak dobel kode.
-async function lfPickThisFile(name) {
-  const taskId = lfPickTaskId;
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  const cur = lfStack[lfStack.length - 1];
-  closeModal('localFolderModal');
-  lfPickTaskId = null;
-  try {
-    const fh = await cur.handle.getFileHandle(name);
-    const file = await fh.getFile();
-    await sendTaskPreviewFile(taskId, file);
-  } catch (e) {
-    console.error(e);
-    toast('Gagal menyiapkan preview', 'error');
-  }
-}
-
-// Tampilkan link portal yang langsung ke task ini (biar owner tinggal salin & kirim ke klien)
-// Link portal itu panjang banget (isinya username, repo, id proyek, id portal, token, id task).
-// Coba dipendekkan pakai is.gd — dipilih krn redirect-nya langsung tanpa halaman iklan/interstitial
-// (beda sama sebagian shortener lain yang suka nyelipin iklan dulu sebelum ngelempar ke link aslinya).
-// Kalau gagal/offline, ya udah tetep pakai link panjangnya — link tetap 100% jalan normal.
-const _shortUrlCache = {};
-async function _tryShortenVia(apiBase, longUrl) {
-  try {
-    const res = await fetch(apiBase + encodeURIComponent(longUrl));
-    if (!res.ok) return null;
-    const text = (await res.text()).trim();
-    if (!text.startsWith('http')) return null; // balikin teks "Error: ..." kalau gagal
-    return text;
-  } catch (e) {
-    return null;
-  }
-}
-async function shortenUrl(longUrl) {
-  if (_shortUrlCache[longUrl]) return _shortUrlCache[longUrl];
-  const short =
-    (await _tryShortenVia('https://is.gd/create.php?format=simple&url=', longUrl)) ||
-    (await _tryShortenVia('https://v.gd/create.php?format=simple&url=', longUrl));
-  if (short) _shortUrlCache[longUrl] = short;
-  return short;
-}
-
-function openTaskPreviewLinkModal(p, t) {
-  const url = buildPortalUrl(p, t.id);
-  let activeUrl = url; // dipakai tombol WA — otomatis ke-update ke versi pendek begitu selesai
-  document.getElementById('tpl-task-name').textContent = t.name;
-  document.getElementById('tpl-link-input').value = url;
-  const waHandler = () => {
-    const phone = (clients.find(c => c.name === p.client) || {}).phone || '';
-    const rawPhone = phone.replace(/\D/g, '');
-    const msg = encodeURIComponent(`Halo, ini preview untuk "${t.name}" — boleh dicek ya:\n${activeUrl}`);
-    window.open(`https://wa.me/${rawPhone}?text=${msg}`, '_blank');
-  };
-  document.getElementById('tpl-wa-btn').onclick = waHandler;
-  document.getElementById('taskPreviewLinkModal').classList.add('show');
-
-  // Link asli panjang banget (ada token & id-id di dalamnya) — coba pendekkan di background.
-  // Selama proses ini link panjang tetap kepake & tetap jalan normal, jadi gak nunggu apa-apa.
-  const statusEl = document.getElementById('tpl-shorten-status');
-  statusEl.style.display = 'block';
-  statusEl.textContent = 'Memendekkan link...';
-  shortenUrl(url).then(short => {
-    if (!document.getElementById('taskPreviewLinkModal').classList.contains('show')) return; // modal udah ditutup, skip
-    if (short) {
-      activeUrl = short;
-      t.previewShortLink = short; // simpen buat dipakai tombol "Copy Link" instan nanti
-      saveState(); ghScheduleSync();
-      document.getElementById('tpl-link-input').value = short;
-      statusEl.textContent = 'Link sudah dipendekkan ✓';
-    } else {
-      statusEl.textContent = '';
-      statusEl.style.display = 'none';
     }
   });
 }
@@ -4277,7 +3611,7 @@ async function genThumb(raw) {
           };
           resolve({
             thumb:     makeThumb(160,  0.55),   // cover kartu — tiny
-            thumbFull: makeThumb(1100, 0.78),   // lightbox — tetap tajam di layar, tapi file-nya lebih ringkas
+            thumbFull: makeThumb(1200, 0.82),   // lightbox   — tajam
           });
         };
         img.onerror = () => resolve(null);
@@ -4775,6 +4109,16 @@ function genInvNum() {
   return 'SNP-' + rand;
 }
 
+// Format harga khusus invoice — currency-nya dibikin eksplisit biar klien gak bingung ini USD atau IDR
+function fInvPrice(n, curr) {
+  curr = curr || 'IDR';
+  if (!n || n == 0) return '\u2014';
+  if (curr === 'USD') {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(n) + ' USD';
+  }
+  return 'Rp ' + parseFloat(n).toLocaleString('id-ID');
+}
+
 function buildInvHTML(d) {
   var isUSD  = d.currency === 'USD';
   var studio = cfg.studio || 'Snapsy Std.';
@@ -4787,8 +4131,8 @@ function buildInvHTML(d) {
     billTo:    isUSD ? 'Bill To'    : 'Tagihan Kepada',
     project:   isUSD ? 'Project'    : 'Proyek',
     desc:      isUSD ? 'DESCRIPTION': 'DESKRIPSI',
-    price:     isUSD ? 'AMOUNT'     : 'HARGA',
-    total:     isUSD ? 'TOTAL'      : 'TOTAL',
+    price:     isUSD ? 'AMOUNT (USD)' : 'HARGA (IDR)',
+    total:     isUSD ? 'TOTAL (USD)'  : 'TOTAL (IDR)',
     date:      isUSD ? 'Date'       : 'Tanggal',
     payment:   isUSD ? 'Payment'    : 'Pembayaran',
     thanks:    isUSD ? 'Thank you for your trust \u2014 ' : 'Terima kasih atas kepercayaan Anda \u2014 '
@@ -4812,7 +4156,7 @@ function buildInvHTML(d) {
       rowsHtml += '<tr>';
       rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;font-size:11px;color:#bbb;width:32px;font-family:monospace">' + num + '</td>';
       rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;font-size:13px;color:#1a1a1a">' + label + '</td>';
-      rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:right;font-weight:700;font-size:13px;color:#1a1a1a;white-space:nowrap">' + fPrice(price, d.currency) + '</td>';
+      rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:right;font-weight:700;font-size:13px;color:#1a1a1a;white-space:nowrap">' + fInvPrice(price, d.currency) + '</td>';
       rowsHtml += '</tr>';
     });
   });
@@ -4876,7 +4220,7 @@ function buildInvHTML(d) {
   // Total
   html += '<div style="display:flex;justify-content:flex-end;padding:14px 28px;border-top:2px solid #111">';
   html += '<div style="min-width:220px;display:flex;justify-content:space-between;font-size:18px;font-weight:900;color:#111">';
-  html += '<span>' + lang.total + '</span><span>' + fPrice(d.total, d.currency) + '</span>';
+  html += '<span>' + lang.total + '</span><span>' + fInvPrice(d.total, d.currency) + '</span>';
   html += '</div></div>';
 
   // Footer
@@ -4970,11 +4314,11 @@ function buildInvWAMessage(d) {
     projGroups.forEach(g => {
       if(projGroups.length > 1) msg += `*${g.project?.name}*\n`;
       g.tasks.forEach(t => {
-        msg += `* ${t.name} : ${fPrice(parseFloat(t.price)||0, d.currency)}\n`;
+        msg += `* ${t.name} : ${fInvPrice(parseFloat(t.price)||0, d.currency)}\n`;
       });
     });
     msg += `${DIV}\n`;
-    msg += `*Total: ${fPrice(d.total, d.currency)}*\n`;
+    msg += `*Total: ${fInvPrice(d.total, d.currency)}*\n`;
     if(d.payment) msg += `\nPay on : ${d.payment}\n`;
     if(d.note)    msg += `\n${d.note}\n`;
     msg += `\nThank you! \uD83D\uDE4F\n_${studio}_`;
@@ -4986,11 +4330,11 @@ function buildInvWAMessage(d) {
     projGroups.forEach(g => {
       if(projGroups.length > 1) msg += `*${g.project?.name}*\n`;
       g.tasks.forEach(t => {
-        msg += `* ${t.name} : ${fPrice(parseFloat(t.price)||0, d.currency)}\n`;
+        msg += `* ${t.name} : ${fInvPrice(parseFloat(t.price)||0, d.currency)}\n`;
       });
     });
     msg += `${DIV}\n`;
-    msg += `*Total: ${fPrice(d.total, d.currency)}*\n`;
+    msg += `*Total: ${fInvPrice(d.total, d.currency)}*\n`;
     if(d.payment) msg += `\nPembayaran ke : ${d.payment}\n`;
     if(d.note)    msg += `\n${d.note}\n`;
     msg += `\nTerima kasih! \uD83D\uDE4F\n_${studio}_`;
@@ -5090,197 +4434,9 @@ function renderTasks(projId) {
   el.innerHTML = list.map(t => {
     const st = t.taskStatus || 'todo'; const stObj = TASK_STATUSES.find(s=>s.v===st) || TASK_STATUSES[0];
     const opts = TASK_STATUSES.map(s=> `<option value="${s.v}" ${st===s.v?'selected':''}>${s.l}</option>`).join('');
-    return `<div class="task-card" id="tc_${t.id}"><div class="task-item" id="ti_${t.id}"> <div class="task-name ${t.done?'done':''}" onclick="toggleTask('${t.id}')" contenteditable="false" ondblclick="startEditTask(this,'${t.id}')" onblur="editTaskInline('${t.id}',this)">${t.name}</div> <select class="task-status-btn ts-${st}" onchange="updateTaskStatus('${t.id}',this.value,this)" style="margin-right:4px">${opts}</select> <input class="task-price-input" type="number" placeholder="Harga..." value="${t.price||''}" onchange="updateTaskPrice('${t.id}',this.value)" oninput="updateTaskPrice('${t.id}',this.value)" min="0"> <div class="task-actions"> <button class="btn btn-danger btn-xs" onclick="deleteTask('${t.id}')">✕</button> </div> </div>${renderTaskPreviewRow(t)}</div>`;
+    return `<div class="task-card" id="tc_${t.id}"><div class="task-item" id="ti_${t.id}"> <div class="task-name ${t.done?'done':''}" onclick="toggleTask('${t.id}')" contenteditable="false" ondblclick="startEditTask(this,'${t.id}')" onblur="editTaskInline('${t.id}',this)">${t.name}</div> <select class="task-status-btn ts-${st}" onchange="updateTaskStatus('${t.id}',this.value,this)" style="margin-right:4px">${opts}</select> <input class="task-price-input" type="number" placeholder="Harga..." value="${t.price||''}" onchange="updateTaskPrice('${t.id}',this.value)" oninput="updateTaskPrice('${t.id}',this.value)" min="0"> <div class="task-actions"> <button class="btn btn-danger btn-xs" onclick="deleteTask('${t.id}')">✕</button> </div> </div></div>`;
   }).join('');
   renderTaskTotal(projId);
-}
-
-// Baris kontrol preview/review klien di bawah tiap task
-// Copy link task langsung ke clipboard dalam satu klik — buat kirim ulang ke klien tanpa buka modal dulu.
-// Pakai link pendek yang udah tersimpan kalau ada; kalau belum ada, copy link panjangnya dulu (tetap jalan),
-// terus pendekkan di background biar klik berikutnya udah instan pakai yang pendek.
-function quickCopyTaskLink(taskId) {
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  const p = getProj(t.projId); if (!p) return;
-  const longUrl = buildPortalUrl(p, t.id);
-  copyTextToClipboard(t.previewShortLink || longUrl, 'Link disalin ✓ — siap dikirim ulang ke klien');
-  if (!t.previewShortLink) {
-    shortenUrl(longUrl).then(short => {
-      if (short) { t.previewShortLink = short; saveState(); ghScheduleSync(); }
-    });
-  }
-}
-
-function renderTaskPreviewRow(t) {
-  const status = t.previewStatus || 'none';
-  const unreadDot = t.previewUnread ? '<span class="tpr-unread-dot"></span>' : '';
-  const histCount = (t.previewHistory || []).length;
-  const histBtn = histCount ? `<button class="btn btn-ghost btn-xs" onclick="openTaskHistoryModal('${t.id}')">${ANN_ICON_HISTORY} Riwayat (${histCount})</button>` : '';
-  // Link deep-link khusus task ini (bukan link portal utama) — selalu tersedia begitu ada file preview yang kekirim.
-  // (Dulu sempet cuma ngecek flag "previewLinkShared" doang — masalahnya task yang preview-nya dikirim SEBELUM fitur ini
-  // ada jadi gak kebagian flag itu & tombolnya ilang. Sekarang cukup cek previewFileId aja, karena link selalu bisa
-  // dibikin ulang dari situ kapan pun, gak perlu nunggu flag apa-apa.)
-  // Klik langsung = link ke-copy instan ke clipboard (buat resend cepat). Ikon kecil di sampingnya buka modal share lengkap (link + WA).
-  const linkBtn = t.previewFileId ? `<button class="btn btn-ghost btn-xs" onclick="quickCopyTaskLink('${t.id}')" title="Copy link, siap kirim ulang ke klien">${ICO_LINK} Copy Link</button><button class="btn btn-ghost btn-xs" style="padding:6px 8px" onclick="openTaskPreviewLinkModal(getProj('${t.projId}'), tasks.find(x=>x.id==='${t.id}'))" title="Buka & kirim via WhatsApp"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></button>` : '';
-  let badge = '', actions = '';
-
-  if (status === 'none') {
-    actions = `<button class="btn btn-secondary btn-xs" onclick="openTaskPreviewPicker('${t.id}')">${ICO_LINK} Kirim Preview</button>`;
-  } else if (status === 'needs_review') {
-    badge = `<span class="badge b-local">Menunggu Klien</span>`;
-    actions = `${histBtn}${linkBtn}<button class="btn btn-ghost btn-xs" onclick="openTaskPreviewPicker('${t.id}')">Ganti Gambar</button>`;
-  } else if (status === 'revision') {
-    badge = `<span class="badge b-cancel">${unreadDot}Revisi Klien</span>`;
-    actions = `${histBtn}${linkBtn}<button class="btn btn-secondary btn-xs" onclick="viewTaskFeedback('${t.id}')">Lihat Coretan</button><button class="btn btn-primary btn-xs" onclick="openTaskPreviewPicker('${t.id}')">Kirim Preview Baru</button>`;
-  } else if (status === 'approved') {
-    badge = `<span class="badge b-paid">${unreadDot}Disetujui Klien</span>`;
-    actions = `${histBtn}${linkBtn}<button class="btn btn-ghost btn-xs" onclick="viewTaskFeedback('${t.id}')">Lihat</button><button class="btn btn-ghost btn-xs" onclick="openTaskPreviewPicker('${t.id}')">Kirim Ulang</button>`;
-  }
-  return `<div class="task-preview-row">${badge}<div style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">${actions}</div></div>`;
-}
-
-// Bikin entri "ronde saat ini" (belum masuk histori krn masih berjalan) dari data live task —
-// dipakai biar timeline riwayat kelihatan utuh: Revisi 1, Revisi 2, ... sampe yang lagi jalan sekarang.
-function buildCurrentRoundFromTask(t) {
-  if (!t || !t.previewFileId) return null;
-  const f = files.find(x => x.id === t.previewFileId);
-  return {
-    fileId: t.previewFileId,
-    fileName: f ? f.name : '',
-    thumb: f ? (f.thumb || null) : null,
-    status: t.previewStatus || 'needs_review',
-    annotations: t.previewAnnotations || [],
-    note: t.previewNote || '',
-    sentAt: t.previewSentAt || null,
-    respondedAt: t.previewRespondedAt || null,
-  };
-}
-
-// Buka riwayat revisi langsung dari baris task, tanpa perlu masuk ke layar annotator dulu.
-let historyModalTaskId = null;
-function openTaskHistoryModal(taskId) {
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  historyModalTaskId = taskId;
-  const refreshBtn = document.getElementById('history-refresh-btn');
-  if (refreshBtn) refreshBtn.style.display = 'inline-flex'; // cuma ada kalau dibuka dari sisi owner (bukan dari portal klien)
-  renderHistoryModal(t.previewHistory || [], 'id', buildCurrentRoundFromTask(t));
-}
-
-// Kalau data yang keliatan di histori kerasa "ketinggalan" (misal klien udah respon tapi di sini masih
-// keliatan "belum direspon"), klik ini buat langsung tarik data terbaru dari GitHub — gak perlu nunggu
-// polling 15 detik atau notifikasi realtime (yang mungkin belum sempet nyampe).
-async function refreshHistoryModal() {
-  const btn = document.getElementById('history-refresh-btn');
-  const taskId = historyModalTaskId;
-  if (btn) { btn.disabled = true; btn.textContent = '🔄 Memuat...'; }
-  await ghSilentPull();
-  if (btn) { btn.disabled = false; btn.textContent = '🔄 Refresh data terbaru'; }
-  if (taskId) openTaskHistoryModal(taskId);
-}
-
-function renderHistoryModal(rounds, lang, currentRound) {
-  const T = ANN_T[lang], SL = PORTAL_STATUS_LABEL[lang];
-  document.getElementById('history-modal-title').textContent = T.riwayatTitle;
-  const listEl = document.getElementById('history-modal-list');
-  // Gabungin histori yang udah lewat + ronde yang lagi berjalan sekarang (kalau ada), biar keliatan sebagai satu timeline utuh:
-  // Revisi 1, Revisi 2, ... sampai yang terbaru/saat ini.
-  const allRounds = currentRound ? [...rounds, currentRound] : rounds;
-  if (!allRounds.length) {
-    listEl.innerHTML = `<div class="notif-bell-empty">${T.riwayatKosong}</div>`;
-  } else {
-    listEl.innerHTML = allRounds.map((h, idx) => ({ h, num: idx + 1 })).reverse().map(({ h, num }) => {
-      const localeStr = lang === 'en' ? 'en-US' : 'id-ID';
-      const sentStr = h.sentAt ? new Date(h.sentAt).toLocaleString(localeStr, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '-';
-      const respStr = h.respondedAt ? new Date(h.respondedAt).toLocaleString(localeStr, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : T.belumDirespon;
-      const annCount = (h.annotations || []).length;
-      const isCurrent = h === currentRound;
-      const roundLabel = (lang === 'en' ? 'Revision ' : 'Revisi ') + num + (isCurrent ? (lang === 'en' ? ' (current)' : ' (saat ini)') : '');
-      return `<div class="history-round ${isCurrent ? 'is-current' : ''}">
-        <div class="history-round-thumb">${h.thumb ? `<img src="${h.thumb}">` : fIcon(h.fileName || '')}</div>
-        <div class="history-round-body">
-          <div class="history-round-top">
-            <span class="history-round-name">${roundLabel} &middot; ${escHtml(h.fileName || '-')}</span>
-            <span class="badge portal-task-status-${h.status}" style="font-size:9.5px;padding:2px 6px">${SL[h.status] || h.status}</span>
-          </div>
-          <div class="history-round-dates">${T.dikirim}: ${sentStr} &middot; ${T.direspon}: ${respStr}</div>
-          ${h.note ? `<div class="history-round-note">${escHtml(h.note)}</div>` : ''}
-          ${annCount ? `<div class="history-round-annn">${annCount} ${lang === 'en' ? 'markup(s)' : 'coretan'}</div>` : ''}
-        </div>
-      </div>`;
-    }).join('');
-  }
-  document.getElementById('historyModal').classList.add('show');
-}
-
-// ── Bell notifikasi: agregat semua task yang statusnya baru diubah klien (revisi/approve) & belum dibaca owner ──
-function getUnreadClientTasks() {
-  return tasks.filter(t => t.previewUnread).map(t => ({ task: t, proj: getProj(t.projId) })).filter(x => x.proj);
-}
-function renderNotifBell() {
-  const dot = document.getElementById('notif-bell-dot');
-  const list = document.getElementById('notif-bell-list');
-  if (!dot || !list) return;
-  const unread = getUnreadClientTasks();
-  if (unread.length) { dot.style.display = 'flex'; dot.textContent = unread.length > 9 ? '9+' : unread.length; }
-  else { dot.style.display = 'none'; }
-
-  if (!unread.length) {
-    list.innerHTML = '<div class="notif-bell-empty">Belum ada aktivitas baru dari klien.</div>';
-    return;
-  }
-  list.innerHTML = unread.map(({ task: t, proj: p }) => {
-    const isApproved = t.previewStatus === 'approved';
-    return `<div class="notif-bell-item" onclick="openNotifBellItem('${t.id}')">
-      <span class="notif-bell-icon ${isApproved ? 'approved' : 'revision'}">${isApproved ? ANN_ICON_CHECK : ANN_ICON_FLAG}</span>
-      <div class="notif-bell-body">
-        <div class="notif-bell-title">${escHtml(t.name)}</div>
-        <div class="notif-bell-sub">${escHtml(p.client)} · ${p.name} · ${isApproved ? 'Klien approve desain' : 'Klien kirim revisi'}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function toggleNotifBell() {
-  const panel = document.getElementById('notif-bell-panel');
-  if (!panel) return;
-  const willShow = panel.style.display === 'none';
-  panel.style.display = willShow ? 'block' : 'none';
-  if (willShow) renderNotifBell();
-}
-document.addEventListener('click', (e) => {
-  const wrap = document.getElementById('notif-bell-wrap');
-  const panel = document.getElementById('notif-bell-panel');
-  if (wrap && panel && panel.style.display !== 'none' && !wrap.contains(e.target)) panel.style.display = 'none';
-});
-function openNotifBellItem(taskId) {
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  document.getElementById('notif-bell-panel').style.display = 'none';
-  openDetail(t.projId);
-  viewTaskFeedback(taskId);
-}
-
-function viewTaskFeedback(taskId) {
-  const t = tasks.find(x => x.id === taskId); if (!t) return;
-  const f = files.find(x => x.id === t.previewFileId);
-  annOpen({
-    readOnly: true,
-    fileId: t.previewFileId,
-    fileName: f ? f.name : 'Preview',
-    imgSrc: f ? (f.thumbFull || f.thumb) : null,
-    annotations: t.previewAnnotations || [],
-    note: t.previewNote || '',
-    history: t.previewHistory || [],
-    getCurrentRound: () => buildCurrentRoundFromTask(t),
-    onMarkRead: () => {
-      t.previewUnread = false;
-      saveState(); ghScheduleSync();
-      renderTasks(t.projId); renderProjects();
-      toast('Ditandai sudah dibaca', 'info');
-    },
-    onUploadRevision: () => {
-      closeAnnotator();
-      triggerPreviewFileUpload(taskId);
-    },
-  });
 }
 
 function startEditTask(el, id) {
@@ -5392,7 +4548,11 @@ function openDetail(id) {
   document.getElementById('dp-client').textContent=p.client; document.getElementById('dp-proj').textContent=p.name; document.getElementById('dp-root').textContent=cfg.root||'Snapsy.Std';
   document.getElementById('dr-cli').textContent=p.client; document.getElementById('dr-proj').textContent=p.name; document.getElementById('dr-root').textContent=cfg.root||'Snapsy.Std';
   if(p.notes) { document.getElementById('d-notes').textContent=p.notes; document.getElementById('d-notes-row').style.display='flex'; } else document.getElementById('d-notes-row').style.display='none';
-  if(p.deadline) {
+  if(PROJECT_TERMINAL_STATUSES.includes(p.status)) {
+    document.getElementById('d-days').textContent='✓';
+    document.getElementById('d-days').style.color='var(--green)';
+    document.getElementById('d-days-lbl').textContent='Selesai';
+  } else if(p.deadline) {
     const days=Math.ceil((new Date(p.deadline)-new Date())/86400000);
     document.getElementById('d-days').textContent=Math.abs(days);
     document.getElementById('d-days').style.color=days<0?'var(--red)':days<=3?'var(--yellow)':'var(--text)';
@@ -5842,7 +5002,7 @@ function projCard(p) {
   const doneTasks=taskList.filter(t=>TASK_DONE_LIKE.includes(t.taskStatus||'todo')).length;
   const projFiles=files.filter(f=>f.projId===p.id);
   const fileCount=projFiles.length;
-  const days=p.deadline?Math.ceil((new Date(p.deadline)-new Date())/86400000):null;
+  const days=(p.deadline && !PROJECT_TERMINAL_STATUSES.includes(p.status))?Math.ceil((new Date(p.deadline)-new Date())/86400000):null;
   const taskTotal=taskList.reduce((s,t)=>s+(parseFloat(t.price)||0),0);
 
   let dpill='';
@@ -5864,8 +5024,6 @@ function projCard(p) {
   // Progress bar based on done tasks
   const pct = taskList.length ? Math.round(doneTasks / taskList.length * 100) : 0;
   const pctClass = pct===100 ? 'pct-100' : pct>=60 ? 'pct-high' : '';
-  const unreadPreviewCount = taskList.filter(t => t.previewUnread).length;
-  const unreadIsApproved = taskList.some(t => t.previewUnread && t.previewStatus === 'approved');
   const progressBar = taskList.length ? `
     <div class="pc-progress-wrap">
       <div class="pc-progress-header">
@@ -5939,7 +5097,6 @@ function projCard(p) {
         ${dpill}
         <span class="pc-portal-wrap" onclick="event.stopPropagation();openPortalModal('${p.id}')" title="Portal Klien">
           <button class="portal-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-          ${unreadPreviewCount ? `<span class="portal-notif-badge ${unreadIsApproved ? 'notif-approved' : ''}">${unreadPreviewCount}</span>` : ''}
         </span>
       </span>
     </div>
@@ -5960,210 +5117,10 @@ function updateCounts() {
   document.getElementById('nc-ca').textContent=n('cancel');
   document.getElementById('nc-paid').textContent=n('paid');
   document.getElementById('nc-qt').textContent=quotations.length;
-  renderNotifBell();
   if (typeof updateMobileBadges === 'function') updateMobileBadges();
 }
 
 // ── SETUP & CONFIRM ───────────────────────────────────
-// ══════════════════════════════════════════════════════
-// ── NOTIFIKASI REALTIME (Firebase Firestore, opsional) ──
-// ══════════════════════════════════════════════════════
-// Dipakai SATU ARAH doang: cuma buat "bel" — nandain "ada yang baru nih, tolong di-refresh".
-// Data asli (gambar, coretan, catatan) TETAP di GitHub seperti biasa; Firestore cuma sinyal kecil
-// {projId, taskId, taskName, status, at} biar owner gak perlu nunggu polling 15 detik lagi.
-let fbApp = null, fbDb = null, fbUnsub = null, fbListenerReady = false;
-
-function fbGetConfig() {
-  // Owner: dari cfg lokal. Portal klien: dari data.cfg yang di-fetch (di-set manual pas portal load).
-  const c = (typeof cfg !== 'undefined' && cfg && cfg.firebaseConfig) || window._portalFirebaseConfig || null;
-  if (!c) console.log('[Firebase] fbGetConfig: gak ketemu config sama sekali (cfg.firebaseConfig maupun window._portalFirebaseConfig kosong)');
-  return c;
-}
-
-function fbInit(explicitConfig) {
-  const conf = explicitConfig || fbGetConfig();
-  if (!conf || typeof firebase === 'undefined') return null;
-  try {
-    fbApp = firebase.apps && firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(conf);
-    fbDb = firebase.firestore();
-    return fbDb;
-  } catch (e) {
-    console.warn('Firebase init gagal:', e);
-    return null;
-  }
-}
-
-// OWNER SIDE: dengerin koleksi "notifications" secara realtime. Begitu ada dokumen baru masuk
-// (dari klien yang baru aja approve/revisi), langsung toast + refresh data asli dari GitHub.
-function fbSetLiveBadge(state, text) {
-  const el = document.getElementById('fb-live-badge');
-  if (!el) return;
-  if (state === 'hidden') { el.style.display = 'none'; return; }
-  el.style.display = 'inline-flex';
-  el.className = 'badge ' + (state === 'ok' ? 'b-paid' : state === 'error' ? 'b-cancel' : 'b-local');
-  el.textContent = text;
-}
-
-function fbStartOwnerListener() {
-  if (fbUnsub) { fbUnsub(); fbUnsub = null; }
-  const db = fbInit();
-  if (!db) { console.log('[Firebase] Belum disetup — pakai polling 15 detik biasa.'); fbSetLiveBadge('hidden'); return; }
-  console.log('[Firebase] Menyalakan listener realtime (owner)...');
-  fbSetLiveBadge('pending', '⚡ Menyambungkan...');
-  fbListenerReady = false;
-  try {
-    fbUnsub = db.collection('notifications').orderBy('at', 'desc').limit(25)
-      .onSnapshot(snap => {
-        if (!fbListenerReady) {
-          // Snapshot pertama = hydration data lama, bukan event baru — jangan di-toast-in semua.
-          fbListenerReady = true;
-          console.log('[Firebase] Listener owner NYALA & tersambung ✓ (', snap.size, 'notif lama di-skip)');
-          fbSetLiveBadge('ok', '⚡ Realtime aktif');
-          return;
-        }
-        console.log('[Firebase] Snapshot baru diterima, ', snap.docChanges().length, 'perubahan');
-        snap.docChanges().forEach(change => {
-          if (change.type !== 'added') return;
-          const d = change.doc.data();
-          console.log('[Firebase] Dokumen baru:', d);
-          if (d.from !== 'client') { console.log('[Firebase] Diabaikan (from !== client)'); return; }
-          const isApproved = d.status === 'approved';
-          toast((isApproved ? '✓ ' : '⚡ ') + (isApproved ? 'Klien approve' : 'Klien kirim revisi') + ` untuk "${d.taskName || ''}" — memuat...`, isApproved ? 'success' : 'info');
-          ghSilentPull(); // tarik data asli (gambar+coretan+status) dari GitHub sesegera mungkin
-        });
-      }, err => {
-        console.warn('[Firebase] Listener error (cek Firestore Rules kalau ini muncul terus):', err);
-        fbSetLiveBadge('error', '⚡ Realtime error — cek console');
-      });
-  } catch (e) {
-    console.warn('[Firebase] Gagal mulai listener:', e);
-    fbSetLiveBadge('error', '⚡ Realtime gagal — cek console');
-  }
-}
-
-// KLIEN SIDE (jalan di browser klien, dalam mode portal): kirim sinyal kecil ke Firestore
-// setelah berhasil submit approve/revisi ke GitHub. Best-effort — kalau gagal (mis. belum disetup
-// owner-nya), gak masalah sama sekali, submit ke GitHub tadi udah pasti berhasil duluan.
-async function fbNotifyOwner(projId, taskId, taskName, status) {
-  try {
-    const db = fbInit();
-    if (!db) { console.log('[Firebase] (klien) Gak bisa notify owner — config Firebase gak ketemu di sisi portal. Cek: apakah cfg.firebaseConfig kesimpen & ke-sync di data JSON?'); return; }
-    await db.collection('notifications').add({ projId, taskId, taskName, status, from: 'client', at: Date.now() });
-    console.log('[Firebase] (klien) Notifikasi ke owner berhasil dikirim ✓', { projId, taskId, taskName, status });
-  } catch (e) {
-    console.warn('[Firebase] (klien) Gagal kirim notifikasi realtime (gak masalah, data utama tetep aman di GitHub):', e);
-  }
-}
-
-// OWNER SIDE: dipanggil abis owner sukses kirim preview/revisi baru ke task — kirim sinyal ke klien
-// (kalau kebetulan lagi buka portal-nya) biar mereka tau ada update tanpa perlu refresh manual.
-async function fbNotifyClient(projId, taskId, taskName) {
-  try {
-    const db = fbInit();
-    if (!db) { console.log('[Firebase] (owner) Gak bisa notify klien — Firebase belum disetup di sisi owner.'); return; }
-    await db.collection('notifications').add({ projId, taskId, taskName, status: 'new_preview', from: 'owner', at: Date.now() });
-    console.log('[Firebase] (owner) Notifikasi ke klien berhasil dikirim ✓');
-  } catch (e) {
-    console.warn('[Firebase] (owner) Gagal kirim notifikasi realtime ke klien (gak masalah, tetep ke-sync normal lewat GitHub):', e);
-  }
-}
-
-// KLIEN SIDE: dengerin notifikasi khusus proyek yang lagi dibuka klien ini. Begitu owner kirim
-// preview/revisi baru, langsung toast + kasih tombol muat ulang (gak dipaksa auto-refresh biar
-// gak ngerusak coretan yang lagi dikerjain klien kalau kebetulan lagi nyoret).
-let fbClientUnsub = null, fbClientListenerReady = false;
-function fbStartClientListener(pid) {
-  if (fbClientUnsub) { fbClientUnsub(); fbClientUnsub = null; }
-  const db = fbInit();
-  if (!db || !pid) { console.log('[Firebase] (klien) Listener gak jalan — db:', !!db, 'pid:', pid); return; }
-  console.log('[Firebase] (klien) Menyalakan listener buat proyek', pid);
-  fbClientListenerReady = false;
-  try {
-    fbClientUnsub = db.collection('notifications').where('projId', '==', pid).limit(20)
-      .onSnapshot(snap => {
-        if (!fbClientListenerReady) { fbClientListenerReady = true; console.log('[Firebase] (klien) Listener NYALA & tersambung ✓'); return; }
-        snap.docChanges().forEach(change => {
-          if (change.type !== 'added') return;
-          const d = change.doc.data();
-          if (d.from !== 'owner') return; // ini sinyal dari klien sendiri (buat notif owner) — abaikan di sisi klien
-          const studio = (portalCurCfg && portalCurCfg.studio) || 'Studio';
-          toast(`⚡ Ada preview baru dari ${studio} untuk "${d.taskName || ''}" — <a href="#" onclick="portalLoadAndRender('${d.taskId}');return false" style="text-decoration:underline;font-weight:700">muat ulang</a>`, 'info');
-        });
-      }, err => {
-        console.warn('[Firebase] (klien) Listener error:', err);
-      });
-  } catch (e) {
-    console.warn('[Firebase] (klien) Gagal mulai listener:', e);
-  }
-}
-
-// Firebase console ngasih snippet LENGKAP kayak "const firebaseConfig = { apiKey: ..., };" — bukan cuma objeknya doang.
-// Kalau user paste utuh gitu (yang paling umum kejadian), eval langsung bakal syntax error krn ada "const ... =" di depan.
-// Jadi di sini kita cari blok {...} yang balance (hitung buka-tutup kurung kurawal) dari string apapun yang di-paste,
-// abaikan semua teks lain di luar itu (const/var/let, komentar, titik koma, dll).
-function fbParseConfigInput(raw) {
-  const start = raw.indexOf('{');
-  if (start === -1) throw new Error('Gak ketemu tanda "{" — pastikan paste objek config-nya (boleh sekalian sama "const firebaseConfig = ...")');
-  let depth = 0, end = -1;
-  for (let i = start; i < raw.length; i++) {
-    if (raw[i] === '{') depth++;
-    else if (raw[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
-  }
-  if (end === -1) throw new Error('Kurung kurawal { } di config gak seimbang/gak lengkap');
-  const objLiteral = raw.slice(start, end + 1);
-  // Dibiarin lenient (eval, bukan JSON.parse ketat) krn key di objek asli Firebase gak dikutip (apiKey: bukan "apiKey":).
-  return new Function('return (' + objLiteral + ')')();
-}
-
-// Tes beneran nulis+baca 1 dokumen kecil ke Firestore — biar ketauan pasti kalau config/Rules-nya salah,
-// daripada diem2 gagal di background dan owner gak pernah tau notifikasi realtimenya idup apa nggak.
-// Pakai instance Firebase app TERPISAH (nama khusus) khusus buat tes ini, biar gak nyenggol/ke-mixed
-// sama app utama yang dipakai listener realtime (aman dites berkali-kali tanpa reload halaman).
-async function fbTestConnection() {
-  const statusEl = document.getElementById('fb-status');
-  statusEl.style.color = 'var(--muted)';
-  statusEl.textContent = 'Menguji koneksi ke Firestore...';
-  let testConfig;
-  try {
-    testConfig = fbParseConfigInput(document.getElementById('s-fb-config').value.trim());
-  } catch (e) {
-    statusEl.style.color = 'var(--red)';
-    statusEl.textContent = '✗ ' + e.message;
-    return;
-  }
-  if (typeof firebase === 'undefined') {
-    statusEl.style.color = 'var(--red)';
-    statusEl.textContent = '✗ SDK Firebase belum ke-load (cek koneksi internet, lalu refresh halaman)';
-    return;
-  }
-  try {
-    const TEST_APP_NAME = 'snapsy-conn-test';
-    const existing = firebase.apps.find(a => a.name === TEST_APP_NAME);
-    if (existing) await existing.delete(); // beresin instance tes sebelumnya kalau ada, biar config terbaru yg kepake
-    const testApp = firebase.initializeApp(testConfig, TEST_APP_NAME);
-    const db = testApp.firestore();
-    const testDoc = await db.collection('notifications').add({ from: 'test', at: Date.now(), taskName: 'tes koneksi' });
-    await testDoc.get(); // pastikan bisa DIBACA balik juga (nguji Rules "read")
-    await testDoc.delete().catch(() => {}); // beres2, boleh gagal (Rules kita emang larang delete — gapapa, biarin aja)
-    await testApp.delete(); // buang instance tesnya, gak perlu nyangkut
-
-    statusEl.style.color = 'var(--green)';
-    statusEl.textContent = '✓ Berhasil! Firestore tersambung & Rules-nya benar. Klik "Simpan" di bawah biar aktif.';
-  } catch (e) {
-    statusEl.style.color = 'var(--red)';
-    const msg = (e && e.message) || String(e);
-    if (msg.toLowerCase().includes('permission')) {
-      statusEl.textContent = '✗ Ditolak izin (permission-denied) — cek lagi Firestore Rules-nya, pastikan udah di-Publish.';
-    } else if (msg.toLowerCase().includes('not been used') || msg.toLowerCase().includes('project') || msg.toLowerCase().includes('not-found')) {
-      statusEl.textContent = '✗ Project/Firestore belum aktif — pastikan udah bikin Firestore Database di project itu.';
-    } else if (msg.toLowerCase().includes('api key') || msg.toLowerCase().includes('invalid')) {
-      statusEl.textContent = '✗ apiKey/projectId kayaknya salah — cek lagi hasil copy dari Firebase console.';
-    } else {
-      statusEl.textContent = '✗ Gagal: ' + msg;
-    }
-  }
-}
-
 function openSetup() {
   document.getElementById('s-studio').value  = cfg.studio  || 'Snapsy Std.';
   document.getElementById('s-owner').value   = cfg.owner   || 'Sony Sanjaya';
@@ -6175,8 +5132,6 @@ function openSetup() {
   document.getElementById('s-cid').value     = cfg.clientId|| '';
   document.getElementById('s-key').value     = cfg.apiKey  || '';
   document.getElementById('s-portal-token').value = localStorage.getItem('gh_portal_token') || '';
-  document.getElementById('s-fb-config').value = cfg.firebaseConfig ? JSON.stringify(cfg.firebaseConfig, null, 2) : '';
-  document.getElementById('fb-status').textContent = cfg.firebaseConfig ? '✓ Firebase tersambung — notifikasi realtime aktif.' : '';
   const repoHint = document.getElementById('s-portal-repo-hint'); if (repoHint) repoHint.textContent = ghCreds().repo || 'data';
   renderLocalRootStatus();
   document.getElementById('setupModal').classList.add('show');
@@ -6195,28 +5150,6 @@ function saveSetup() {
   const portalToken = document.getElementById('s-portal-token').value.trim();
   if (portalToken) localStorage.setItem('gh_portal_token', portalToken);
   else localStorage.removeItem('gh_portal_token');
-
-  const fbRaw = document.getElementById('s-fb-config').value.trim();
-  const fbStatusEl = document.getElementById('fb-status');
-  if (!fbRaw) {
-    cfg.firebaseConfig = null;
-  } else {
-    try {
-      const parsed = fbParseConfigInput(fbRaw);
-      if (!parsed || !parsed.apiKey || !parsed.projectId) throw new Error('Config gak lengkap (minimal butuh apiKey & projectId)');
-      cfg.firebaseConfig = parsed;
-      fbStatusEl.textContent = '✓ Firebase config tersimpan. Klik "Tes Koneksi" buat mastiin beneran nyambung.';
-      fbStatusEl.style.color = 'var(--green)';
-    } catch (e) {
-      toast('Format Firebase config gak valid: ' + e.message, 'error');
-      fbStatusEl.textContent = '✗ Gagal parse config — cek lagi format-nya.';
-      fbStatusEl.style.color = 'var(--red)';
-    }
-  }
-  localStorage.setItem('ssy_cfg',JSON.stringify(cfg));
-  ghScheduleSync(); // biar cfg.firebaseConfig ikut ke-sync & bisa dibaca dari sisi portal klien juga
-  fbStartOwnerListener(); // langsung (re)aktifin listener realtime pakai config terbaru
-
   closeModal('setupModal');
   document.getElementById('loginBtn').style.display='inline-flex';
   if(cfg.clientId && cfg.apiKey) initGapi();
@@ -7180,8 +6113,8 @@ function convertQtToProject() {
         });
       });
 
-      // Mark quotation as accepted
-      qt.status = 'accepted';
+      // Quotation sudah jadi proyek — hapus dari daftar quotation (bukan cuma ganti status)
+      quotations = quotations.filter(q => q.id !== curQtId);
       saveState(); updateCounts();
       closeModal('qtDetailModal');
       renderQuotations();
@@ -7368,7 +6301,6 @@ async function ghSilentPull() {
     if (ghFileSha && json.sha === ghFileSha) { dbg('silentPull: same SHA, skip'); return; }
 
     dbg('silentPull: SHA CHANGED → pulling data');
-    const prevUnreadIds = new Set(getUnreadClientTasks().map(x => x.task.id));
     ghFileSha = json.sha;
     let data;
     if (json.content) {
@@ -7405,15 +6337,7 @@ async function ghSilentPull() {
     else if (activeView === 'financial')  renderFinancial();
 
     ghSetBadge('synced', 'Tersinkron');
-    const newUnread = getUnreadClientTasks().filter(x => !prevUnreadIds.has(x.task.id));
-    if (newUnread.length === 1) {
-      const { task: t } = newUnread[0];
-      toast(t.previewStatus === 'approved' ? `✓ Klien approve "${t.name}"` : `✎ Klien kirim revisi untuk "${t.name}"`, t.previewStatus === 'approved' ? 'success' : 'info');
-    } else if (newUnread.length > 1) {
-      toast(`✎ ${newUnread.length} aktivitas baru dari klien`, 'info');
-    } else {
-      toast('✦ Data diperbarui otomatis', 'info');
-    }
+    toast('✦ Data diperbarui otomatis', 'info');
   } catch(e) {
     dbg('silentPull ERROR: ' + e.message);
     console.warn('GH silent pull error:', e);
@@ -7510,22 +6434,7 @@ function renderPortalModalState(p) {
   const active = p.portal && p.portal.active;
   document.getElementById('portal-inactive-state').style.display = active ? 'none' : 'block';
   document.getElementById('portal-active-state').style.display = active ? 'block' : 'none';
-  if (active) {
-    const url = buildPortalUrl(p);
-    document.getElementById('portal-link-input').value = url;
-    const statusEl = document.getElementById('portal-shorten-status');
-    statusEl.style.display = 'block';
-    statusEl.textContent = 'Memendekkan link...';
-    shortenUrl(url).then(short => {
-      if (!document.getElementById('portalModal').classList.contains('show')) return;
-      if (short) {
-        document.getElementById('portal-link-input').value = short;
-        statusEl.textContent = 'Link sudah dipendekkan ✓';
-      } else {
-        statusEl.style.display = 'none';
-      }
-    });
-  }
+  if (active) document.getElementById('portal-link-input').value = buildPortalUrl(p);
 }
 
 function generatePortalLink(projId) {
@@ -7535,14 +6444,6 @@ function generatePortalLink(projId) {
   renderPortalModalState(p);
   renderProjects();
   toast('Link portal dibuat ✓', 'success');
-}
-
-// Pastikan portal proyek aktif — dipanggil otomatis saat owner kirim preview task pertama kali,
-// biar nggak perlu bikin link manual dulu sebelum bisa kirim preview.
-function ensurePortalActive(p) {
-  if (!p.portal || !p.portal.active) {
-    p.portal = { id: (p.portal && p.portal.id) || randSlug(), active: true, unread: false, createdAt: new Date().toISOString() };
-  }
 }
 
 function regeneratePortalLink(projId) {
@@ -7566,11 +6467,11 @@ function revokePortalLink(projId) {
   });
 }
 
-function buildPortalUrl(p, taskId) {
+function buildPortalUrl(p) {
   const { username, repo } = ghCreds();
   const token = getPortalToken();
   const base = location.origin + location.pathname;
-  const parts = [username, repo, p.id, p.portal.id, token, taskId || ''].map(x => encodeURIComponent(x || ''));
+  const parts = [username, repo, p.id, p.portal.id, token].map(x => encodeURIComponent(x || ''));
   return base + '#portal~' + parts.join('~');
 }
 
@@ -7589,21 +6490,19 @@ function sharePortalLinkWA() {
   window.open(phone ? `https://wa.me/${phone}?text=${msg}` : `https://wa.me/?text=${msg}`, '_blank');
 }
 
-// ── KLIEN SIDE: render halaman portal (read-only + review) ──
-let portalCreds = null;   // {u, r, pid, sid, token} — dipakai buat baca & tulis balik ke GitHub
+// ── KLIEN SIDE: render halaman portal (read-only) ──
+let portalCreds = null;   // {u, r, pid, sid, token} — dipakai buat baca data dari GitHub
 let portalCurFiles = [];  // cache file proyek yang lagi dibuka di portal
-let portalCurTasks = [];  // cache task proyek (yang menentukan status review per-task)
+let portalCurTasks = [];  // cache task proyek (buat progress bar)
 let portalCurClient = null;
-let portalDeepLinkTaskId = null;
 
 async function initPortalMode() {
   document.body.classList.add('portal-mode');
   document.getElementById('portal-app').classList.add('show');
   const parts = location.hash.slice(1).split('~').map(decodeURIComponent);
-  const [, u, r, pid, sid, token, taskId] = parts;
+  const [, u, r, pid, sid, token] = parts;
   if (!u || !r || !pid || !sid || !token) { renderPortalError('Link portal tidak lengkap atau rusak.'); return; }
   portalCreds = { u, r, pid, sid, token };
-  portalDeepLinkTaskId = taskId || null;
   await portalLoadAndRender();
 }
 
@@ -7629,7 +6528,7 @@ async function portalFetchDataFile() {
   return { data, sha: json.sha };
 }
 
-async function portalLoadAndRender(openTaskId) {
+async function portalLoadAndRender() {
   try {
     const { pid, sid } = portalCreds;
     const { data } = await portalFetchDataFile();
@@ -7643,58 +6542,13 @@ async function portalLoadAndRender(openTaskId) {
     portalCurTasks = (data.tasks || []).filter(t => t.projId === pid);
     portalCurClient = (data.clients || []).find(c => c.name === proj.client) || { name: proj.client };
     portalCurProj = proj; portalCurCfg = data.cfg || {};
-    if (data.cfg && data.cfg.firebaseConfig) { window._portalFirebaseConfig = data.cfg.firebaseConfig; fbStartClientListener(pid); }
 
-    const jump = openTaskId || portalDeepLinkTaskId;
-    portalDeepLinkTaskId = null;
-    if (jump && portalCurTasks.some(t => t.id === jump && t.previewFileId)) {
-      portalOpenTask(jump);
-    } else {
-      renderPortalView(proj, portalCurFiles, data.cfg || {});
-    }
+    renderPortalView(proj, portalCurFiles, data.cfg || {});
   } catch (e) {
     renderPortalError('Gagal memuat portal: ' + e.message);
   }
 }
 let portalCurProj = null, portalCurCfg = {};
-
-// ── Bahasa portal klien: otomatis ikut mata uang klien (USD → Inggris, selain itu Indonesia) ──
-// Prioritaskan currency milik KLIEN (di halaman Klien) karena itu sumber kebenarannya —
-// currency di proyek kadang cuma cache lama yang ke-set sekali pas proyek dibuat & gak ikut update kalau currency klien diubah belakangan.
-function portalLang() {
-  const cur = (portalCurClient && portalCurClient.currency) || (portalCurProj && portalCurProj.currency) || 'IDR';
-  return cur === 'USD' ? 'en' : 'id';
-}
-const PORTAL_STATUS_LABEL = {
-  id: { none: 'Belum Dikirim', needs_review: 'Perlu Review', revision: 'Revisi Terkirim', approved: 'Disetujui' },
-  en: { none: 'Not Sent', needs_review: 'Needs Review', revision: 'Revision Sent', approved: 'Approved' },
-};
-const PORTAL_T = {
-  id: {
-    reviewBtn: 'Review', updateRevisi: 'Update Revisi', approvedBtn: 'Approved!',
-    noDesign: 'Belum ada desain yang diajukan untuk direview.',
-    noFinalFiles: 'Belum ada file final yang dibagikan.',
-    greetSub: 'Ini portal kamu untuk lihat progres task, invoice, dan file proyek.',
-    lihatInvoice: 'Lihat Invoice', fileFinal: 'File Final', buka: 'Buka',
-    footerNote: (s) => `Portal ini dibuat oleh ${s} — hanya untuk proyek ini.`,
-    filePreviewBelumAda: 'File preview untuk task ini belum tersedia',
-    lockedPopup: (o) => `Desain ini sudah disetujui. Kalau mau ada perubahan, hubungi ${o} lewat WhatsApp ya.`,
-    noInvoice: 'Belum ada invoice yang dibagikan untuk proyek ini',
-    kembali: '← Kembali',
-  },
-  en: {
-    reviewBtn: 'Review', updateRevisi: 'Update Revision', approvedBtn: 'Approved!',
-    noDesign: 'No designs have been submitted for review yet.',
-    noFinalFiles: 'No final files shared yet.',
-    greetSub: 'This is your portal to track task progress, invoices, and project files.',
-    lihatInvoice: 'View Invoice', fileFinal: 'Final Files', buka: 'Open',
-    footerNote: (s) => `This portal was created by ${s} — for this project only.`,
-    filePreviewBelumAda: 'Preview file for this task is not available yet',
-    lockedPopup: (o) => `This design has already been approved. If you need changes, please contact ${o} via WhatsApp.`,
-    noInvoice: 'No invoice has been shared for this project yet',
-    kembali: '← Back',
-  },
-};
 
 function renderPortalError(msg) {
   document.getElementById('portal-content').innerHTML = `
@@ -7704,58 +6558,32 @@ function renderPortalError(msg) {
     </div>`;
 }
 
-// ── HOME: kartu per-task + ringkasan proyek + file final ──
+// ── HOME: ringkasan proyek (progress) + file final + invoice ──
 function renderPortalView(p, projFiles, portalCfg) {
-  closeAnnotator();
-  const lang = portalLang(), T = PORTAL_T[lang], SL = PORTAL_STATUS_LABEL[lang];
   document.getElementById('portal-studio-name').textContent = portalCfg.studio || '';
 
-  const tasksWithPreview = portalCurTasks.filter(t => t.previewFileId);
   const totalTasks = portalCurTasks.length || 1;
   const doneTasks = portalCurTasks.filter(t => TASK_DONE_LIKE.includes(t.taskStatus || 'todo')).length;
   const pct = Math.round(doneTasks / totalTasks * 100);
 
-  const taskCardsHtml = tasksWithPreview.length ? tasksWithPreview.map(t => {
-    const st = t.previewStatus || 'none';
-    const f = portalCurFiles.find(x => x.id === t.previewFileId);
-    const thumbSrc = f ? (f.thumb || f.thumbFull) : null;
-    let btnLabel = T.reviewBtn, btnClass = 'primary', locked = false;
-    if (st === 'revision') { btnLabel = T.updateRevisi; btnClass = 'secondary'; }
-    else if (st === 'approved') { btnLabel = T.approvedBtn; btnClass = 'approved'; locked = true; }
-    const clickAction = locked ? `portalApprovedLockedPopup()` : `portalOpenTask('${t.id}')`;
-    return `
-    <div class="portal-task-card">
-      <div class="portal-task-thumb" onclick="${clickAction}">
-        ${thumbSrc ? `<img src="${thumbSrc}">` : `<div class="portal-task-thumb-empty">${fIcon(f ? f.name : '')}</div>`}
-      </div>
-      <div class="portal-task-body">
-        <div class="portal-task-name">${escHtml(t.name)}</div>
-        <span class="badge portal-task-status-${st}">${SL[st]}</span>
-      </div>
-      <button class="portal-task-btn btn-${btnClass} ${locked ? 'locked' : ''}" onclick="${clickAction}">${btnLabel}</button>
-    </div>`;
-  }).join('') : `<div style="font-size:12.5px;color:var(--muted);text-align:center;padding:16px 0">${T.noDesign}</div>`;
-
-  // Final files = file selesai yang BUKAN gambar preview review (biar gak dobel sama task card)
-  const previewFileIds = tasksWithPreview.map(t => t.previewFileId);
-  const finalFiles = projFiles.filter(f => (f.status === 'done' || f.status === 'local') && !previewFileIds.includes(f.id));
+  const finalFiles = projFiles.filter(f => f.status === 'done' || f.status === 'local');
   const finalFilesHtml = finalFiles.length ? finalFiles.map(f => `
     <div class="portal-file-item">
       <div style="color:var(--muted)">${fIcon(f.name)}</div>
       <div class="portal-file-name">${f.name}</div>
       <div class="portal-file-size">${fSize(f.size)}</div>
       <div class="portal-file-actions">
-        ${f.driveLink ? `<a href="${f.driveLink}" target="_blank" class="btn btn-ghost btn-xs">${T.buka}</a>` : ''}
+        ${f.driveLink ? `<a href="${f.driveLink}" target="_blank" class="btn btn-ghost btn-xs">Buka</a>` : ''}
       </div>
-    </div>`).join('') : `<div style="font-size:12px;color:var(--muted);text-align:center;padding:10px 0">${T.noFinalFiles}</div>`;
+    </div>`).join('') : '<div style="font-size:12px;color:var(--muted);text-align:center;padding:10px 0">Belum ada file final yang dibagikan</div>';
 
   document.getElementById('portal-content').innerHTML = `
     <div class="portal-card portal-home-head">
       <div>
         <div class="portal-greet">Hi, ${escHtml(portalCurClient ? portalCurClient.name : '')}</div>
-        <div class="portal-greet-sub">${T.greetSub}</div>
+        <div class="portal-greet-sub">Ini portal kamu untuk lihat progres task, invoice, dan file proyek.</div>
       </div>
-      <button class="btn btn-secondary btn-sm" onclick="portalOpenInvoice()">${T.lihatInvoice}</button>
+      <button class="btn btn-secondary btn-sm" onclick="portalOpenInvoice()">Lihat Invoice</button>
     </div>
     <div class="portal-card">
       <div class="portal-proj-name">${escHtml(p.name)}</div>
@@ -7764,181 +6592,22 @@ function renderPortalView(p, projFiles, portalCfg) {
         <span class="portal-progress-pct">${pct}%</span>
       </div>
     </div>
-    <div class="portal-task-grid">${taskCardsHtml}</div>
     <div class="portal-card">
-      <div class="card-title" style="margin-bottom:8px">${T.fileFinal}</div>
+      <div class="card-title" style="margin-bottom:8px">File Final</div>
       ${finalFilesHtml}
     </div>
-    <div class="portal-footer-note">${T.footerNote(portalCfg.studio || 'studio')}</div>
+    <div class="portal-footer-note">Portal ini dibuat oleh ${portalCfg.studio || 'studio'} — hanya untuk proyek ini.</div>
   `;
 }
 
 function portalGoHome() {
-  closeAnnotator();
   renderPortalView(portalCurProj, portalCurFiles, portalCurCfg);
-}
-
-function portalApprovedLockedPopup() {
-  const lang = portalLang(), T = PORTAL_T[lang];
-  const ownerName = (portalCurCfg && portalCurCfg.owner) || (lang === 'en' ? 'us' : 'kami');
-  toast(T.lockedPopup(ownerName), 'info');
-}
-
-// ── REVIEW: buka annotator untuk 1 task spesifik, dengan sidebar navigasi task ──
-// Susun daftar ronde revisi task ini (buat sidebar kiri) — Revisi 1, 2, ... sampe yang lagi berjalan sekarang.
-function buildPortalRounds(t) {
-  const hist = (t.previewHistory || []).map((h, i) => ({ ...h, num: i + 1, key: h.id }));
-  const f = portalCurFiles.find(x => x.id === t.previewFileId);
-  const current = {
-    fileId: t.previewFileId, fileName: t.name, thumb: f ? (f.thumb || null) : null,
-    status: t.previewStatus || 'needs_review', annotations: t.previewAnnotations || [], note: t.previewNote || '',
-    sentAt: t.previewSentAt || null, respondedAt: t.previewRespondedAt || null,
-    num: hist.length + 1, key: 'current',
-  };
-  return [...hist, current];
-}
-
-function portalOpenTask(taskId) {
-  const t = portalCurTasks.find(x => x.id === taskId); if (!t) return;
-  const st = t.previewStatus || 'none';
-  if (st === 'approved') { portalApprovedLockedPopup(); return; }
-  const f = portalCurFiles.find(x => x.id === t.previewFileId);
-  const lang = portalLang(), T = PORTAL_T[lang];
-  if (!f) { toast(T.filePreviewBelumAda, 'error'); return; }
-
-  annOpen({
-    readOnly: false,
-    lang,
-    projId: t.projId,
-    fileId: f.id,
-    fileName: t.name,
-    imgSrc: f.thumbFull || f.thumb || null,
-    annotations: t.previewAnnotations || [],
-    note: t.previewNote || '',
-    history: t.previewHistory || [],
-    getCurrentRound: () => ({
-      fileId: t.previewFileId, fileName: f.name, thumb: f.thumb || null,
-      status: t.previewStatus || 'needs_review', annotations: t.previewAnnotations || [], note: t.previewNote || '',
-      sentAt: t.previewSentAt || null, respondedAt: t.previewRespondedAt || null,
-    }),
-    onApprove: (payload) => portalSubmitTask(taskId, 'approved', payload),
-    onRevision: (payload) => portalSubmitTask(taskId, 'revision', payload),
-    taskNav: {
-      rounds: buildPortalRounds(t),
-      activeKey: 'current',
-      taskId: t.id,
-      taskName: t.name,
-      clientName: portalCurClient ? portalCurClient.name : '',
-      onSelectRound: 'portalViewHistoryRound',
-      onInvoice: 'portalOpenInvoice',
-      onHome: 'portalGoHome',
-    },
-  });
-}
-
-// Buka ronde revisi LAMA dari task ini (read-only, cuma buat lihat coretan & catatan waktu itu).
-// Ronde "saat ini" (current) balik ke mode edit biasa lewat portalOpenTask.
-function portalViewHistoryRound(taskId, key) {
-  if (key === 'current') { portalOpenTask(taskId); return; }
-  const t = portalCurTasks.find(x => x.id === taskId); if (!t) return;
-  const h = (t.previewHistory || []).find(x => x.id === key); if (!h) return;
-  const f = portalCurFiles.find(x => x.id === h.fileId);
-  const lang = portalLang(), T = PORTAL_T[lang];
-
-  annOpen({
-    readOnly: true,
-    locked: true,
-    lockedMsg: lang === 'en' ? 'This is a past revision round (view only).' : 'Ini ronde revisi yang sudah lewat (cuma bisa dilihat).',
-    lang,
-    projId: t.projId,
-    fileId: h.fileId,
-    fileName: t.name,
-    imgSrc: (f && (f.thumbFull || f.thumb)) || h.thumb || null,
-    annotations: h.annotations || [],
-    note: h.note || '',
-    history: t.previewHistory || [],
-    getCurrentRound: () => ({
-      fileId: t.previewFileId, fileName: t.name, thumb: (portalCurFiles.find(x => x.id === t.previewFileId) || {}).thumb || null,
-      status: t.previewStatus || 'needs_review', annotations: t.previewAnnotations || [], note: t.previewNote || '',
-      sentAt: t.previewSentAt || null, respondedAt: t.previewRespondedAt || null,
-    }),
-    taskNav: {
-      rounds: buildPortalRounds(t),
-      activeKey: key,
-      taskId: t.id,
-      taskName: t.name,
-      clientName: portalCurClient ? portalCurClient.name : '',
-      onSelectRound: 'portalViewHistoryRound',
-      onInvoice: 'portalOpenInvoice',
-      onHome: 'portalGoHome',
-    },
-  });
-}
-
-async function portalSubmitTask(taskId, newStatus, payload) {
-  const lang = portalLang();
-  const M = lang === 'en'
-    ? { sending: newStatus === 'revision' ? 'Sending revision...' : 'Sending approval...', ok: newStatus === 'revision' ? 'Revision sent ✓' : 'Approval sent ✓', projNotFound: 'Project not found.', portalInactive: 'This portal is no longer active.', taskNotFound: 'Task not found.', alreadyApproved: 'This design has already been approved.', conflict: 'Data conflict, retrying...', failGeneric: 'Failed to send.', failPrefix: 'Failed to send: ' }
-    : { sending: newStatus === 'revision' ? 'Mengirim revisi...' : 'Mengirim approval...', ok: newStatus === 'revision' ? 'Revisi terkirim ✓' : 'Approve terkirim ✓', projNotFound: 'Proyek tidak ditemukan.', portalInactive: 'Portal sudah tidak aktif.', taskNotFound: 'Task tidak ditemukan.', alreadyApproved: 'Desain ini sudah disetujui sebelumnya.', conflict: 'Bentrok data, mencoba lagi...', failGeneric: 'Gagal mengirim.', failPrefix: 'Gagal mengirim: ' };
-  toast(M.sending, 'info');
-  const { u, r, pid, sid, token } = portalCreds;
-  let lastErr = null;
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const { data, sha } = await portalFetchDataFile();
-      const proj = (data.projects || []).find(x => x.id === pid);
-      if (!proj) throw new Error(M.projNotFound);
-      if (!proj.portal || proj.portal.id !== sid || !proj.portal.active) throw new Error(M.portalInactive);
-      const t = (data.tasks || []).find(x => x.id === taskId);
-      if (!t) throw new Error(M.taskNotFound);
-      if (t.previewStatus === 'approved') throw new Error(M.alreadyApproved);
-
-      t.previewStatus = newStatus;
-      t.previewAnnotations = payload.annotations || [];
-      t.previewNote = payload.note || '';
-      t.previewUnread = true;
-      t.previewRespondedAt = new Date().toISOString();
-
-      const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-      const putRes = await fetch(
-        `https://api.github.com/repos/${u}/${r}/contents/${GH_DATA_FILE}`,
-        {
-          method: 'PUT',
-          headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: 'portal: ' + newStatus + ' — ' + new Date().toLocaleString('id-ID'), content, sha })
-        }
-      );
-      if (putRes.ok) {
-        toast(M.ok, 'success');
-        // Data yang barusan berhasil ditulis udah ada di memori (variabel `data` di atas) —
-        // gak perlu fetch ulang ke GitHub cuma buat baca balik apa yang baru aja kita tulis sendiri.
-        // Ini motong 1 round-trip network penuh (file datanya bisa beberapa MB krn ada gambar2 preview),
-        // jadi "nunggu setelah kirim revisi" jadi jauh lebih cepat.
-        portalCurFiles = (data.files || []).filter(f => f.projId === pid);
-        portalCurTasks = (data.tasks || []).filter(x => x.projId === pid);
-        portalCurClient = (data.clients || []).find(c => c.name === proj.client) || { name: proj.client };
-        portalCurProj = proj; portalCurCfg = data.cfg || {};
-        fbNotifyOwner(pid, taskId, t.name, newStatus); // sinyal realtime ke owner (best-effort, gak nge-block apapun)
-        portalOpenTask(taskId);
-        return;
-      }
-      if (putRes.status === 409) { lastErr = new Error(M.conflict); continue; }
-      const errBody = await putRes.json().catch(() => ({}));
-      throw new Error(errBody.message || M.failGeneric);
-    } catch (e) {
-      lastErr = e;
-      break;
-    }
-  }
-  toast(M.failPrefix + (lastErr ? lastErr.message : ''), 'error');
-  annRestoreActions();
 }
 
 // ── INVOICE: reuse buildInvHTML dengan snapshot yang disimpan owner ──
 function portalOpenInvoice() {
   const p = portalCurProj;
-  const T = PORTAL_T[portalLang()];
-  if (!p || !p.lastInvoice) { toast(T.noInvoice, 'info'); return; }
+  if (!p || !p.lastInvoice) { toast('Belum ada invoice yang dibagikan untuk proyek ini', 'info'); return; }
   const inv = p.lastInvoice;
   const cl = portalCurClient || { name: p.client };
   const taskRows = (inv.taskIds || []).map(tid => portalCurTasks.find(t => t.id === tid)).filter(Boolean);
@@ -7955,530 +6624,11 @@ function portalOpenInvoice() {
 
   document.getElementById('portal-content').innerHTML = `
     <div class="portal-card" style="display:flex;align-items:center;gap:10px">
-      <button class="btn btn-ghost btn-sm" onclick="portalGoHome()">${T.kembali}</button>
+      <button class="btn btn-ghost btn-sm" onclick="portalGoHome()">← Kembali</button>
       <div style="font-weight:700;font-size:13px">Invoice ${escHtml(inv.invNum || '')}</div>
     </div>
     <div class="portal-invoice-wrap">${invHtml}</div>
   `;
-}
-
-// ══════════════════════════════════════════════════════
-// ── ANNOTATOR ENGINE (coret-coret gambar, zoom-safe) ──
-// dipakai 2 arah: portal klien (edit) & owner (lihat hasil)
-// ══════════════════════════════════════════════════════
-const ANN_PALETTE = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899'];
-let annState = null;
-
-const ANN_ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
-const ANN_ICON_FLAG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
-const ANN_ICON_TRASH = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
-const ANN_ICON_DRAG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l-3 3-3-3"/><path d="M19 9l3 3-3 3"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>';
-const ANN_ICON_SCROLL = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="14" rx="4"/><line x1="12" y1="6" x2="12" y2="10"/></svg>';
-const ANN_ICON_PINCH = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M6 14v0a6 6 0 0 0 6 6h1a7 7 0 0 0 7-7v-2a2 2 0 0 0-4 0"/></svg>';
-const ANN_ICON_UPLOAD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
-const ANN_ICON_HISTORY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 16 14"/></svg>';
-
-const ANN_T = {
-  id: {
-    catatanUmum: 'Catatan Umum', catatanUmumOpsional: 'Catatan Umum (opsional)',
-    tandaiDibaca: 'Tandai Sudah Dibaca', approve: 'Approve', kirimRevisi: 'Kirim Revisi',
-    sudahDisetujui: 'Desain ini sudah disetujui.',
-    hintReadonly: 'Cubit / scroll untuk zoom &middot; tahan &amp; geser untuk lihat detail',
-    hintEdit: 'Seret untuk menandai &middot; scroll / cubit untuk zoom &middot; tombol untuk geser',
-    coretan: 'Coretan', coretanN: (n) => `Coretan ${n}`, tanpaCatatan: 'Tanpa catatan',
-    placeholderItem: 'Catatan untuk coretan ini...', placeholderUmum: 'Tulis catatan revisi secara umum...',
-    tidakAdaCoretan: 'Tidak ada coretan.', belumAdaCoretan: 'Belum ada coretan. Seret langsung di atas foto untuk menandai bagian yang mau direvisi.',
-    lihatCatatan: 'Lihat Catatan & Coretan',
-    kirimRevisiBaru: 'Kirim Revisi Baru', riwayat: 'Riwayat', riwayatN: (n) => `Riwayat (${n})`,
-    riwayatTitle: 'Riwayat Revisi', riwayatKosong: 'Belum ada riwayat revisi.',
-    dikirim: 'Dikirim', direspon: 'Direspon', belumDirespon: 'Belum direspon',
-  },
-  en: {
-    catatanUmum: 'General Note', catatanUmumOpsional: 'General Note (optional)',
-    tandaiDibaca: 'Mark as Read', approve: 'Approve', kirimRevisi: 'Send Revision',
-    sudahDisetujui: 'This design has already been approved.',
-    hintReadonly: 'Pinch / scroll to zoom &middot; hold &amp; drag to see details',
-    hintEdit: 'Drag to mark &middot; scroll / pinch to zoom &middot; button to pan',
-    coretan: 'Markups', coretanN: (n) => `Markup ${n}`, tanpaCatatan: 'No note',
-    placeholderItem: 'Note for this markup...', placeholderUmum: 'Write a general revision note...',
-    tidakAdaCoretan: 'No markups.', belumAdaCoretan: 'No markups yet. Drag directly on the image to mark what needs revising.',
-    lihatCatatan: 'View Notes & Markups',
-    kirimRevisiBaru: 'Send New Revision', riwayat: 'History', riwayatN: (n) => `History (${n})`,
-    riwayatTitle: 'Revision History', riwayatKosong: 'No revision history yet.',
-    dikirim: 'Sent', direspon: 'Responded', belumDirespon: 'Not responded yet',
-  },
-};
-
-function annOpen(opts) {
-  annState = {
-    readOnly: !!opts.readOnly,
-    locked: !!opts.locked,
-    lockedMsg: opts.lockedMsg || '',
-    lang: opts.lang || 'id',
-    projId: opts.projId || null,
-    fileId: opts.fileId,
-    fileName: opts.fileName,
-    imgSrc: opts.imgSrc || null,
-    isPdf: !!opts.isPdf,
-    annotations: (opts.annotations || []).map(a => ({ id: a.id, color: a.color, points: a.points, comment: a.comment || '' })),
-    note: opts.note || '',
-    onApprove: opts.onApprove || null,
-    onRevision: opts.onRevision || null,
-    onMarkRead: opts.onMarkRead || null,
-    onUploadRevision: opts.onUploadRevision || null,
-    history: opts.history || [],
-    getCurrentRound: opts.getCurrentRound || null,
-    zoom: 1, panX: 0, panY: 0, tool: 'draw',
-    isDrawing: false, isPanning: false, isPinching: false,
-    curPoints: null, curColor: null,
-    naturalW: 0, naturalH: 0,
-    pointers: new Map(),
-    taskNav: opts.taskNav || null,
-  };
-  const T = ANN_T[annState.lang];
-
-  annToggleSidebar(false);
-  const modalEl = document.querySelector('#annotatorOverlay .ann-modal');
-  const tasknavEl = document.getElementById('ann-tasknav');
-  if (modalEl) modalEl.classList.toggle('has-tasknav', !!annState.taskNav);
-  if (tasknavEl) tasknavEl.classList.toggle('show', !!annState.taskNav);
-  if (annState.taskNav) annRenderTaskNav();
-
-  document.getElementById('ann-filename').textContent = opts.fileName || '-';
-  document.getElementById('annotatorOverlay').classList.add('show');
-  const listLabelEl = document.getElementById('ann-list-label');
-  if (listLabelEl) listLabelEl.textContent = T.coretan;
-  const historyBtnEl = document.getElementById('ann-history-btn');
-  if (historyBtnEl) {
-    if (annState.history.length) {
-      historyBtnEl.style.display = 'flex';
-      historyBtnEl.innerHTML = `${ANN_ICON_HISTORY} ${T.riwayatN(annState.history.length)}`;
-    } else {
-      historyBtnEl.style.display = 'none';
-    }
-  }
-  const noteTaEl = document.getElementById('ann-general-note');
-  if (noteTaEl) noteTaEl.placeholder = T.placeholderUmum;
-
-  const stageWrap = document.getElementById('ann-stage-wrap');
-  const zoomCtrls = document.getElementById('ann-zoom-controls');
-  const toolDock = document.getElementById('ann-tool-dock');
-  const listHead = document.querySelector('.ann-list-head');
-  const listEl = document.getElementById('ann-list');
-  const actions = document.getElementById('ann-actions');
-  const noteLabel = document.getElementById('ann-note-label');
-  const noteTa = document.getElementById('ann-general-note');
-  const hintChip = document.getElementById('ann-hint-chip');
-
-  const hasImg = !!annState.imgSrc;
-  stageWrap.classList.toggle('no-img', !hasImg);
-  stageWrap.classList.toggle('readonly-mode', !!annState.readOnly);
-  stageWrap.style.display = hasImg ? 'flex' : 'none';
-  zoomCtrls.style.display = hasImg ? 'flex' : 'none';
-  toolDock.style.display = (hasImg && !annState.readOnly && !annState.locked) ? 'flex' : 'none';
-  annSetTool('draw');
-  if (listHead) listHead.style.display = hasImg ? 'flex' : 'none';
-  listEl.style.display = hasImg ? 'block' : 'none';
-
-  noteTa.value = annState.note;
-  if (annState.locked) {
-    noteLabel.textContent = T.catatanUmum;
-    noteTa.setAttribute('readonly', 'readonly');
-    actions.innerHTML = `<div class="ann-locked-note">${ANN_ICON_CHECK} ${escHtml(annState.lockedMsg || T.sudahDisetujui)}</div>`;
-  } else if (annState.readOnly) {
-    noteLabel.textContent = T.catatanUmum;
-    noteTa.setAttribute('readonly', 'readonly');
-    let btnsHtml = '';
-    if (annState.onMarkRead) btnsHtml += `<button class="ann-abtn read" onclick="annMarkRead()">${ANN_ICON_CHECK} ${T.tandaiDibaca}</button>`;
-    if (annState.onUploadRevision) btnsHtml += `<button class="ann-abtn revise" onclick="annTriggerUploadRevision()">${ANN_ICON_UPLOAD} ${T.kirimRevisiBaru}</button>`;
-    actions.innerHTML = btnsHtml;
-  } else {
-    noteLabel.textContent = T.catatanUmumOpsional;
-    noteTa.removeAttribute('readonly');
-    actions.innerHTML = `
-      <button class="ann-abtn approve" onclick="annSubmitApproval()">${ANN_ICON_CHECK} ${T.approve}</button>
-      <button class="ann-abtn revise" onclick="annSubmitRevision()">${ANN_ICON_FLAG} ${T.kirimRevisi}</button>`;
-  }
-
-  if (hasImg) {
-    hintChip.innerHTML = (annState.readOnly || annState.locked)
-      ? `${ANN_ICON_PINCH} ${T.hintReadonly}`
-      : `${ANN_ICON_DRAG} ${T.hintEdit}`;
-    hintChip.style.opacity = '1';
-    clearTimeout(annState._hintTimer);
-    annState._hintTimer = setTimeout(() => { if (hintChip) hintChip.style.opacity = '0'; }, 4500);
-    annLoadImage(annState.imgSrc);
-  } else {
-    annRenderList();
-  }
-}
-
-function annSetTool(tool) {
-  if (!annState) return;
-  annState.tool = tool;
-  const drawBtn = document.getElementById('ann-tool-draw');
-  const panBtn = document.getElementById('ann-tool-pan');
-  if (drawBtn) drawBtn.classList.toggle('active', tool === 'draw');
-  if (panBtn) panBtn.classList.toggle('active', tool === 'pan');
-  const stageWrap = document.getElementById('ann-stage-wrap');
-  if (stageWrap) stageWrap.classList.toggle('pan-mode', tool === 'pan');
-}
-
-function annRenderTaskNav() {
-  const nav = annState && annState.taskNav; if (!nav) return;
-  const el = document.getElementById('ann-tasknav'); if (!el) return;
-  const lang = (annState && annState.lang) || 'id';
-  const T = ANN_T[lang], SL = PORTAL_STATUS_LABEL[lang];
-  const localeStr = lang === 'en' ? 'en-US' : 'id-ID';
-
-  // Sidebar ini nunjukin RIWAYAT REVISI task yang lagi dibuka (Revisi 1, 2, dst) — bukan daftar task lain,
-  // biar klien gak bingung ngirain task lain itu bagian dari revisi task ini.
-  const itemsHtml = (nav.rounds || []).slice().reverse().map(r => {
-    const active = r.key === nav.activeKey;
-    const isCurrent = r.key === 'current';
-    const dateStr = r.sentAt ? new Date(r.sentAt).toLocaleDateString(localeStr, { day: 'numeric', month: 'short' }) : '';
-    const label = (lang === 'en' ? 'Revision ' : 'Revisi ') + r.num + (isCurrent ? (lang === 'en' ? ' (latest)' : ' (terbaru)') : '');
-    return `<div class="ann-tasknav-item ${active ? 'active' : ''}" onclick="${nav.onSelectRound}('${nav.taskId}', '${r.key}')">
-      <div class="ann-tasknav-item-name">${label}</div>
-      <div style="display:flex;align-items:center;gap:6px">
-        ${dateStr ? `<span style="font-size:10px;color:var(--muted)">${dateStr}</span>` : ''}
-        <span class="badge" style="font-size:9.5px;padding:2px 6px">${SL[r.status] || r.status}</span>
-      </div>
-    </div>`;
-  }).join('');
-  const greetName = nav.clientName || (lang === 'en' ? 'there' : 'Klien');
-  el.innerHTML = `
-    <div class="ann-tasknav-greet">Hi, ${escHtml(greetName)}</div>
-    <div class="ann-tasknav-tasklabel">${escHtml(nav.taskName || '')}</div>
-    <div class="ann-tasknav-sublabel">${T.riwayat}</div>
-    <div class="ann-tasknav-list">${itemsHtml}</div>
-    <div class="ann-tasknav-foot">
-      ${nav.onInvoice ? `<button class="btn btn-secondary btn-sm" onclick="${nav.onInvoice}()">${lang === 'en' ? 'View Invoice' : 'Cek Invoice'}</button>` : ''}
-      ${nav.onHome ? `<button class="btn btn-ghost btn-sm" onclick="${nav.onHome}()">${lang === 'en' ? 'Home' : 'Home'}</button>` : ''}
-    </div>`;
-}
-
-function annLoadImage(src) {
-  const img = document.getElementById('ann-img');
-  const svg = document.getElementById('ann-svg');
-  img.onload = () => {
-    if (!annState) return;
-    annState.naturalW = img.naturalWidth;
-    annState.naturalH = img.naturalHeight;
-    const stage = document.getElementById('ann-stage');
-    stage.style.width = annState.naturalW + 'px';
-    stage.style.height = annState.naturalH + 'px';
-    img.style.width = annState.naturalW + 'px';
-    img.style.height = annState.naturalH + 'px';
-    svg.setAttribute('viewBox', `0 0 ${annState.naturalW} ${annState.naturalH}`);
-    annFitToView();
-    annRenderStrokes();
-    annRenderList();
-  };
-  img.src = src;
-}
-
-function annFitToView() {
-  if (!annState) return;
-  const wrap = document.getElementById('ann-stage-wrap');
-  const rect = wrap.getBoundingClientRect();
-  const pad = 24;
-  // Dulu di-cap max 1x (gak boleh upscale) → gambar kecil jadi keliatan mini di tengah dengan banyak area kosong.
-  // Sekarang gambar SELALU dibesarkan/dikecilkan biar penuh mengisi area viewer waktu pertama dibuka (kayak preview foto),
-  // baru abis itu klien/owner bebas pinch/scroll buat zoom in-out & geser lihat detail.
-  let z = Math.min((rect.width - pad * 2) / annState.naturalW, (rect.height - pad * 2) / annState.naturalH, 6);
-  if (!isFinite(z) || z <= 0) z = 1;
-  annState.zoom = z;
-  annState.panX = (rect.width - annState.naturalW * z) / 2;
-  annState.panY = (rect.height - annState.naturalH * z) / 2;
-  annApplyTransform();
-}
-
-function annApplyTransform() {
-  if (!annState) return;
-  const stage = document.getElementById('ann-stage');
-  stage.style.transform = `translate(${annState.panX}px, ${annState.panY}px) scale(${annState.zoom})`;
-  document.getElementById('ann-zoom-pct').textContent = Math.round(annState.zoom * 100) + '%';
-}
-
-function annZoom(delta, cx, cy) {
-  if (!annState || !annState.naturalW) return;
-  const wrap = document.getElementById('ann-stage-wrap');
-  const rect = wrap.getBoundingClientRect();
-  if (cx == null) { cx = rect.width / 2; cy = rect.height / 2; }
-  const natX = (cx - annState.panX) / annState.zoom;
-  const natY = (cy - annState.panY) / annState.zoom;
-  const newZoom = Math.min(6, Math.max(0.15, annState.zoom + delta));
-  annState.panX = cx - natX * newZoom;
-  annState.panY = cy - natY * newZoom;
-  annState.zoom = newZoom;
-  annApplyTransform();
-}
-function annResetView() { annFitToView(); }
-
-function annClientToLocal(clientX, clientY) {
-  const stage = document.getElementById('ann-stage');
-  const r = stage.getBoundingClientRect();
-  return [(clientX - r.left) / annState.zoom, (clientY - r.top) / annState.zoom];
-}
-function annClientToWrap(clientX, clientY) {
-  const wrap = document.getElementById('ann-stage-wrap');
-  const r = wrap.getBoundingClientRect();
-  return [clientX - r.left, clientY - r.top];
-}
-
-function annNextColor() { return ANN_PALETTE[annState.annotations.length % ANN_PALETTE.length]; }
-
-function annRenderStrokes(includeTemp) {
-  if (!annState) return;
-  const svg = document.getElementById('ann-svg');
-  const sw = Math.max(3, (annState.naturalW || 800) / 280);
-  const pinR = Math.max(11, (annState.naturalW || 800) / 55);
-  let html = '';
-  annState.annotations.forEach((a, i) => {
-    const pts = a.points.map(pt => pt.join(',')).join(' ');
-    html += `<polyline points="${pts}" fill="none" stroke="${a.color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"/>`;
-    const start = a.points[0];
-    html += `<g><circle cx="${start[0]}" cy="${start[1]}" r="${pinR}" fill="${a.color}" stroke="#fff" stroke-width="${pinR/6}"/><text x="${start[0]}" y="${start[1]}" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="${pinR}" font-weight="700" font-family="sans-serif">${i + 1}</text></g>`;
-  });
-  if (includeTemp && annState.curPoints && annState.curPoints.length > 1) {
-    const pts = annState.curPoints.map(pt => pt.join(',')).join(' ');
-    html += `<polyline points="${pts}" fill="none" stroke="${annState.curColor}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round"/>`;
-  }
-  svg.innerHTML = html;
-}
-
-function annRenderList() {
-  const listEl = document.getElementById('ann-list');
-  annUpdateSidebarToggleLabel();
-  if (!annState || !annState.imgSrc) { listEl.innerHTML = ''; return; }
-  const T = ANN_T[annState.lang || 'id'];
-  if (!annState.annotations.length) {
-    listEl.innerHTML = `<div class="ann-empty-hint">${annState.readOnly ? T.tidakAdaCoretan : T.belumAdaCoretan}</div>`;
-    return;
-  }
-  listEl.innerHTML = annState.annotations.map((a, i) => `
-    <div class="ann-item">
-      <div class="ann-pin" style="background:${a.color}">${i + 1}</div>
-      <div class="ann-item-body">
-        <div class="ann-item-toprow">
-          <span class="ann-item-label">${T.coretanN(i + 1)}</span>
-          ${annState.readOnly ? '' : `<button class="ann-item-del" onclick="annDeleteAnnotation('${a.id}')" title="Hapus">${ANN_ICON_TRASH}</button>`}
-        </div>
-        ${annState.readOnly
-          ? `<p>${a.comment ? escHtml(a.comment) : `<span style="color:var(--muted)">${T.tanpaCatatan}</span>`}</p>`
-          : `<textarea rows="2" placeholder="${T.placeholderItem}" oninput="annUpdateComment('${a.id}', this.value)">${escHtml(a.comment)}</textarea>`}
-      </div>
-    </div>`).join('');
-}
-
-// Buka/tutup panel catatan & coretan di HP — canvas gambar tetep full di layar, panel cuma muncul saat dibutuhkan.
-function annToggleSidebar(forceOpen) {
-  const sb = document.getElementById('ann-sidebar');
-  const icon = document.getElementById('ann-sidebar-toggle-icon');
-  if (!sb) return;
-  const open = forceOpen !== undefined ? forceOpen : sb.classList.contains('collapsed');
-  sb.classList.toggle('collapsed', !open);
-  if (icon) icon.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
-}
-function annUpdateSidebarToggleLabel() {
-  const label = document.getElementById('ann-sidebar-toggle-label');
-  if (!label || !annState) return;
-  const T = ANN_T[annState.lang || 'id'];
-  const n = annState.annotations.length;
-  label.textContent = n ? `${T.lihatCatatan} (${n})` : T.lihatCatatan;
-}
-
-// Dipanggil dari tombol "Kirim Revisi Baru" saat owner lagi liat feedback/coretan klien —
-// bisa langsung upload versi baru dari layar yang sama, gak perlu keluar dulu.
-function annTriggerUploadRevision() {
-  if (!annState || !annState.onUploadRevision) return;
-  annState.onUploadRevision();
-}
-
-function annOpenHistoryModal() {
-  if (!annState) return;
-  historyModalTaskId = null;
-  const refreshBtn = document.getElementById('history-refresh-btn');
-  if (refreshBtn) refreshBtn.style.display = 'none';
-  const current = annState.getCurrentRound ? annState.getCurrentRound() : null;
-  renderHistoryModal(annState.history || [], annState.lang || 'id', current);
-}
-function annUpdateComment(id, val) {
-  const a = annState.annotations.find(x => x.id === id);
-  if (a) a.comment = val;
-}
-function annDeleteAnnotation(id) {
-  annState.annotations = annState.annotations.filter(a => a.id !== id);
-  annRenderStrokes(); annRenderList();
-}
-function annUndo() {
-  if (!annState || !annState.annotations.length) return;
-  annState.annotations.pop();
-  annRenderStrokes(); annRenderList();
-}
-
-// ── Interaksi gestur: gambar (default), geser (Space+drag / tombol tengah / 2 jari), zoom (scroll / cubit) ──
-function annPointerDown(e) {
-  if (!annState || !annState.imgSrc) return;
-  if (e.target.closest('.ann-tool-dock')) return; // biar klik tombol dock (gambar/geser/undo) gak ke-capture jadi gesture kanvas
-  const wrap = document.getElementById('ann-stage-wrap');
-  if (wrap.setPointerCapture && e.pointerId != null) { try { wrap.setPointerCapture(e.pointerId); } catch (_) {} }
-  annState.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
-  if (annState.pointers.size >= 2) {
-    annState.isDrawing = false; annState.curPoints = null;
-    annState.isPanning = false;
-    annState.isPinching = true;
-    const pts = Array.from(annState.pointers.values());
-    const [p1, p2] = pts;
-    const [wx, wy] = annClientToWrap((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
-    annState._pinchDist0 = Math.hypot(p2.x - p1.x, p2.y - p1.y) || 1;
-    annState._pinchZoom0 = annState.zoom;
-    annState._pinchNat0 = [(wx - annState.panX) / annState.zoom, (wy - annState.panY) / annState.zoom];
-    annRenderStrokes();
-    return;
-  }
-
-  // Read-only / locked (POV owner lihat hasil, atau desain sudah approved) → drag selalu geser.
-  // Mode edit: geser hanya kalau tool "pan" lagi aktif (tombol tangan di dock alat), selain itu = gambar.
-  const isPanTrigger = annState.readOnly || annState.locked || annState.tool === 'pan' || e.button === 1 || e.button === 2;
-  if (isPanTrigger) {
-    annState.isPanning = true;
-    annState._panStartX = e.clientX; annState._panStartY = e.clientY;
-    annState._origPanX = annState.panX; annState._origPanY = annState.panY;
-    wrap.classList.add('panning');
-  } else {
-    annState.isDrawing = true;
-    annState.curColor = annNextColor();
-    annState.curPoints = [annClientToLocal(e.clientX, e.clientY)];
-    annRenderStrokes(true);
-  }
-  e.preventDefault();
-}
-function annPointerMove(e) {
-  if (!annState) return;
-  if (annState.pointers.has(e.pointerId)) annState.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
-  if (annState.isPinching && annState.pointers.size >= 2) {
-    const pts = Array.from(annState.pointers.values());
-    const [p1, p2] = pts;
-    const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y) || 1;
-    const [wx, wy] = annClientToWrap((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
-    const newZoom = Math.min(6, Math.max(0.15, annState._pinchZoom0 * (dist / annState._pinchDist0)));
-    annState.zoom = newZoom;
-    annState.panX = wx - annState._pinchNat0[0] * newZoom;
-    annState.panY = wy - annState._pinchNat0[1] * newZoom;
-    annApplyTransform();
-  } else if (annState.isPanning) {
-    annState.panX = annState._origPanX + (e.clientX - annState._panStartX);
-    annState.panY = annState._origPanY + (e.clientY - annState._panStartY);
-    annApplyTransform();
-  } else if (annState.isDrawing) {
-    annState.curPoints.push(annClientToLocal(e.clientX, e.clientY));
-    annRenderStrokes(true);
-  }
-}
-function annPointerUp(e) {
-  if (!annState) return;
-  annState.pointers.delete(e.pointerId);
-  const wrap = document.getElementById('ann-stage-wrap');
-
-  if (annState.isPinching) {
-    if (annState.pointers.size < 2) annState.isPinching = false;
-    return;
-  }
-  wrap.classList.remove('panning');
-  if (annState.isPanning) annState.isPanning = false;
-  if (annState.isDrawing) {
-    annState.isDrawing = false;
-    if (annState.curPoints && annState.curPoints.length > 1) {
-      annState.annotations.push({ id: 'a_' + Date.now() + Math.random().toString(36).slice(2, 6), color: annState.curColor, points: annState.curPoints, comment: '' });
-    }
-    annState.curPoints = null;
-    annRenderStrokes();
-    annRenderList();
-  }
-}
-function annWheel(e) {
-  if (!annState || !annState.imgSrc || !annState.naturalW) return;
-  e.preventDefault();
-  const wrap = document.getElementById('ann-stage-wrap');
-  const rect = wrap.getBoundingClientRect();
-  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
-  const natX = (cx - annState.panX) / annState.zoom;
-  const natY = (cy - annState.panY) / annState.zoom;
-  const delta = -e.deltaY * 0.0022;
-  const newZoom = Math.min(6, Math.max(0.15, annState.zoom * (1 + delta)));
-  annState.panX = cx - natX * newZoom;
-  annState.panY = cy - natY * newZoom;
-  annState.zoom = newZoom;
-  annApplyTransform();
-}
-(function annInitListeners() {
-  const wrap = document.getElementById('ann-stage-wrap');
-  if (!wrap) return;
-  wrap.addEventListener('pointerdown', annPointerDown);
-  window.addEventListener('pointermove', annPointerMove);
-  window.addEventListener('pointerup', annPointerUp);
-  window.addEventListener('pointercancel', annPointerUp);
-  wrap.addEventListener('wheel', annWheel, { passive: false });
-  wrap.addEventListener('contextmenu', e => { if (annState && annState.imgSrc) e.preventDefault(); });
-})();
-
-function closeAnnotator() {
-  document.getElementById('annotatorOverlay').classList.remove('show');
-  if (annState) clearTimeout(annState._hintTimer);
-  annState = null;
-}
-
-// Kasih feedback instan pas tombol Approve/Kirim Revisi diklik — biar kerasa "lagi proses", bukan diem/macet,
-// sekalian nyegah kepencet 2x (double submit) selama nunggu request ke server.
-function annSetActionsLoading(label) {
-  const actions = document.getElementById('ann-actions');
-  if (!actions || actions.dataset.loading === '1') return;
-  actions.dataset.loading = '1';
-  actions.dataset.prevHtml = actions.innerHTML;
-  actions.innerHTML = `<button class="ann-abtn" disabled style="opacity:.65;cursor:default">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> ${escHtml(label)}
-  </button>`;
-}
-function annRestoreActions() {
-  const actions = document.getElementById('ann-actions');
-  if (!actions || actions.dataset.loading !== '1') return;
-  actions.innerHTML = actions.dataset.prevHtml || '';
-  delete actions.dataset.loading;
-  delete actions.dataset.prevHtml;
-}
-
-function annSubmitApproval() {
-  if (!annState || !annState.onApprove || annState.locked) return;
-  const note = document.getElementById('ann-general-note').value.trim();
-  annSetActionsLoading(annState.lang === 'en' ? 'Sending...' : 'Mengirim...');
-  annState.onApprove({
-    fileId: annState.fileId, fileName: annState.fileName,
-    annotations: annState.annotations.map(a => ({ id: a.id, color: a.color, points: a.points, comment: a.comment || '' })),
-    note, at: new Date().toISOString(),
-  });
-}
-function annSubmitRevision() {
-  if (!annState || !annState.onRevision || annState.locked) return;
-  const note = document.getElementById('ann-general-note').value.trim();
-  if (!annState.annotations.length && !note) { toast('Tambahkan minimal 1 coretan atau catatan dulu ya', 'error'); return; }
-  annSetActionsLoading(annState.lang === 'en' ? 'Sending...' : 'Mengirim...');
-  annState.onRevision({
-    fileId: annState.fileId,
-    fileName: annState.fileName,
-    imageSrc: annState.imgSrc,
-    annotations: annState.annotations.map(a => ({ id: a.id, color: a.color, points: a.points, comment: a.comment || '' })),
-    note,
-    createdAt: new Date().toISOString(),
-  });
-}
-function annMarkRead() {
-  if (!annState || !annState.onMarkRead) return;
-  annState.onMarkRead();
-  closeAnnotator();
 }
 
 // ── DEBOUNCED SYNC ───────────────────────────────────
