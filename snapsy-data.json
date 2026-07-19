@@ -855,8 +855,8 @@
         }
       },
       "lastInvoice": {
-        "invNum": "SNP-DBKL11",
-        "invDate": "2026-07-15",
+        "invNum": "SNP-G87W0V",
+        "invDate": "2026-07-19",
         "payment": "",
         "note": "",
         "currency": "USD",
@@ -868,7 +868,7 @@
           "t_1783220328212"
         ],
         "isMulti": false,
-        "createdAt": "2026-07-15T22:10:09.516Z"
+        "createdAt": "2026-07-19T09:38:46.487Z"
       }
     }
   ],
@@ -3805,5 +3805,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-19T09:38:27.140Z"
+  "_savedAt": "2026-07-19T09:38:47.998Z"
 }
