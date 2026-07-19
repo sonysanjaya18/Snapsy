@@ -972,7 +972,8 @@
         }
       ],
       "previewSentAt": "2026-07-19T09:08:03.876Z",
-      "previewRespondedAt": null
+      "previewRespondedAt": null,
+      "previewLinkShared": true
     },
     {
       "id": "t_1782687269087",
@@ -3880,5 +3881,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-19T09:08:08.839Z"
+  "_savedAt": "2026-07-19T09:08:15.098Z"
 }
