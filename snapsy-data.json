@@ -974,7 +974,7 @@
       "name": "4x Social Media Size",
       "done": true,
       "price": "20",
-      "taskStatus": "invoiced",
+      "taskStatus": "done",
       "createdAt": "2026-06-29T01:58:40.938Z",
       "previewFileId": "f_1784414908626oenw6pfr23",
       "previewStatus": "needs_review",
@@ -3925,5 +3925,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-19T08:55:19.923Z"
+  "_savedAt": "2026-07-19T08:55:29.945Z"
 }
