@@ -3418,7 +3418,6 @@ async function sendTaskPreviewFile(taskId, file) {
     t.previewRespondedAt = null;
     ensurePortalActive(p);
     saveState();
-    ghScheduleSync();
     renderTasks(p.id);
 
     if (!hasViewableImage) {
@@ -3431,6 +3430,13 @@ async function sendTaskPreviewFile(taskId, file) {
       // Drive cuma buat nyimpen salinan file original di folder proyek, bukan syarat wajib buat kirim preview ke klien.
       console.warn('Upload ke Drive gagal/tidak tersambung — preview tetap dikirim pakai gambar lokal (base64).');
     }
+
+    // PENTING: tunggu push ke GitHub bener2 KELAR (bukan cuma di-debounce/dijadwalin) sebelum ngirim sinyal
+    // realtime ke klien. Kalau nembak sinyalnya duluan, klien bisa refresh & masih ketemu data LAMA
+    // (soalnya ghScheduleSync() itu nunda 1.5 detik dulu baru upload, belum tentu udah kelar).
+    await ghPushData();
+    fbNotifyClient(p.id, taskId, t.name); // sinyal realtime ke klien (best-effort, gak nge-block apapun kalau gagal)
+
     if (!t.previewLinkShared) {
       // Pertama kali kirim preview utk task ini → tampilkan link buat dibagikan ke klien
       t.previewLinkShared = true;
@@ -5978,7 +5984,7 @@ function fbStartOwnerListener() {
         snap.docChanges().forEach(change => {
           if (change.type !== 'added') return;
           const d = change.doc.data();
-          const lang = 'id';
+          if (d.from !== 'client') return; // ini sinyal dari owner sendiri (buat notif klien) — abaikan di sisi owner
           const isApproved = d.status === 'approved';
           toast((isApproved ? '✓ ' : '⚡ ') + (isApproved ? 'Klien approve' : 'Klien kirim revisi') + ` untuk "${d.taskName || ''}" — memuat...`, isApproved ? 'success' : 'info');
           ghSilentPull(); // tarik data asli (gambar+coretan+status) dari GitHub sesegera mungkin
@@ -5998,9 +6004,49 @@ async function fbNotifyOwner(projId, taskId, taskName, status) {
   try {
     const db = fbInit();
     if (!db) return;
-    await db.collection('notifications').add({ projId, taskId, taskName, status, at: Date.now() });
+    await db.collection('notifications').add({ projId, taskId, taskName, status, from: 'client', at: Date.now() });
   } catch (e) {
     console.warn('Gagal kirim notifikasi realtime (gak masalah, data utama tetep aman di GitHub):', e);
+  }
+}
+
+// OWNER SIDE: dipanggil abis owner sukses kirim preview/revisi baru ke task — kirim sinyal ke klien
+// (kalau kebetulan lagi buka portal-nya) biar mereka tau ada update tanpa perlu refresh manual.
+async function fbNotifyClient(projId, taskId, taskName) {
+  try {
+    const db = fbInit();
+    if (!db) return;
+    await db.collection('notifications').add({ projId, taskId, taskName, status: 'new_preview', from: 'owner', at: Date.now() });
+  } catch (e) {
+    console.warn('Gagal kirim notifikasi realtime ke klien (gak masalah, tetep ke-sync normal lewat GitHub):', e);
+  }
+}
+
+// KLIEN SIDE: dengerin notifikasi khusus proyek yang lagi dibuka klien ini. Begitu owner kirim
+// preview/revisi baru, langsung toast + kasih tombol muat ulang (gak dipaksa auto-refresh biar
+// gak ngerusak coretan yang lagi dikerjain klien kalau kebetulan lagi nyoret).
+let fbClientUnsub = null, fbClientListenerReady = false;
+function fbStartClientListener(pid) {
+  if (fbClientUnsub) { fbClientUnsub(); fbClientUnsub = null; }
+  const db = fbInit();
+  if (!db || !pid) return;
+  fbClientListenerReady = false;
+  try {
+    fbClientUnsub = db.collection('notifications').where('projId', '==', pid).limit(20)
+      .onSnapshot(snap => {
+        if (!fbClientListenerReady) { fbClientListenerReady = true; return; }
+        snap.docChanges().forEach(change => {
+          if (change.type !== 'added') return;
+          const d = change.doc.data();
+          if (d.from !== 'owner') return; // ini sinyal dari klien sendiri (buat notif owner) — abaikan di sisi klien
+          const studio = (portalCurCfg && portalCurCfg.studio) || 'Studio';
+          toast(`⚡ Ada preview baru dari ${studio} untuk "${d.taskName || ''}" — <a href="#" onclick="portalLoadAndRender('${d.taskId}');return false" style="text-decoration:underline;font-weight:700">muat ulang</a>`, 'info');
+        });
+      }, err => {
+        console.warn('Firestore client listener error:', err);
+      });
+  } catch (e) {
+    console.warn('Gagal mulai listener Firebase (klien):', e);
   }
 }
 
@@ -7485,7 +7531,7 @@ async function portalLoadAndRender(openTaskId) {
     portalCurTasks = (data.tasks || []).filter(t => t.projId === pid);
     portalCurClient = (data.clients || []).find(c => c.name === proj.client) || { name: proj.client };
     portalCurProj = proj; portalCurCfg = data.cfg || {};
-    if (data.cfg && data.cfg.firebaseConfig) window._portalFirebaseConfig = data.cfg.firebaseConfig;
+    if (data.cfg && data.cfg.firebaseConfig) { window._portalFirebaseConfig = data.cfg.firebaseConfig; fbStartClientListener(pid); }
 
     const jump = openTaskId || portalDeepLinkTaskId;
     portalDeepLinkTaskId = null;
