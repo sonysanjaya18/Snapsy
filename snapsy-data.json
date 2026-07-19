@@ -522,7 +522,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "ongoing",
       "startDate": "2026-06-09",
       "deadline": "2026-06-30",
       "notes": "",
@@ -2679,6 +2679,15 @@
           "respondedAt": "2026-07-18T22:58:20.920Z"
         }
       ]
+    },
+    {
+      "id": "t_1784452121867",
+      "projId": "p_1782687066050",
+      "name": "nbgkjk",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-19T09:08:41.867Z"
     }
   ],
   "files": [
@@ -3850,5 +3859,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-19T09:08:22.274Z"
+  "_savedAt": "2026-07-19T09:08:43.384Z"
 }
