@@ -1397,6 +1397,7 @@ body.portal-mode { overflow-x: hidden; }
         <div class="notif-bell-list" id="notif-bell-list"></div>
       </div>
     </div>
+    <span id="fb-live-badge" class="badge" style="display:none;cursor:pointer" onclick="openSetup()" title="Klik buat buka pengaturan Firebase"></span>
     <span id="authBadge" class="badge b-cancel">● Belum terhubung</span>
     <span id="gh-sync-badge" class="gh-sync-badge" style="display:none"></span>
     <button class="btn btn-ghost btn-sm" id="gh-disconnect-btn" onclick="ghDisconnect()" style="display:none;color:var(--muted)" title="Putuskan GitHub">
@@ -5953,7 +5954,9 @@ let fbApp = null, fbDb = null, fbUnsub = null, fbListenerReady = false;
 
 function fbGetConfig() {
   // Owner: dari cfg lokal. Portal klien: dari data.cfg yang di-fetch (di-set manual pas portal load).
-  return (typeof cfg !== 'undefined' && cfg && cfg.firebaseConfig) || window._portalFirebaseConfig || null;
+  const c = (typeof cfg !== 'undefined' && cfg && cfg.firebaseConfig) || window._portalFirebaseConfig || null;
+  if (!c) console.log('[Firebase] fbGetConfig: gak ketemu config sama sekali (cfg.firebaseConfig maupun window._portalFirebaseConfig kosong)');
+  return c;
 }
 
 function fbInit(explicitConfig) {
@@ -5971,10 +5974,21 @@ function fbInit(explicitConfig) {
 
 // OWNER SIDE: dengerin koleksi "notifications" secara realtime. Begitu ada dokumen baru masuk
 // (dari klien yang baru aja approve/revisi), langsung toast + refresh data asli dari GitHub.
+function fbSetLiveBadge(state, text) {
+  const el = document.getElementById('fb-live-badge');
+  if (!el) return;
+  if (state === 'hidden') { el.style.display = 'none'; return; }
+  el.style.display = 'inline-flex';
+  el.className = 'badge ' + (state === 'ok' ? 'b-paid' : state === 'error' ? 'b-cancel' : 'b-local');
+  el.textContent = text;
+}
+
 function fbStartOwnerListener() {
   if (fbUnsub) { fbUnsub(); fbUnsub = null; }
   const db = fbInit();
-  if (!db) return; // Firebase belum disetup — gapapa, tetep jalan normal pakai polling 15 detik
+  if (!db) { console.log('[Firebase] Belum disetup — pakai polling 15 detik biasa.'); fbSetLiveBadge('hidden'); return; }
+  console.log('[Firebase] Menyalakan listener realtime (owner)...');
+  fbSetLiveBadge('pending', '⚡ Menyambungkan...');
   fbListenerReady = false;
   try {
     fbUnsub = db.collection('notifications').orderBy('at', 'desc').limit(25)
@@ -5982,21 +5996,27 @@ function fbStartOwnerListener() {
         if (!fbListenerReady) {
           // Snapshot pertama = hydration data lama, bukan event baru — jangan di-toast-in semua.
           fbListenerReady = true;
+          console.log('[Firebase] Listener owner NYALA & tersambung ✓ (', snap.size, 'notif lama di-skip)');
+          fbSetLiveBadge('ok', '⚡ Realtime aktif');
           return;
         }
+        console.log('[Firebase] Snapshot baru diterima, ', snap.docChanges().length, 'perubahan');
         snap.docChanges().forEach(change => {
           if (change.type !== 'added') return;
           const d = change.doc.data();
-          if (d.from !== 'client') return; // ini sinyal dari owner sendiri (buat notif klien) — abaikan di sisi owner
+          console.log('[Firebase] Dokumen baru:', d);
+          if (d.from !== 'client') { console.log('[Firebase] Diabaikan (from !== client)'); return; }
           const isApproved = d.status === 'approved';
           toast((isApproved ? '✓ ' : '⚡ ') + (isApproved ? 'Klien approve' : 'Klien kirim revisi') + ` untuk "${d.taskName || ''}" — memuat...`, isApproved ? 'success' : 'info');
           ghSilentPull(); // tarik data asli (gambar+coretan+status) dari GitHub sesegera mungkin
         });
       }, err => {
-        console.warn('Firestore listener error (cek Firestore Rules kalau ini muncul terus):', err);
+        console.warn('[Firebase] Listener error (cek Firestore Rules kalau ini muncul terus):', err);
+        fbSetLiveBadge('error', '⚡ Realtime error — cek console');
       });
   } catch (e) {
-    console.warn('Gagal mulai listener Firebase:', e);
+    console.warn('[Firebase] Gagal mulai listener:', e);
+    fbSetLiveBadge('error', '⚡ Realtime gagal — cek console');
   }
 }
 
@@ -6006,10 +6026,11 @@ function fbStartOwnerListener() {
 async function fbNotifyOwner(projId, taskId, taskName, status) {
   try {
     const db = fbInit();
-    if (!db) return;
+    if (!db) { console.log('[Firebase] (klien) Gak bisa notify owner — config Firebase gak ketemu di sisi portal. Cek: apakah cfg.firebaseConfig kesimpen & ke-sync di data JSON?'); return; }
     await db.collection('notifications').add({ projId, taskId, taskName, status, from: 'client', at: Date.now() });
+    console.log('[Firebase] (klien) Notifikasi ke owner berhasil dikirim ✓', { projId, taskId, taskName, status });
   } catch (e) {
-    console.warn('Gagal kirim notifikasi realtime (gak masalah, data utama tetep aman di GitHub):', e);
+    console.warn('[Firebase] (klien) Gagal kirim notifikasi realtime (gak masalah, data utama tetep aman di GitHub):', e);
   }
 }
 
@@ -6018,10 +6039,11 @@ async function fbNotifyOwner(projId, taskId, taskName, status) {
 async function fbNotifyClient(projId, taskId, taskName) {
   try {
     const db = fbInit();
-    if (!db) return;
+    if (!db) { console.log('[Firebase] (owner) Gak bisa notify klien — Firebase belum disetup di sisi owner.'); return; }
     await db.collection('notifications').add({ projId, taskId, taskName, status: 'new_preview', from: 'owner', at: Date.now() });
+    console.log('[Firebase] (owner) Notifikasi ke klien berhasil dikirim ✓');
   } catch (e) {
-    console.warn('Gagal kirim notifikasi realtime ke klien (gak masalah, tetep ke-sync normal lewat GitHub):', e);
+    console.warn('[Firebase] (owner) Gagal kirim notifikasi realtime ke klien (gak masalah, tetep ke-sync normal lewat GitHub):', e);
   }
 }
 
@@ -6032,12 +6054,13 @@ let fbClientUnsub = null, fbClientListenerReady = false;
 function fbStartClientListener(pid) {
   if (fbClientUnsub) { fbClientUnsub(); fbClientUnsub = null; }
   const db = fbInit();
-  if (!db || !pid) return;
+  if (!db || !pid) { console.log('[Firebase] (klien) Listener gak jalan — db:', !!db, 'pid:', pid); return; }
+  console.log('[Firebase] (klien) Menyalakan listener buat proyek', pid);
   fbClientListenerReady = false;
   try {
     fbClientUnsub = db.collection('notifications').where('projId', '==', pid).limit(20)
       .onSnapshot(snap => {
-        if (!fbClientListenerReady) { fbClientListenerReady = true; return; }
+        if (!fbClientListenerReady) { fbClientListenerReady = true; console.log('[Firebase] (klien) Listener NYALA & tersambung ✓'); return; }
         snap.docChanges().forEach(change => {
           if (change.type !== 'added') return;
           const d = change.doc.data();
@@ -6046,10 +6069,10 @@ function fbStartClientListener(pid) {
           toast(`⚡ Ada preview baru dari ${studio} untuk "${d.taskName || ''}" — <a href="#" onclick="portalLoadAndRender('${d.taskId}');return false" style="text-decoration:underline;font-weight:700">muat ulang</a>`, 'info');
         });
       }, err => {
-        console.warn('Firestore client listener error:', err);
+        console.warn('[Firebase] (klien) Listener error:', err);
       });
   } catch (e) {
-    console.warn('Gagal mulai listener Firebase (klien):', e);
+    console.warn('[Firebase] (klien) Gagal mulai listener:', e);
   }
 }
 
