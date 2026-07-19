@@ -1914,7 +1914,10 @@ service cloud.firestore {
   messagingSenderId: "...",
   appId: "..."
 }'></textarea></div>
-    <div id="fb-status" style="font-size:12px;margin-bottom:4px"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <button class="btn btn-secondary btn-xs" type="button" onclick="fbTestConnection()">Tes Koneksi</button>
+      <div id="fb-status" style="font-size:12px"></div>
+    </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('setupModal')">Batal</button>
       <button class="btn btn-primary" onclick="saveSetup()">Simpan</button>
@@ -6050,6 +6053,73 @@ function fbStartClientListener(pid) {
   }
 }
 
+// Firebase console ngasih snippet LENGKAP kayak "const firebaseConfig = { apiKey: ..., };" — bukan cuma objeknya doang.
+// Kalau user paste utuh gitu (yang paling umum kejadian), eval langsung bakal syntax error krn ada "const ... =" di depan.
+// Jadi di sini kita cari blok {...} yang balance (hitung buka-tutup kurung kurawal) dari string apapun yang di-paste,
+// abaikan semua teks lain di luar itu (const/var/let, komentar, titik koma, dll).
+function fbParseConfigInput(raw) {
+  const start = raw.indexOf('{');
+  if (start === -1) throw new Error('Gak ketemu tanda "{" — pastikan paste objek config-nya (boleh sekalian sama "const firebaseConfig = ...")');
+  let depth = 0, end = -1;
+  for (let i = start; i < raw.length; i++) {
+    if (raw[i] === '{') depth++;
+    else if (raw[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
+  }
+  if (end === -1) throw new Error('Kurung kurawal { } di config gak seimbang/gak lengkap');
+  const objLiteral = raw.slice(start, end + 1);
+  // Dibiarin lenient (eval, bukan JSON.parse ketat) krn key di objek asli Firebase gak dikutip (apiKey: bukan "apiKey":).
+  return new Function('return (' + objLiteral + ')')();
+}
+
+// Tes beneran nulis+baca 1 dokumen kecil ke Firestore — biar ketauan pasti kalau config/Rules-nya salah,
+// daripada diem2 gagal di background dan owner gak pernah tau notifikasi realtimenya idup apa nggak.
+// Pakai instance Firebase app TERPISAH (nama khusus) khusus buat tes ini, biar gak nyenggol/ke-mixed
+// sama app utama yang dipakai listener realtime (aman dites berkali-kali tanpa reload halaman).
+async function fbTestConnection() {
+  const statusEl = document.getElementById('fb-status');
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Menguji koneksi ke Firestore...';
+  let testConfig;
+  try {
+    testConfig = fbParseConfigInput(document.getElementById('s-fb-config').value.trim());
+  } catch (e) {
+    statusEl.style.color = 'var(--red)';
+    statusEl.textContent = '✗ ' + e.message;
+    return;
+  }
+  if (typeof firebase === 'undefined') {
+    statusEl.style.color = 'var(--red)';
+    statusEl.textContent = '✗ SDK Firebase belum ke-load (cek koneksi internet, lalu refresh halaman)';
+    return;
+  }
+  try {
+    const TEST_APP_NAME = 'snapsy-conn-test';
+    const existing = firebase.apps.find(a => a.name === TEST_APP_NAME);
+    if (existing) await existing.delete(); // beresin instance tes sebelumnya kalau ada, biar config terbaru yg kepake
+    const testApp = firebase.initializeApp(testConfig, TEST_APP_NAME);
+    const db = testApp.firestore();
+    const testDoc = await db.collection('notifications').add({ from: 'test', at: Date.now(), taskName: 'tes koneksi' });
+    await testDoc.get(); // pastikan bisa DIBACA balik juga (nguji Rules "read")
+    await testDoc.delete().catch(() => {}); // beres2, boleh gagal (Rules kita emang larang delete — gapapa, biarin aja)
+    await testApp.delete(); // buang instance tesnya, gak perlu nyangkut
+
+    statusEl.style.color = 'var(--green)';
+    statusEl.textContent = '✓ Berhasil! Firestore tersambung & Rules-nya benar. Klik "Simpan" di bawah biar aktif.';
+  } catch (e) {
+    statusEl.style.color = 'var(--red)';
+    const msg = (e && e.message) || String(e);
+    if (msg.toLowerCase().includes('permission')) {
+      statusEl.textContent = '✗ Ditolak izin (permission-denied) — cek lagi Firestore Rules-nya, pastikan udah di-Publish.';
+    } else if (msg.toLowerCase().includes('not been used') || msg.toLowerCase().includes('project') || msg.toLowerCase().includes('not-found')) {
+      statusEl.textContent = '✗ Project/Firestore belum aktif — pastikan udah bikin Firestore Database di project itu.';
+    } else if (msg.toLowerCase().includes('api key') || msg.toLowerCase().includes('invalid')) {
+      statusEl.textContent = '✗ apiKey/projectId kayaknya salah — cek lagi hasil copy dari Firebase console.';
+    } else {
+      statusEl.textContent = '✗ Gagal: ' + msg;
+    }
+  }
+}
+
 function openSetup() {
   document.getElementById('s-studio').value  = cfg.studio  || 'Snapsy Std.';
   document.getElementById('s-owner').value   = cfg.owner   || 'Sony Sanjaya';
@@ -6088,12 +6158,10 @@ function saveSetup() {
     cfg.firebaseConfig = null;
   } else {
     try {
-      // Dibiarin lenient (bukan JSON.parse ketat) krn orang biasanya copy-paste objek JS asli dari Firebase console
-      // (key-nya gak dikutip, ada trailing comma dll) — bukan JSON valid tapi tetep JS object literal yang sah.
-      const parsed = new Function('return (' + fbRaw + ')')();
+      const parsed = fbParseConfigInput(fbRaw);
       if (!parsed || !parsed.apiKey || !parsed.projectId) throw new Error('Config gak lengkap (minimal butuh apiKey & projectId)');
       cfg.firebaseConfig = parsed;
-      fbStatusEl.textContent = '✓ Firebase config tersimpan.';
+      fbStatusEl.textContent = '✓ Firebase config tersimpan. Klik "Tes Koneksi" buat mastiin beneran nyambung.';
       fbStatusEl.style.color = 'var(--green)';
     } catch (e) {
       toast('Format Firebase config gak valid: ' + e.message, 'error');
