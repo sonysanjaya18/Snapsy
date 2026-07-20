@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1784537732186",
+      "client": "Gabriela",
+      "name": "Richmond Winterfest",
+      "price": "10",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-20",
+      "deadline": "",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-20T08:55:32.186Z"
+    },
+    {
       "id": "p_1784001912520a66vpc3ji1a",
       "name": "Menu Design",
       "client": "Hamaza",
@@ -3815,5 +3830,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-20T08:49:15.948Z"
+  "_savedAt": "2026-07-20T08:55:33.696Z"
 }
