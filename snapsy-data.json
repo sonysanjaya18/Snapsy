@@ -6,7 +6,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "need-to-pay",
       "startDate": "2026-07-20",
       "deadline": "2026-07-22",
       "notes": "",
@@ -2718,9 +2718,9 @@
       "id": "t_1784537756552",
       "projId": "p_1784537732186",
       "name": "Screen Size",
-      "done": false,
+      "done": true,
       "price": "10",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-07-20T08:55:56.552Z"
     }
   ],
@@ -3858,5 +3858,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-20T23:57:09.939Z"
+  "_savedAt": "2026-07-20T23:59:54.697Z"
 }
