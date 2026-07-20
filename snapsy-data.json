@@ -3775,6 +3775,16 @@
   ],
   "withdrawals": [
     {
+      "id": "wd_1784537354427",
+      "date": "2026-07-20",
+      "amount": 226,
+      "rate": null,
+      "idrReceived": null,
+      "method": "BCA",
+      "note": "",
+      "createdAt": "2026-07-20T08:49:14.427Z"
+    },
+    {
       "id": "wd_1783591248210",
       "date": "2026-07-09",
       "amount": 44,
@@ -3805,5 +3815,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-20T02:32:44.189Z"
+  "_savedAt": "2026-07-20T08:49:15.948Z"
 }
