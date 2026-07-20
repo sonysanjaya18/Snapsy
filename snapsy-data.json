@@ -439,14 +439,6 @@
       "createdAt": "2026-06-30T06:14:20.321Z",
       "subfolders": [
         {
-          "id": "sf_1783294516500vtef",
-          "name": "Digital Screen",
-          "driveId": "1Cx1dvgsma2OvConu0IVtOf3J_Wq1npxH",
-          "driveLink": "https://drive.google.com/drive/folders/1Cx1dvgsma2OvConu0IVtOf3J_Wq1npxH",
-          "parentId": null,
-          "source": "synced"
-        },
-        {
           "id": "sf_1784591127556t8m2",
           "name": "03_FINAL",
           "driveId": "1T7U8S1tCqKHAc-nL7YZ-t4UuyxLnDDyj",
@@ -3866,5 +3858,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-20T23:45:37.242Z"
+  "_savedAt": "2026-07-20T23:46:20.730Z"
 }
