@@ -1,6 +1,17 @@
 {
   "projects": [
     {
+      "id": "p_1784620444443wmnmeh36et",
+      "name": "TLC",
+      "client": "Shahnee",
+      "price": 11,
+      "currency": "USD",
+      "status": "pending",
+      "startDate": "2026-07-21",
+      "deadline": "2026-07-28",
+      "notes": "From quotation QT-1URLS"
+    },
+    {
       "id": "p_1784537732186",
       "client": "Gabriela",
       "name": "Richmond Winterfest",
@@ -2730,6 +2741,14 @@
       "price": "10",
       "taskStatus": "done",
       "createdAt": "2026-07-20T08:55:56.552Z"
+    },
+    {
+      "id": "tk_1784620444443ed0cxqewl2v",
+      "projId": "p_1784620444443wmnmeh36et",
+      "name": "TLC",
+      "price": 11,
+      "done": false,
+      "taskStatus": "todo"
     }
   ],
   "files": [
@@ -3780,28 +3799,6 @@
   ],
   "quotations": [
     {
-      "id": "qt_1784597963480jf58o2fj0h",
-      "num": "QT-1URLS",
-      "clientName": "Shahnee",
-      "phone": "",
-      "email": "",
-      "currency": "USD",
-      "notes": "",
-      "validUntil": "2026-07-28",
-      "status": "pending",
-      "createdAt": "2026-07-21",
-      "items": [
-        {
-          "name": "TLC",
-          "qty": 1,
-          "price": 11,
-          "desc": "",
-          "printMeta": null
-        }
-      ],
-      "total": 11
-    },
-    {
       "id": "qt_1784001600134o2ux7zpn51h",
       "num": "QT-SNYO6",
       "clientName": "Hamaza",
@@ -3888,5 +3885,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-21T07:54:01.133Z"
+  "_savedAt": "2026-07-21T07:54:10.468Z"
 }
