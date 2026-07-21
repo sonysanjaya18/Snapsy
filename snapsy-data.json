@@ -6,7 +6,7 @@
       "client": "Shahnee",
       "price": 11,
       "currency": "USD",
-      "status": "pending",
+      "status": "need-work",
       "startDate": "2026-07-21",
       "deadline": "2026-07-28",
       "notes": "From quotation QT-1URLS"
@@ -2741,14 +2741,6 @@
       "price": "10",
       "taskStatus": "done",
       "createdAt": "2026-07-20T08:55:56.552Z"
-    },
-    {
-      "id": "tk_1784620444443ed0cxqewl2v",
-      "projId": "p_1784620444443wmnmeh36et",
-      "name": "TLC",
-      "price": 11,
-      "done": false,
-      "taskStatus": "todo"
     }
   ],
   "files": [
@@ -3885,5 +3877,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-21T07:54:10.468Z"
+  "_savedAt": "2026-07-21T07:54:17.459Z"
 }
