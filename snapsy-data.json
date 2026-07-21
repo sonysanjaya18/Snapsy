@@ -976,6 +976,14 @@
       "email": "",
       "status": "on-quotation",
       "currency": "USD"
+    },
+    {
+      "id": "c_1784597963480hqwo50f9ul",
+      "name": "Shahnee",
+      "phone": "",
+      "email": "",
+      "status": "on-quotation",
+      "currency": "USD"
     }
   ],
   "tasks": [
@@ -3772,6 +3780,28 @@
   ],
   "quotations": [
     {
+      "id": "qt_1784597963480jf58o2fj0h",
+      "num": "QT-1URLS",
+      "clientName": "Shahnee",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "notes": "",
+      "validUntil": "2026-07-28",
+      "status": "pending",
+      "createdAt": "2026-07-21",
+      "items": [
+        {
+          "name": "Menu Design",
+          "qty": 1,
+          "price": 11,
+          "desc": "",
+          "printMeta": null
+        }
+      ],
+      "total": 11
+    },
+    {
       "id": "qt_1784001600134o2ux7zpn51h",
       "num": "QT-SNYO6",
       "clientName": "Hamaza",
@@ -3858,5 +3888,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-21T00:01:25.649Z"
+  "_savedAt": "2026-07-21T01:39:24.988Z"
 }
