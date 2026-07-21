@@ -17,9 +17,9 @@
     },
     {
       "id": "p_1784001912520a66vpc3ji1a",
-      "name": "Menu Design",
+      "name": "BBQ Bros",
       "client": "Hamaza",
-      "price": 11,
+      "price": "11",
       "currency": "USD",
       "status": "need-to-pay",
       "startDate": "2026-07-14",
@@ -3888,5 +3888,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-21T01:41:47.872Z"
+  "_savedAt": "2026-07-21T01:42:20.223Z"
 }
