@@ -6,14 +6,27 @@
       "name": "Menu Design Update",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "need-to-pay",
       "startDate": "2026-07-21",
       "deadline": "2026-07-22",
       "notes": "",
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-22T01:22:38.300Z"
+      "createdAt": "2026-07-22T01:22:38.300Z",
+      "lastInvoice": {
+        "invNum": "SNP-EG34YF",
+        "invDate": "2026-07-22",
+        "payment": "https://www.paypal.me/sonysanjaya18",
+        "note": "",
+        "currency": "USD",
+        "total": 11,
+        "taskIds": [
+          "t_1784683369926"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-22T01:23:06.382Z"
+      }
     },
     {
       "id": "p_1784620444443wmnmeh36et",
@@ -2770,9 +2783,9 @@
       "id": "t_1784683369926",
       "projId": "p_1784683358300",
       "name": "Spudhole Menu Update",
-      "done": false,
+      "done": true,
       "price": "11",
-      "taskStatus": "todo",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-22T01:22:49.926Z"
     }
   ],
@@ -3925,5 +3938,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-22T01:23:00.760Z"
+  "_savedAt": "2026-07-22T01:23:07.909Z"
 }
