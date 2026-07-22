@@ -41,7 +41,7 @@
       "client": "Shahnee",
       "price": 11,
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-07-21",
       "deadline": "2026-07-28",
       "notes": "From quotation QT-1URLS",
@@ -60,7 +60,8 @@
           "parentId": null,
           "driveLink": "https://drive.google.com/drive/folders/1eDQMo22E4NcDKB4Qv1nBZMaAVyzXHGyO"
         }
-      ]
+      ],
+      "paidAt": "2026-07-22T23:08:48.584Z"
     },
     {
       "id": "p_1784537732186",
@@ -2799,7 +2800,7 @@
       "name": "Menu Design",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "paid",
       "createdAt": "2026-07-21T07:54:25.842Z"
     },
     {
@@ -4020,5 +4021,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-22T23:08:36.398Z"
+  "_savedAt": "2026-07-22T23:08:50.094Z"
 }
