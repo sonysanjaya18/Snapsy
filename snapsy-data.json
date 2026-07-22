@@ -6,7 +6,7 @@
       "name": "Menu Design Update",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-07-21",
       "deadline": "2026-07-22",
       "notes": "",
@@ -32,7 +32,8 @@
         "Final-Menu spudhole - Update 080726.pdf": "1dEfHjTmP-nmcr2m4iVcHD5QmK4JGfKDA"
       },
       "localSyncedFolders": {},
-      "subfolders": []
+      "subfolders": [],
+      "paidAt": "2026-07-22T23:08:25.299Z"
     },
     {
       "id": "p_1784620444443wmnmeh36et",
@@ -2807,7 +2808,7 @@
       "name": "Spudhole Menu Update",
       "done": true,
       "price": "11",
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "createdAt": "2026-07-22T01:22:49.926Z"
     }
   ],
@@ -4019,5 +4020,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-22T23:08:18.010Z"
+  "_savedAt": "2026-07-22T23:08:26.808Z"
 }
