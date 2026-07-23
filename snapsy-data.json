@@ -2835,6 +2835,15 @@
       "price": "11",
       "taskStatus": "paid",
       "createdAt": "2026-07-22T01:22:49.926Z"
+    },
+    {
+      "id": "t_1784766682011",
+      "projId": "p_1784766677052",
+      "name": "Sign Design",
+      "done": false,
+      "price": "11",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-23T00:31:22.011Z"
     }
   ],
   "files": [
@@ -4045,5 +4054,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T00:31:19.591Z"
+  "_savedAt": "2026-07-23T00:31:29.742Z"
 }
