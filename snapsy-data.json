@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1784766677052",
+      "client": "Harry",
+      "name": "Sign Design",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-22",
+      "deadline": "2026-07-23",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-23T00:31:17.052Z"
+    },
+    {
       "id": "p_1784683358300",
       "client": "Mahmoud",
       "name": "Menu Design Update",
@@ -4030,5 +4045,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T00:30:47.518Z"
+  "_savedAt": "2026-07-23T00:31:19.591Z"
 }
