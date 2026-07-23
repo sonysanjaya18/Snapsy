@@ -2815,7 +2815,7 @@
       "projId": "p_1784537732186",
       "name": "Screen Size",
       "done": true,
-      "price": "10",
+      "price": "5",
       "taskStatus": "done",
       "createdAt": "2026-07-20T08:55:56.552Z"
     },
@@ -4064,5 +4064,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T03:01:35.169Z"
+  "_savedAt": "2026-07-23T03:02:04.219Z"
 }
