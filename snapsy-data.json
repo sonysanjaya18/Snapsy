@@ -6,7 +6,7 @@
       "name": "Sign Design",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "ongoing",
       "startDate": "2026-07-22",
       "deadline": "2026-07-23",
       "notes": "",
@@ -2842,7 +2842,7 @@
       "name": "Sign Design",
       "done": false,
       "price": "11",
-      "taskStatus": "todo",
+      "taskStatus": "inprogress",
       "createdAt": "2026-07-23T00:31:22.011Z"
     }
   ],
@@ -4054,5 +4054,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T00:31:29.742Z"
+  "_savedAt": "2026-07-23T00:31:41.412Z"
 }
