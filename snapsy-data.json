@@ -2851,7 +2851,7 @@
       "projId": "p_1784537732186",
       "name": "2x EDM Design",
       "done": false,
-      "price": "10",
+      "price": "16",
       "taskStatus": "todo",
       "createdAt": "2026-07-23T03:00:27.103Z"
     }
@@ -4064,5 +4064,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T03:00:31.972Z"
+  "_savedAt": "2026-07-23T03:00:38.875Z"
 }
