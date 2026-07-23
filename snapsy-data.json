@@ -99,7 +99,7 @@
       "client": "Hamaza",
       "price": "11",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-07-14",
       "deadline": "2026-07-23",
       "notes": "From quotation QT-SNYO6",
@@ -129,7 +129,8 @@
         "BBQ BROS-Menu Design 780x910mm.pdf": "1GhlIUN7UgW4pNdwMAQKbNI4FdSSdgZSZ"
       },
       "localSyncedFolders": {},
-      "subfolders": []
+      "subfolders": [],
+      "paidAt": "2026-07-23T02:59:59.315Z"
     },
     {
       "id": "p_1783490938548",
@@ -2399,7 +2400,7 @@
       "name": "Menu Design",
       "price": 11,
       "done": true,
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "previewFileId": "f_1784416746055e22md96w0f4",
       "previewStatus": "needs_review",
       "previewAnnotations": [],
@@ -4054,5 +4055,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T02:59:55.896Z"
+  "_savedAt": "2026-07-23T03:00:05.498Z"
 }
