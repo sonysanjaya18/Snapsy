@@ -971,6 +971,15 @@
   ],
   "clients": [
     {
+      "id": "c_1784766645994",
+      "name": "Harry",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-07-23T00:30:45.994Z"
+    },
+    {
       "id": "c_1783490912579",
       "name": "Mahmoud",
       "phone": "",
@@ -4021,5 +4030,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-22T23:08:50.094Z"
+  "_savedAt": "2026-07-23T00:30:47.518Z"
 }
