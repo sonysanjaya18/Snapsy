@@ -84,7 +84,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "ongoing",
       "startDate": "2026-07-20",
       "deadline": "2026-07-22",
       "notes": "",
@@ -2845,6 +2845,15 @@
       "price": "11",
       "taskStatus": "inprogress",
       "createdAt": "2026-07-23T00:31:22.011Z"
+    },
+    {
+      "id": "t_1784775627103",
+      "projId": "p_1784537732186",
+      "name": "2x EDM Design",
+      "done": false,
+      "price": "10",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-23T03:00:27.103Z"
     }
   ],
   "files": [
@@ -4055,5 +4064,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-23T03:00:22.977Z"
+  "_savedAt": "2026-07-23T03:00:31.972Z"
 }
