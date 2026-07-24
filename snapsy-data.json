@@ -2841,9 +2841,9 @@
       "id": "t_1784766682011",
       "projId": "p_1784766677052",
       "name": "Sign Design",
-      "done": false,
+      "done": true,
       "price": "11",
-      "taskStatus": "review",
+      "taskStatus": "done",
       "createdAt": "2026-07-23T00:31:22.011Z"
     },
     {
@@ -2879,7 +2879,7 @@
       "name": "Add On Menu",
       "done": false,
       "price": "6",
-      "taskStatus": "todo",
+      "taskStatus": "review",
       "createdAt": "2026-07-24T04:41:40.279Z"
     }
   ],
@@ -4151,5 +4151,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T04:42:36.959Z"
+  "_savedAt": "2026-07-24T04:42:49.630Z"
 }
