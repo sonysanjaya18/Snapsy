@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1784871374650",
+      "client": "George",
+      "name": "Nonna Marias Pasta",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-23",
+      "deadline": "2026-07-24",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-24T05:36:14.650Z"
+    },
+    {
       "id": "p_1784766677052",
       "client": "Harry",
       "name": "Sign Design",
@@ -4151,5 +4166,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T05:35:47.932Z"
+  "_savedAt": "2026-07-24T05:36:17.320Z"
 }
