@@ -2860,7 +2860,7 @@
       "projId": "p_1784537732186",
       "name": "Upload And Schedule EDM",
       "done": false,
-      "price": "0",
+      "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-07-24T04:40:23.642Z"
     }
@@ -4073,5 +4073,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T04:40:25.800Z"
+  "_savedAt": "2026-07-24T04:40:35.119Z"
 }
