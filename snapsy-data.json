@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1784871544841",
+      "client": "Racha",
+      "name": "Compli Brand",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-24",
+      "deadline": "2026-07-25",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-24T05:39:04.841Z"
+    },
+    {
       "id": "p_1784871374650",
       "client": "George",
       "name": "Nonna Marias Pasta",
@@ -4183,5 +4198,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T05:37:16.915Z"
+  "_savedAt": "2026-07-24T05:39:06.351Z"
 }
