@@ -84,7 +84,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "ongoing",
+      "status": "revision",
       "startDate": "2026-07-20",
       "deadline": "2026-07-22",
       "notes": "",
@@ -2850,18 +2850,18 @@
       "id": "t_1784775627103",
       "projId": "p_1784537732186",
       "name": "2x EDM Design",
-      "done": false,
+      "done": true,
       "price": "16",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-07-23T03:00:27.103Z"
     },
     {
       "id": "t_1784868023642",
       "projId": "p_1784537732186",
       "name": "Upload And Schedule EDM",
-      "done": false,
+      "done": true,
       "price": "15",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-07-24T04:40:23.642Z"
     },
     {
@@ -2870,7 +2870,7 @@
       "name": "2 Size Free Zone",
       "done": false,
       "price": "10",
-      "taskStatus": "todo",
+      "taskStatus": "review",
       "createdAt": "2026-07-24T04:40:36.427Z"
     },
     {
@@ -4151,5 +4151,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T04:45:14.145Z"
+  "_savedAt": "2026-07-24T04:45:22.241Z"
 }
