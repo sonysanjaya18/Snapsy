@@ -2878,7 +2878,7 @@
       "projId": "p_1784766677052",
       "name": "Add On Menu",
       "done": false,
-      "price": "",
+      "price": "6",
       "taskStatus": "todo",
       "createdAt": "2026-07-24T04:41:40.279Z"
     }
@@ -4136,5 +4136,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T04:41:42.455Z"
+  "_savedAt": "2026-07-24T04:41:50.438Z"
 }
