@@ -6,7 +6,7 @@
       "name": "Nonna Marias Pasta",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-07-23",
       "deadline": "2026-07-24",
       "notes": "",
@@ -2896,6 +2896,15 @@
       "price": "6",
       "taskStatus": "review",
       "createdAt": "2026-07-24T04:41:40.279Z"
+    },
+    {
+      "id": "t_1784871382068",
+      "projId": "p_1784871374650",
+      "name": "Menu Sign",
+      "done": false,
+      "price": "11",
+      "taskStatus": "review",
+      "createdAt": "2026-07-24T05:36:22.068Z"
     }
   ],
   "files": [
@@ -4166,5 +4175,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T05:36:17.320Z"
+  "_savedAt": "2026-07-24T05:36:26.794Z"
 }
