@@ -2863,6 +2863,15 @@
       "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-07-24T04:40:23.642Z"
+    },
+    {
+      "id": "t_1784868036427",
+      "projId": "p_1784537732186",
+      "name": "2 Size Free Zone",
+      "done": false,
+      "price": "10",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-24T04:40:36.427Z"
     }
   ],
   "files": [
@@ -4073,5 +4082,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T04:40:35.119Z"
+  "_savedAt": "2026-07-24T04:40:41.069Z"
 }
