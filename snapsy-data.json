@@ -2928,6 +2928,15 @@
       "price": "11",
       "taskStatus": "review",
       "createdAt": "2026-07-24T05:36:22.068Z"
+    },
+    {
+      "id": "t_1784871572771",
+      "projId": "p_1784871544841",
+      "name": "4x Cover Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-24T05:39:32.771Z"
     }
   ],
   "files": [
@@ -4243,5 +4252,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T05:39:15.776Z"
+  "_savedAt": "2026-07-24T05:39:34.281Z"
 }
