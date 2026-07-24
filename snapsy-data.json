@@ -25,10 +25,12 @@
       "startDate": "2026-07-22",
       "deadline": "2026-07-23",
       "notes": "",
-      "driveRootId": null,
-      "driveCliId": null,
-      "driveProjId": null,
-      "createdAt": "2026-07-23T00:31:17.052Z"
+      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
+      "driveCliId": "1euI5dLRk6WiiB85AakNGa_cEsO9CvWVR",
+      "driveProjId": "1cir4ez_i3o-HSvaavMmuN95YWod5AAuF",
+      "createdAt": "2026-07-23T00:31:17.052Z",
+      "localSynced": {},
+      "localSyncedFolders": {}
     },
     {
       "id": "p_1784683358300",
@@ -4175,5 +4177,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T05:36:40.053Z"
+  "_savedAt": "2026-07-24T05:36:47.420Z"
 }
