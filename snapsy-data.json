@@ -84,7 +84,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "need-to-pay",
       "startDate": "2026-07-20",
       "deadline": "2026-07-22",
       "notes": "",
@@ -2868,9 +2868,9 @@
       "id": "t_1784868036427",
       "projId": "p_1784537732186",
       "name": "2 Size Free Zone",
-      "done": false,
+      "done": true,
       "price": "10",
-      "taskStatus": "review",
+      "taskStatus": "done",
       "createdAt": "2026-07-24T04:40:36.427Z"
     },
     {
@@ -4151,5 +4151,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-24T04:45:44.320Z"
+  "_savedAt": "2026-07-24T05:35:47.932Z"
 }
