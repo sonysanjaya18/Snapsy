@@ -2937,6 +2937,15 @@
       "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-07-25T04:08:36.732Z"
+    },
+    {
+      "id": "t_1784969813927",
+      "projId": "p_1784537732186",
+      "name": "3 Size Free Zone",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-25T08:56:53.927Z"
     }
   ],
   "files": [
@@ -4252,5 +4261,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-25T08:56:46.398Z"
+  "_savedAt": "2026-07-25T08:56:55.439Z"
 }
