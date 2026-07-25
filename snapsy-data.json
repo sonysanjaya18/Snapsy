@@ -6,7 +6,7 @@
       "name": "Compli Brand",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "ongoing",
       "startDate": "2026-07-24",
       "deadline": "2026-07-25",
       "notes": "",
@@ -2935,7 +2935,7 @@
       "name": "4x Cover Design",
       "done": false,
       "price": "25",
-      "taskStatus": "todo",
+      "taskStatus": "inprogress",
       "createdAt": "2026-07-24T05:39:32.771Z"
     },
     {
@@ -4261,5 +4261,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-25T08:56:25.719Z"
+  "_savedAt": "2026-07-25T08:56:37.888Z"
 }
