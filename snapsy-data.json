@@ -2903,15 +2903,6 @@
       "createdAt": "2026-07-24T04:40:23.642Z"
     },
     {
-      "id": "t_1784868036427",
-      "projId": "p_1784537732186",
-      "name": "2 Size Free Zone",
-      "done": true,
-      "price": "10",
-      "taskStatus": "done",
-      "createdAt": "2026-07-24T04:40:36.427Z"
-    },
-    {
       "id": "t_1784868100279",
       "projId": "p_1784766677052",
       "name": "Add On Menu",
@@ -4261,5 +4252,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-25T08:56:37.888Z"
+  "_savedAt": "2026-07-25T08:56:46.398Z"
 }
