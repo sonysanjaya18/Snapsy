@@ -122,7 +122,7 @@
       "name": "Richmond Winterfest",
       "price": "",
       "currency": "USD",
-      "status": "ongoing",
+      "status": "need-to-pay",
       "startDate": "2026-07-20",
       "deadline": "2026-07-22",
       "notes": "",
@@ -2933,18 +2933,18 @@
       "id": "t_1784952516732",
       "projId": "p_1784537732186",
       "name": "Free Activities Flyer",
-      "done": false,
+      "done": true,
       "price": "15",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-07-25T04:08:36.732Z"
     },
     {
       "id": "t_1784969813927",
       "projId": "p_1784537732186",
       "name": "3 Size Free Zone",
-      "done": false,
-      "price": "",
-      "taskStatus": "todo",
+      "done": true,
+      "price": "15",
+      "taskStatus": "done",
       "createdAt": "2026-07-25T08:56:53.927Z"
     }
   ],
@@ -4261,5 +4261,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-25T08:56:55.439Z"
+  "_savedAt": "2026-07-25T08:57:04.965Z"
 }
