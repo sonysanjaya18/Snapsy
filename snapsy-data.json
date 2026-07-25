@@ -36,7 +36,7 @@
       "name": "Sign Design",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "need-to-pay",
       "startDate": "2026-07-22",
       "deadline": "2026-07-23",
       "notes": "",
@@ -2906,9 +2906,9 @@
       "id": "t_1784868100279",
       "projId": "p_1784766677052",
       "name": "Add On Menu",
-      "done": false,
+      "done": true,
       "price": "6",
-      "taskStatus": "review",
+      "taskStatus": "paid",
       "createdAt": "2026-07-24T04:41:40.279Z"
     },
     {
@@ -4261,5 +4261,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-25T08:57:22.908Z"
+  "_savedAt": "2026-07-25T08:57:34.879Z"
 }
