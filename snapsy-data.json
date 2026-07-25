@@ -36,7 +36,7 @@
       "name": "Sign Design",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-07-22",
       "deadline": "2026-07-23",
       "notes": "",
@@ -51,7 +51,8 @@
         "CUTLINE-Front Sign_230726.pdf": "1YuU7STpFPqav9EWioSzn-d1Hv6noRWcW"
       },
       "localSyncedFolders": {},
-      "subfolders": []
+      "subfolders": [],
+      "paidAt": "2026-07-25T08:57:42.313Z"
     },
     {
       "id": "p_1784683358300",
@@ -2881,7 +2882,7 @@
       "name": "Sign Design",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "paid",
       "createdAt": "2026-07-23T00:31:22.011Z"
     },
     {
@@ -4261,5 +4262,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-25T08:57:34.879Z"
+  "_savedAt": "2026-07-25T08:57:48.947Z"
 }
