@@ -2304,7 +2304,7 @@
       "projId": "p_1782800060321",
       "name": "Digital Menu Update",
       "done": true,
-      "price": "33",
+      "price": "16",
       "taskStatus": "invoiced",
       "createdAt": "2026-06-30T06:14:41.150Z"
     },
@@ -4370,5 +4370,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-26T22:54:53.894Z"
+  "_savedAt": "2026-07-26T22:59:38.001Z"
 }
