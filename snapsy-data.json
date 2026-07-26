@@ -555,7 +555,7 @@
       "name": "Sammy Digital Menu",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "need-to-pay",
       "startDate": "2026-06-30",
       "deadline": "2026-07-01",
       "notes": "",
@@ -602,6 +602,19 @@
           "driveLink": "https://drive.google.com/drive/folders/1WZreP5bNUWdKrqEi5HjbOZPONFWkcaLI",
           "name": "Digital Screen"
         }
+      },
+      "lastInvoice": {
+        "invNum": "SNP-0R88Y5",
+        "invDate": "2026-07-26",
+        "payment": "https://www.paypal.me/sonysanjaya18",
+        "note": "",
+        "currency": "USD",
+        "total": 33,
+        "taskIds": [
+          "t_1782800081150"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-26T22:54:29.007Z"
       }
     },
     {
@@ -2290,9 +2303,9 @@
       "id": "t_1782800081150",
       "projId": "p_1782800060321",
       "name": "Digital Menu Update",
-      "done": false,
+      "done": true,
       "price": "33",
-      "taskStatus": "review",
+      "taskStatus": "invoiced",
       "createdAt": "2026-06-30T06:14:41.150Z"
     },
     {
@@ -4357,5 +4370,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-26T22:54:20.391Z"
+  "_savedAt": "2026-07-26T22:54:43.425Z"
 }
