@@ -588,7 +588,7 @@
       "name": "Sammy Digital Menu",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-06-30",
       "deadline": "2026-07-01",
       "notes": "",
@@ -648,7 +648,8 @@
         ],
         "isMulti": false,
         "createdAt": "2026-07-26T22:59:41.691Z"
-      }
+      },
+      "paidAt": "2026-07-27T23:31:17.442Z"
     },
     {
       "id": "p_1782711026659",
@@ -4418,5 +4419,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-27T22:07:53.520Z"
+  "_savedAt": "2026-07-27T23:31:18.947Z"
 }
