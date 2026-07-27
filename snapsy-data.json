@@ -2985,6 +2985,15 @@
       "price": "15",
       "taskStatus": "invoiced",
       "createdAt": "2026-07-25T08:56:53.927Z"
+    },
+    {
+      "id": "t_1785131328696",
+      "projId": "p_1784871374650",
+      "name": "2x Menu Sign",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-27T05:48:48.696Z"
     }
   ],
   "files": [
@@ -4387,5 +4396,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-27T05:48:38.877Z"
+  "_savedAt": "2026-07-27T05:48:50.201Z"
 }
