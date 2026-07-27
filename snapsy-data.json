@@ -28,7 +28,20 @@
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-24T05:36:14.650Z"
+      "createdAt": "2026-07-24T05:36:14.650Z",
+      "lastInvoice": {
+        "invNum": "SNP-7MUK6T",
+        "invDate": "2026-07-27",
+        "payment": "https://www.paypal.me/sonysanjaya18",
+        "note": "",
+        "currency": "USD",
+        "total": 22,
+        "taskIds": [
+          "t_1785131328696"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-27T05:49:15.635Z"
+      }
     },
     {
       "id": "p_1784766677052",
@@ -2983,7 +2996,7 @@
       "name": "2x Menu Sign",
       "done": true,
       "price": "22",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-27T05:48:48.696Z"
     }
   ],
@@ -4387,5 +4400,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-27T05:49:12.708Z"
+  "_savedAt": "2026-07-27T05:49:24.627Z"
 }
