@@ -6,14 +6,15 @@
       "name": "Compli Brand",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-07-24",
       "deadline": "2026-07-25",
       "notes": "",
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-24T05:39:04.841Z"
+      "createdAt": "2026-07-24T05:39:04.841Z",
+      "paidAt": "2026-07-27T22:07:52.014Z"
     },
     {
       "id": "p_1784871374650",
@@ -4417,5 +4418,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-27T21:55:52.700Z"
+  "_savedAt": "2026-07-27T22:07:53.520Z"
 }
