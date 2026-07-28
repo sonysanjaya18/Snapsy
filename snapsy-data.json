@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1785199624911",
+      "client": "George",
+      "name": "Nonna Marias",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-28",
+      "deadline": "2026-07-29",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-28T00:47:04.911Z"
+    },
+    {
       "id": "p_1784871544841",
       "client": "Racha",
       "name": "Compli Brand",
@@ -4419,5 +4434,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-27T23:31:18.947Z"
+  "_savedAt": "2026-07-28T00:47:07.844Z"
 }
