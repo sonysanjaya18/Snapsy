@@ -3017,6 +3017,15 @@
       "price": "22",
       "taskStatus": "paid",
       "createdAt": "2026-07-27T05:48:48.696Z"
+    },
+    {
+      "id": "t_1785199635852",
+      "projId": "p_1785199624911",
+      "name": "2 Poster Design",
+      "done": false,
+      "price": "22",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-28T00:47:15.852Z"
     }
   ],
   "files": [
@@ -4434,5 +4443,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-28T00:47:07.844Z"
+  "_savedAt": "2026-07-28T00:47:19.991Z"
 }
