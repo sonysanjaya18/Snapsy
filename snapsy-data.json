@@ -3042,6 +3042,15 @@
       "price": "22",
       "taskStatus": "paid",
       "createdAt": "2026-07-28T00:47:15.852Z"
+    },
+    {
+      "id": "t_1785276400396",
+      "projId": "p_1785276380686",
+      "name": "Menu Design-Fast Track",
+      "done": false,
+      "price": "16",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-28T22:06:40.396Z"
     }
   ],
   "files": [
@@ -4459,5 +4468,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-28T22:06:34.563Z"
+  "_savedAt": "2026-07-28T22:06:45.522Z"
 }
