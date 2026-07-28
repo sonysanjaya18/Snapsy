@@ -6,14 +6,15 @@
       "name": "Nonna Marias",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "paid",
       "startDate": "2026-07-28",
       "deadline": "2026-07-29",
       "notes": "",
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-28T00:47:04.911Z"
+      "createdAt": "2026-07-28T00:47:04.911Z",
+      "paidAt": "2026-07-28T09:52:22.215Z"
     },
     {
       "id": "p_1784871544841",
@@ -3022,9 +3023,9 @@
       "id": "t_1785199635852",
       "projId": "p_1785199624911",
       "name": "2 Poster Design",
-      "done": false,
+      "done": true,
       "price": "22",
-      "taskStatus": "todo",
+      "taskStatus": "paid",
       "createdAt": "2026-07-28T00:47:15.852Z"
     }
   ],
@@ -4443,5 +4444,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-28T00:47:19.991Z"
+  "_savedAt": "2026-07-28T09:52:23.726Z"
 }
