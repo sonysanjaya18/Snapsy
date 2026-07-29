@@ -15,17 +15,17 @@
       "driveProjId": null,
       "createdAt": "2026-07-29T03:16:21.934Z",
       "lastInvoice": {
-        "invNum": "SNP-46F97Z",
+        "invNum": "SNP-ANZTMC",
         "invDate": "2026-07-29",
         "payment": "https://www.paypal.me/sonysanjaya18",
         "note": "",
         "currency": "USD",
-        "total": 16,
+        "total": 11,
         "taskIds": [
           "t_1785294997165"
         ],
         "isMulti": false,
-        "createdAt": "2026-07-29T23:45:14.977Z"
+        "createdAt": "2026-07-29T23:45:47.785Z"
       }
     },
     {
@@ -4594,5 +4594,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-29T23:45:43.645Z"
+  "_savedAt": "2026-07-29T23:46:01.895Z"
 }
