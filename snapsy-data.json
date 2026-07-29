@@ -21,7 +21,7 @@
       "name": "Teelish",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "need-to-pay",
       "startDate": "2026-07-28",
       "deadline": "2026-07-29",
       "notes": "",
@@ -3071,9 +3071,9 @@
       "id": "t_1785276400396",
       "projId": "p_1785276380686",
       "name": "Menu Design-Fast Track",
-      "done": false,
+      "done": true,
       "price": "16",
-      "taskStatus": "review",
+      "taskStatus": "done",
       "createdAt": "2026-07-28T22:06:40.396Z"
     },
     {
@@ -4501,5 +4501,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-29T03:56:25.351Z"
+  "_savedAt": "2026-07-29T03:56:36.368Z"
 }
