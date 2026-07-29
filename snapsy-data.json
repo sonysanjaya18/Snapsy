@@ -3116,7 +3116,7 @@
       "projId": "p_1785294981934",
       "name": "Menu Poster",
       "done": true,
-      "price": "16",
+      "price": "11",
       "taskStatus": "invoiced",
       "createdAt": "2026-07-29T03:16:37.165Z"
     }
@@ -4594,5 +4594,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-29T23:45:22.755Z"
+  "_savedAt": "2026-07-29T23:45:43.645Z"
 }
