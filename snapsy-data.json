@@ -1112,6 +1112,15 @@
   ],
   "clients": [
     {
+      "id": "c_1785294944042",
+      "name": "Joan",
+      "phone": "",
+      "email": "",
+      "currency": "USD",
+      "status": "aktif",
+      "createdAt": "2026-07-29T03:15:44.042Z"
+    },
+    {
       "id": "c_1784766645994",
       "name": "Harry",
       "phone": "",
@@ -4468,5 +4477,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-29T03:15:33.421Z"
+  "_savedAt": "2026-07-29T03:15:45.548Z"
 }
