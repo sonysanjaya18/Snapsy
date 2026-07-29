@@ -6,14 +6,27 @@
       "name": "Callis Grill",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "need-to-pay",
       "startDate": "2026-07-29",
       "deadline": "2026-07-30",
       "notes": "",
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-29T03:16:21.934Z"
+      "createdAt": "2026-07-29T03:16:21.934Z",
+      "lastInvoice": {
+        "invNum": "SNP-46F97Z",
+        "invDate": "2026-07-29",
+        "payment": "https://www.paypal.me/sonysanjaya18",
+        "note": "",
+        "currency": "USD",
+        "total": 16,
+        "taskIds": [
+          "t_1785294997165"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-07-29T23:45:14.977Z"
+      }
     },
     {
       "id": "p_1785276380686",
@@ -3102,9 +3115,9 @@
       "id": "t_1785294997165",
       "projId": "p_1785294981934",
       "name": "Menu Poster",
-      "done": false,
+      "done": true,
       "price": "16",
-      "taskStatus": "todo",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-29T03:16:37.165Z"
     }
   ],
@@ -4581,5 +4594,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-29T23:45:09.314Z"
+  "_savedAt": "2026-07-29T23:45:22.755Z"
 }
