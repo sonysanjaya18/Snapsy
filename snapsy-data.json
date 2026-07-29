@@ -3075,6 +3075,15 @@
       "price": "16",
       "taskStatus": "review",
       "createdAt": "2026-07-28T22:06:40.396Z"
+    },
+    {
+      "id": "t_1785294997165",
+      "projId": "p_1785294981934",
+      "name": "Menu Poster",
+      "done": false,
+      "price": "16",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-29T03:16:37.165Z"
     }
   ],
   "files": [
@@ -4492,5 +4501,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-29T03:16:36.499Z"
+  "_savedAt": "2026-07-29T03:16:45.299Z"
 }
