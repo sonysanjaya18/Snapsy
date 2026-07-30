@@ -6,14 +6,15 @@
       "name": "Tama",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "paid",
       "startDate": "2026-07-30",
       "deadline": "2026-07-31",
       "notes": "",
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-07-30T01:54:59.504Z"
+      "createdAt": "2026-07-30T01:54:59.504Z",
+      "paidAt": "2026-07-30T07:15:22.115Z"
     },
     {
       "id": "p_1785373993139",
@@ -3178,9 +3179,9 @@
       "id": "t_1785376678855",
       "projId": "p_1785376499504",
       "name": "Menu Design",
-      "done": false,
+      "done": true,
       "price": "11",
-      "taskStatus": "review",
+      "taskStatus": "paid",
       "createdAt": "2026-07-30T01:57:58.855Z"
     }
   ],
@@ -4715,5 +4716,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T07:15:20.280Z"
+  "_savedAt": "2026-07-30T07:15:31.492Z"
 }
