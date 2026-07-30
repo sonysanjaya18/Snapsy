@@ -6,7 +6,7 @@
       "name": "Tama",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-07-30",
       "deadline": "2026-07-31",
       "notes": "",
@@ -3173,7 +3173,7 @@
       "name": "Menu Design",
       "done": false,
       "price": "11",
-      "taskStatus": "todo",
+      "taskStatus": "review",
       "createdAt": "2026-07-30T01:57:58.855Z"
     }
   ],
@@ -4679,5 +4679,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T04:32:00.804Z"
+  "_savedAt": "2026-07-30T04:32:24.292Z"
 }
