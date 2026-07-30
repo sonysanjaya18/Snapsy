@@ -3166,6 +3166,15 @@
       "price": "15",
       "taskStatus": "inprogress",
       "createdAt": "2026-07-30T01:13:22.766Z"
+    },
+    {
+      "id": "t_1785376678855",
+      "projId": "p_1785376499504",
+      "name": "Menu Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-07-30T01:57:58.855Z"
     }
   ],
   "files": [
@@ -4670,5 +4679,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T01:55:02.294Z"
+  "_savedAt": "2026-07-30T01:58:00.361Z"
 }
