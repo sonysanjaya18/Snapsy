@@ -6,7 +6,7 @@
       "name": "Disurpt X",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "ongoing",
       "startDate": "2026-07-29",
       "deadline": "2026-07-30",
       "notes": "Canva Projek",
@@ -3142,6 +3142,15 @@
       "price": "11",
       "taskStatus": "invoiced",
       "createdAt": "2026-07-29T03:16:37.165Z"
+    },
+    {
+      "id": "t_1785374002766",
+      "projId": "p_1785373993139",
+      "name": "One Pager Design",
+      "done": false,
+      "price": "15",
+      "taskStatus": "inprogress",
+      "createdAt": "2026-07-30T01:13:22.766Z"
     }
   ],
   "files": [
@@ -4646,5 +4655,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T01:13:14.662Z"
+  "_savedAt": "2026-07-30T01:13:38.909Z"
 }
