@@ -4676,6 +4676,16 @@
   ],
   "withdrawals": [
     {
+      "id": "wd_1785395773109",
+      "date": "2026-07-30",
+      "amount": 218,
+      "rate": 17500,
+      "idrReceived": 3815000,
+      "method": "https://www.paypal.me/sonysanjaya18",
+      "note": "",
+      "createdAt": "2026-07-30T07:16:13.110Z"
+    },
+    {
       "id": "wd_1784537354427",
       "date": "2026-07-20",
       "amount": 226,
@@ -4716,5 +4726,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T07:15:31.492Z"
+  "_savedAt": "2026-07-30T07:16:14.621Z"
 }
