@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1785373993139",
+      "client": "Gabriela",
+      "name": "Disurpt X",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-07-29",
+      "deadline": "2026-07-30",
+      "notes": "Canva Projek",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-07-30T01:13:13.139Z"
+    },
+    {
       "id": "p_1785294981934",
       "client": "Joan",
       "name": "Callis Grill",
@@ -4631,5 +4646,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T00:57:43.657Z"
+  "_savedAt": "2026-07-30T01:13:14.662Z"
 }
