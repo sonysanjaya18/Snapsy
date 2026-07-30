@@ -3172,7 +3172,7 @@
       "projId": "p_1785376499504",
       "name": "Menu Design",
       "done": false,
-      "price": "",
+      "price": "11",
       "taskStatus": "todo",
       "createdAt": "2026-07-30T01:57:58.855Z"
     }
@@ -4679,5 +4679,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-07-30T01:58:00.361Z"
+  "_savedAt": "2026-07-30T01:58:17.076Z"
 }
