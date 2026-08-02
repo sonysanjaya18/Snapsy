@@ -3198,6 +3198,15 @@
       "price": "11",
       "taskStatus": "paid",
       "createdAt": "2026-07-30T01:57:58.855Z"
+    },
+    {
+      "id": "t_1785712165797",
+      "projId": "p_1785712152562",
+      "name": "Bossman in Belmore Flyer",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-08-02T23:09:25.797Z"
     }
   ],
   "files": [
@@ -4741,5 +4750,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-02T23:09:14.070Z"
+  "_savedAt": "2026-08-02T23:09:27.317Z"
 }
