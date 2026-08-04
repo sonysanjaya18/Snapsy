@@ -6,14 +6,32 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "ongoing",
+      "status": "need-work",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
-      "driveRootId": null,
-      "driveCliId": null,
-      "driveProjId": null,
-      "createdAt": "2026-08-02T23:09:12.562Z"
+      "driveRootId": "13xn_oSFlUgz0v2q3CVbb_orQpJuUJvZ6",
+      "driveCliId": "1IVx_vR9Nxuszth95pn6_yRKAscCuz4To",
+      "driveProjId": "1aSu-KAwo0oBQfp8AGOUbabIEZAnMU6Vx",
+      "createdAt": "2026-08-02T23:09:12.562Z",
+      "localSynced": {},
+      "localSyncedFolders": {
+        "_Flyer": {
+          "driveId": "1_wtykqrV7GSbdTvuBjrV5fOohmR0lHwT",
+          "driveLink": "https://drive.google.com/drive/folders/1_wtykqrV7GSbdTvuBjrV5fOohmR0lHwT",
+          "name": "_Flyer"
+        }
+      },
+      "subfolders": [
+        {
+          "id": "sf_178581603183596m5",
+          "name": "_Flyer",
+          "driveId": "1_wtykqrV7GSbdTvuBjrV5fOohmR0lHwT",
+          "driveLink": "https://drive.google.com/drive/folders/1_wtykqrV7GSbdTvuBjrV5fOohmR0lHwT",
+          "parentId": null,
+          "source": "synced"
+        }
+      ]
     },
     {
       "id": "p_1785376499504",
@@ -52,7 +70,7 @@
       "name": "Callis Grill",
       "price": "",
       "currency": "USD",
-      "status": "paid",
+      "status": "need-to-pay",
       "startDate": "2026-07-29",
       "deadline": "2026-07-30",
       "notes": "",
@@ -80,8 +98,7 @@
           "driveId": "1Tl7Qg_wwdzq_BLnt7UOUV0tj5pV1OKVf",
           "parentId": null
         }
-      ],
-      "paidAt": "2026-08-04T03:57:03.977Z"
+      ]
     },
     {
       "id": "p_1785276380686",
@@ -3179,7 +3196,7 @@
       "name": "Menu Poster",
       "done": true,
       "price": "11",
-      "taskStatus": "paid",
+      "taskStatus": "invoiced",
       "createdAt": "2026-07-29T03:16:37.165Z"
     },
     {
@@ -3204,19 +3221,10 @@
       "id": "t_1785712165797",
       "projId": "p_1785712152562",
       "name": "Bossman in Belmore Flyer",
-      "done": true,
-      "price": "15",
-      "taskStatus": "done",
-      "createdAt": "2026-08-02T23:09:25.797Z"
-    },
-    {
-      "id": "t_1785815855823",
-      "projId": "p_1785712152562",
-      "name": "4x Social Media Siza",
       "done": false,
-      "price": "20",
+      "price": "15",
       "taskStatus": "todo",
-      "createdAt": "2026-08-04T03:57:35.823Z"
+      "createdAt": "2026-08-02T23:09:25.797Z"
     }
   ],
   "files": [
@@ -4760,5 +4768,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-04T03:58:07.346Z"
+  "_savedAt": "2026-08-04T04:00:32.215Z"
 }
