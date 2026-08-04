@@ -19,7 +19,10 @@
         "_Source/Belmore Foodfest-04 August 2026/Bossman in Belmore.ai": "1hSvlP_uLmkxM7P4bkf3NPTnW6HOyoiKT",
         "_Source/Belmore Foodfest-04 August 2026/Links/ChatGPT Image 3 Agu 2026, 10.30.19.png": "1olqjeln2fL5wJzNcMbLZs_6q_zfB56kc",
         "_Source/Belmore Foodfest-04 August 2026/Links/Sydney olympic logo.jpeg": "1TC-DpR3u73pcm9ulP_c6cPBhtATNOJkO",
-        "_Source/Belmore Foodfest-04 August 2026/Fonts/bahnschrift.ttf": "1Gr9lM5KFq_BpuWOhCpdWCu7bRaPVRKVM"
+        "_Source/Belmore Foodfest-04 August 2026/Fonts/bahnschrift.ttf": "1Gr9lM5KFq_BpuWOhCpdWCu7bRaPVRKVM",
+        "_Source/Belmore Foodfest-04 August 2026/Fonts/Bestime.otf": "1tOGXkIXjEB8-Ek6F57u_wotH1YYz1HoI",
+        "_Source/Belmore Foodfest-04 August 2026/Fonts/Montserrat-SemiBold.ttf": "104hqWXOhUsIfn45zF47WMA3nnSGohaNt",
+        "_Source/Belmore Foodfest-04 August 2026/Fonts/Montserrat-ExtraBold.ttf": "1cNSRHrIiZWsCEtA1BVScuThBJVUTWgBX"
       },
       "localSyncedFolders": {
         "_Flyer": {
@@ -4801,6 +4804,51 @@
       "thumb": null,
       "thumbFull": null,
       "localFolder": "03_FINAL/_Source/Belmore Foodfest-04 August 2026/Fonts"
+    },
+    {
+      "id": "f_1785816058071oefmgz13dv",
+      "projId": "p_1785712152562",
+      "name": "Bestime.otf",
+      "size": 31624,
+      "type": "",
+      "status": "done",
+      "progress": 100,
+      "driveId": "1tOGXkIXjEB8-Ek6F57u_wotH1YYz1HoI",
+      "driveLink": "https://drive.google.com/file/d/1tOGXkIXjEB8-Ek6F57u_wotH1YYz1HoI/view?usp=drivesdk",
+      "subfolderRef": "sf_17858160521610ljp",
+      "thumb": null,
+      "thumbFull": null,
+      "localFolder": "03_FINAL/_Source/Belmore Foodfest-04 August 2026/Fonts"
+    },
+    {
+      "id": "f_1785816060482oivf8mlik4j",
+      "projId": "p_1785712152562",
+      "name": "Montserrat-SemiBold.ttf",
+      "size": 197964,
+      "type": "",
+      "status": "done",
+      "progress": 100,
+      "driveId": "104hqWXOhUsIfn45zF47WMA3nnSGohaNt",
+      "driveLink": "https://drive.google.com/file/d/104hqWXOhUsIfn45zF47WMA3nnSGohaNt/view?usp=drivesdk",
+      "subfolderRef": "sf_17858160521610ljp",
+      "thumb": null,
+      "thumbFull": null,
+      "localFolder": "03_FINAL/_Source/Belmore Foodfest-04 August 2026/Fonts"
+    },
+    {
+      "id": "f_1785816062136wegv8mf5d3k",
+      "projId": "p_1785712152562",
+      "name": "Montserrat-ExtraBold.ttf",
+      "size": 199276,
+      "type": "",
+      "status": "done",
+      "progress": 100,
+      "driveId": "1cNSRHrIiZWsCEtA1BVScuThBJVUTWgBX",
+      "driveLink": "https://drive.google.com/file/d/1cNSRHrIiZWsCEtA1BVScuThBJVUTWgBX/view?usp=drivesdk",
+      "subfolderRef": "sf_17858160521610ljp",
+      "thumb": null,
+      "thumbFull": null,
+      "localFolder": "03_FINAL/_Source/Belmore Foodfest-04 August 2026/Fonts"
     }
   ],
   "quotations": [
@@ -4901,5 +4949,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-04T04:00:57.235Z"
+  "_savedAt": "2026-08-04T04:01:17.526Z"
 }
