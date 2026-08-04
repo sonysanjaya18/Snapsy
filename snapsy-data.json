@@ -3214,7 +3214,7 @@
       "projId": "p_1785712152562",
       "name": "4x Social Media Siza",
       "done": false,
-      "price": "",
+      "price": "20",
       "taskStatus": "todo",
       "createdAt": "2026-08-04T03:57:35.823Z"
     }
@@ -4760,5 +4760,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-04T03:57:37.338Z"
+  "_savedAt": "2026-08-04T03:57:54.519Z"
 }
