@@ -6,7 +6,7 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "ongoing",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
@@ -3208,6 +3208,15 @@
       "price": "15",
       "taskStatus": "done",
       "createdAt": "2026-08-02T23:09:25.797Z"
+    },
+    {
+      "id": "t_1785815855823",
+      "projId": "p_1785712152562",
+      "name": "4x Social Media Siza",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-08-04T03:57:35.823Z"
     }
   ],
   "files": [
@@ -4751,5 +4760,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-04T03:57:24.625Z"
+  "_savedAt": "2026-08-04T03:57:37.338Z"
 }
