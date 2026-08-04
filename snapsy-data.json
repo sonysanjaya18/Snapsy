@@ -6,7 +6,7 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "need-to-pay",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
@@ -3204,9 +3204,9 @@
       "id": "t_1785712165797",
       "projId": "p_1785712152562",
       "name": "Bossman in Belmore Flyer",
-      "done": false,
+      "done": true,
       "price": "15",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-08-02T23:09:25.797Z"
     }
   ],
@@ -4751,5 +4751,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-04T03:57:12.741Z"
+  "_savedAt": "2026-08-04T03:57:24.625Z"
 }
