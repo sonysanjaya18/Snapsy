@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1785898829639",
+      "client": "Racha",
+      "name": "Compli Brand",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-08-04",
+      "deadline": "2026-08-06",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-08-05T03:00:29.640Z"
+    },
+    {
       "id": "p_1785712152562",
       "client": "Gabriela",
       "name": "Bosman in Belmore",
@@ -5037,5 +5052,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-05T02:59:48.169Z"
+  "_savedAt": "2026-08-05T03:00:31.150Z"
 }
