@@ -3293,6 +3293,15 @@
       "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-08-02T23:09:25.797Z"
+    },
+    {
+      "id": "t_1785898529527",
+      "projId": "p_1785712152562",
+      "name": "4x Social Media Sie",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-08-05T02:55:29.527Z"
     }
   ],
   "files": [
@@ -5027,5 +5036,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-05T02:47:54.376Z"
+  "_savedAt": "2026-08-05T02:55:31.038Z"
 }
