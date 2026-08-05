@@ -138,7 +138,7 @@
       "name": "Callis Grill",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-07-29",
       "deadline": "2026-07-30",
       "notes": "",
@@ -166,7 +166,8 @@
           "driveId": "1Tl7Qg_wwdzq_BLnt7UOUV0tj5pV1OKVf",
           "parentId": null
         }
-      ]
+      ],
+      "paidAt": "2026-08-05T02:59:21.468Z"
     },
     {
       "id": "p_1785276380686",
@@ -3264,7 +3265,7 @@
       "name": "Menu Poster",
       "done": true,
       "price": "11",
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "createdAt": "2026-07-29T03:16:37.165Z"
     },
     {
@@ -5036,5 +5037,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-05T02:56:53.999Z"
+  "_savedAt": "2026-08-05T02:59:23.999Z"
 }
