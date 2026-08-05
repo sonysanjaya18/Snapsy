@@ -3318,6 +3318,15 @@
       "price": "20",
       "taskStatus": "done",
       "createdAt": "2026-08-05T02:55:29.527Z"
+    },
+    {
+      "id": "t_1785898846833",
+      "projId": "p_1785898829639",
+      "name": "9x Social Media Feed",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-08-05T03:00:46.833Z"
     }
   ],
   "files": [
@@ -5052,5 +5061,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-05T03:00:31.150Z"
+  "_savedAt": "2026-08-05T03:00:48.349Z"
 }
