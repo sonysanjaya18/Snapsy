@@ -6,7 +6,7 @@
       "name": "Compli Brand",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "need-to-pay",
       "startDate": "2026-08-04",
       "deadline": "2026-08-06",
       "notes": "",
@@ -3323,9 +3323,9 @@
       "id": "t_1785898846833",
       "projId": "p_1785898829639",
       "name": "9x Social Media Feed",
-      "done": false,
+      "done": true,
       "price": "50",
-      "taskStatus": "review",
+      "taskStatus": "done",
       "createdAt": "2026-08-05T03:00:46.833Z"
     }
   ],
@@ -5179,5 +5179,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-06T02:49:16.423Z"
+  "_savedAt": "2026-08-07T04:33:53.708Z"
 }
