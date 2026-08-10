@@ -34,7 +34,7 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "invoice-sent",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
@@ -165,7 +165,7 @@
       "name": "Disurpt X",
       "price": "",
       "currency": "USD",
-      "status": "revision",
+      "status": "invoice-sent",
       "startDate": "2026-07-29",
       "deadline": "2026-07-30",
       "notes": "Canva Projek",
@@ -5219,5 +5219,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-10T01:47:17.994Z"
+  "_savedAt": "2026-08-10T01:47:41.834Z"
 }
