@@ -2921,9 +2921,9 @@ function renderMultiProjPicker() {
     updateMultiTotal(); return;
   }
 
-  const clientProjs = projects.filter(function(p){ return p.client === clientName; });
+  const clientProjs = projects.filter(function(p){ return p.client === clientName && p.status !== 'paid'; });
   if(!clientProjs.length) {
-    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:10px 0">Tidak ada proyek untuk klien ini.</div>';
+    el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:10px 0">Tidak ada proyek aktif untuk klien ini (semua sudah paid/lunas).</div>';
     updateMultiTotal(); return;
   }
 
