@@ -2187,6 +2187,76 @@ async function driveUpload(fileObj, folderId, onProgress) {
 }
 async function driveDelete(fileId) { return gapi.client.drive.files.delete({fileId}); }
 
+// ── THUMBNAIL STORAGE (IndexedDB) ──────────────────────
+// thumb/thumbFull (base64 JPEG) dulu disimpen bareng data lain di localStorage lewat
+// key 'ssy_files' — localStorage cuma muat ~5-10MB, jadi lama-lama numpuk dan bikin
+// QuotaExceededError begitu banyak file/gambar ke-upload. IndexedDB muat jauh lebih
+// besar (ratusan MB), jadi thumbnail dipindah ke sini. localStorage cuma nyimpen
+// data ringan (nama, size, status, dll) — lihat saveLocalOnly().
+function thumbDbOpen() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('snapsy-thumbs', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('thumbs');
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+async function thumbSet(id, val) {
+  try {
+    const db = await thumbDbOpen();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction('thumbs', 'readwrite');
+      tx.objectStore('thumbs').put(val, id);
+      tx.oncomplete = () => res(true);
+      tx.onerror = () => rej(tx.error);
+    });
+  } catch (e) { console.error('thumbSet gagal untuk', id, e); return false; }
+}
+async function thumbDelete(id) {
+  try {
+    const db = await thumbDbOpen();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction('thumbs', 'readwrite');
+      tx.objectStore('thumbs').delete(id);
+      tx.oncomplete = () => res(true);
+      tx.onerror = () => rej(tx.error);
+    });
+  } catch (e) { console.error('thumbDelete gagal untuk', id, e); return false; }
+}
+async function thumbGetAll() {
+  try {
+    const db = await thumbDbOpen();
+    return await new Promise((res, rej) => {
+      const tx = db.transaction('thumbs', 'readonly');
+      const out = {};
+      const req = tx.objectStore('thumbs').openCursor();
+      req.onsuccess = (e) => {
+        const cur = e.target.result;
+        if (cur) { out[cur.key] = cur.value; cur.continue(); } else res(out);
+      };
+      req.onerror = () => rej(req.error);
+    });
+  } catch (e) { console.error('thumbGetAll gagal:', e); return {}; }
+}
+// Simpen thumbnail 1 file ke IndexedDB (dipanggil tiap kali thumb baru dibuat)
+function persistThumb(f) {
+  if (f && f.id && (f.thumb || f.thumbFull)) thumbSet(f.id, { thumb: f.thumb || null, thumbFull: f.thumbFull || null });
+}
+// Dipanggil sehabis pull data dari GitHub — data dari GitHub masih bawa thumbnail lengkap,
+// simpen ke IndexedDB lokal juga biar bisa dipakai offline tanpa perlu narik ulang dari GitHub
+function persistAllThumbsFromFiles() { files.forEach(persistThumb); }
+// Ambil semua thumbnail dari IndexedDB dan tempelin balik ke array `files` di memori
+// (dipanggil sekali pas app baru kebuka, karena localStorage gak nyimpen thumbnail lagi)
+async function rehydrateThumbsFromIdb() {
+  const all = await thumbGetAll();
+  let changed = false;
+  files.forEach(f => {
+    const t = all[f.id];
+    if (t && (!f.thumb && !f.thumbFull)) { f.thumb = t.thumb; f.thumbFull = t.thumbFull; changed = true; }
+  });
+  if (changed) { renderDashboard(); if (curProjId) renderDetailFiles(curProjId); renderProjects(); }
+}
+
 
 function getSubfolders(projId) {
   const p = getProj(projId);
