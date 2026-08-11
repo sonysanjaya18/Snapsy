@@ -34,7 +34,7 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "ongoing",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
@@ -3367,6 +3367,15 @@
       "price": "45",
       "taskStatus": "invoiced",
       "createdAt": "2026-08-05T03:00:46.833Z"
+    },
+    {
+      "id": "t_1786490246091",
+      "projId": "p_1785712152562",
+      "name": "6x Social Media Size",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-08-11T23:17:26.091Z"
     }
   ],
   "files": [
@@ -5219,5 +5228,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-11T23:17:04.575Z"
+  "_savedAt": "2026-08-11T23:17:27.601Z"
 }
