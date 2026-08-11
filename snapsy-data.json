@@ -34,7 +34,7 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "invoice-sent",
+      "status": "need-to-pay",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
@@ -3356,7 +3356,7 @@
       "name": "4x Social Media Sie",
       "done": true,
       "price": "20",
-      "taskStatus": "invoiced",
+      "taskStatus": "done",
       "createdAt": "2026-08-05T02:55:29.527Z"
     },
     {
@@ -5219,5 +5219,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-10T01:47:41.834Z"
+  "_savedAt": "2026-08-11T23:17:04.575Z"
 }
