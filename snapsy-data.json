@@ -165,7 +165,7 @@
       "name": "Disurpt X",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "revision",
       "startDate": "2026-07-29",
       "deadline": "2026-07-30",
       "notes": "Canva Projek",
@@ -5229,5 +5229,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-12T23:26:22.963Z"
+  "_savedAt": "2026-08-12T23:26:51.890Z"
 }
