@@ -3327,9 +3327,9 @@
       "id": "t_1785374002766",
       "projId": "p_1785373993139",
       "name": "One Pager Design",
-      "done": true,
+      "done": false,
       "price": "15",
-      "taskStatus": "done",
+      "taskStatus": "review",
       "createdAt": "2026-07-30T01:13:22.766Z"
     },
     {
@@ -5229,5 +5229,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-12T23:26:51.890Z"
+  "_savedAt": "2026-08-12T23:27:13.706Z"
 }
