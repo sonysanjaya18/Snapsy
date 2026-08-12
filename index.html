@@ -120,7 +120,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 
 /* PROJECT CARDS */
 .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
-#completed-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+#completed-grid { display: flex; flex-direction: column; gap: 8px; }
 .project-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 16px; cursor: pointer;
@@ -403,48 +403,35 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
   max-width: 60vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* COMPLETED CARD — gambar di atas */
-.cc-wrap {
+/* COMPLETED LIST — baris ringkas, thumbnail kecil di kiri */
+.cc-row {
+  display: flex; align-items: center; gap: 12px;
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,.05);
-  transition: transform .15s, box-shadow .15s;
-  cursor: pointer;
+  border-radius: 10px; padding: 8px 12px; cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
 }
-.cc-wrap:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
-.cc-gallery {
-  position: relative; width: 100%; aspect-ratio: 16/9;
-  background: var(--surface2); overflow: hidden;
+.cc-row:hover { border-color: var(--accent); box-shadow: 0 2px 10px rgba(108,99,255,.1); }
+.cc-row-thumb-wrap { position: relative; flex-shrink: 0; }
+.cc-row-thumb {
+  width: 46px; height: 46px; border-radius: 8px; object-fit: cover;
+  display: block; background: var(--surface2); border: 1px solid var(--border);
 }
-.cc-gallery-img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform .2s;
+.cc-row-thumb-empty {
+  width: 46px; height: 46px; border-radius: 8px; flex-shrink: 0;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 17px; color: var(--muted);
 }
-.cc-wrap:hover .cc-gallery-img { transform: scale(1.03); }
-.cc-gallery-empty {
-  width: 100%; height: 100%; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 6px;
-  color: var(--muted); font-size: 11px;
+.cc-row-thumb-count {
+  position: absolute; bottom: -3px; right: -3px;
+  background: var(--accent); color: #fff; font-size: 9px; font-weight: 700;
+  border-radius: 10px; padding: 1px 5px; line-height: 1.4; border: 2px solid var(--surface);
 }
-.cc-gallery-count {
-  position: absolute; bottom: 8px; right: 10px;
-  background: rgba(0,0,0,.5); color: #fff; font-size: 10px; font-weight: 700;
-  padding: 3px 8px; border-radius: 12px; backdrop-filter: blur(4px);
-  display: flex; align-items: center; gap: 4px;
-}
-.cc-gallery-dots {
-  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 4px;
-}
-.cc-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.45);
-  transition: background .15s;
-}
-.cc-dot.active { background: #fff; }
-.cc-body { padding: 12px 14px 14px; }
-.cc-name { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cc-client { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; margin-bottom: 10px; }
-.cc-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); margin-top: 8px; }
+.cc-row-info { flex: 1; min-width: 0; }
+.cc-row-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cc-row-client { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cc-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+.cc-row-price { font-size: 13px; font-weight: 700; color: var(--green); white-space: nowrap; }
+.cc-row-files { font-size: 10.5px; color: var(--muted); display: flex; align-items: center; gap: 3px; white-space: nowrap; }
 
 /* PRINT IMPOSITION CALCULATOR */
 .pcalc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
@@ -2769,7 +2756,6 @@ document.addEventListener('keydown', e => {
 // ── COMPLETED CARD ────────────────────────────────────
 function completedCard(p) {
   const taskList  = getProjTasks(p.id);
-  const doneTasks = taskList.filter(t=>TASK_DONE_LIKE.includes(t.taskStatus||'todo')).length;
   const projFiles = files.filter(f=>f.projId===p.id);
   const taskTotal = taskList.reduce((s,t)=>s+(parseFloat(t.price)||0),0);
 
@@ -2777,52 +2763,31 @@ function completedCard(p) {
   const imgFiles = projFiles.filter(f=>f.thumb);
   _galleryRegistry[p.id] = imgFiles.map(f=>({src: f.thumbFull || f.thumb, name:f.name}));
 
-  // Gallery area
-  let galleryHtml = '';
+  // Thumbnail kecil di kiri
+  let thumbHtml = '';
   if (imgFiles.length > 0) {
     const cover = imgFiles[0];
-    const dotHtml = imgFiles.length > 1
-      ? `<div class="cc-gallery-dots">${imgFiles.slice(0,5).map((_,i)=>`<div class="cc-dot${i===0?' active':''}"></div>`).join('')}</div>` : '';
-    const countHtml = imgFiles.length > 1
-      ? `<div class="cc-gallery-count"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>${imgFiles.length}</div>` : '';
-    galleryHtml = `
-      <div class="cc-gallery" onclick="event.stopPropagation();openProjGallery('${p.id}',0)">
-        <img class="cc-gallery-img" src="${cover.thumb}" loading="lazy">
-        ${dotHtml}${countHtml}
+    const countBadge = imgFiles.length > 1 ? `<span class="cc-row-thumb-count">${imgFiles.length}</span>` : '';
+    thumbHtml = `
+      <div class="cc-row-thumb-wrap" onclick="event.stopPropagation();openProjGallery('${p.id}',0)">
+        <img class="cc-row-thumb" src="${cover.thumb}" loading="lazy">
+        ${countBadge}
       </div>`;
   } else {
     const extOf = f => f.name.split('.').pop().toLowerCase();
     const hasPdf = projFiles.some(f=>extOf(f)==='pdf');
-    galleryHtml = `
-      <div class="cc-gallery">
-        <div class="cc-gallery-empty">
-          <span style="font-size:32px">${hasPdf?'📄':projFiles.length?'📁':'🖼'}</span>
-          <span>${hasPdf?'PDF':'Belum ada preview'}</span>
-        </div>
-      </div>`;
+    thumbHtml = `<div class="cc-row-thumb-empty">${hasPdf?'📄':projFiles.length?'📁':'🖼'}</div>`;
   }
 
-  const pct = taskList.length ? Math.round(doneTasks/taskList.length*100) : 0;
-  const pctClass = pct===100?'pct-100':pct>=60?'pct-high':'';
-  const progressBar = taskList.length ? `
-    <div class="pc-progress-wrap" style="margin-top:0;margin-bottom:8px">
-      <div class="pc-progress-header">
-        <span>${doneTasks}/${taskList.length} task</span>
-        <span class="pc-progress-pct" style="color:${pct===100?'var(--green)':pct>=60?'var(--accent2)':'var(--muted)'}">${pct}%</span>
-      </div>
-      <div class="pc-progress-bar"><div class="pc-progress-fill ${pctClass}" style="width:${pct}%"></div></div>
-    </div>` : '';
-
-  return `<div class="cc-wrap" onclick="openDetail('${p.id}')">
-    ${galleryHtml}
-    <div class="cc-body">
-      <div class="cc-name" title="${p.name}">${p.name}</div>
-      <div class="cc-client"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${p.client}</div>
-      ${progressBar}
-      <div class="cc-meta">
-        <span class="price-text" style="font-size:12px">${taskTotal>0?fPrice(taskTotal,p.currency):'—'}</span>
-        <span style="display:flex;align-items:center;gap:4px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${projFiles.length} file</span>
-      </div>
+  return `<div class="cc-row" onclick="openDetail('${p.id}')">
+    ${thumbHtml}
+    <div class="cc-row-info">
+      <div class="cc-row-name" title="${p.name}">${p.name}</div>
+      <div class="cc-row-client"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${p.client}</div>
+    </div>
+    <div class="cc-row-right">
+      <span class="cc-row-price">${taskTotal>0?fPrice(taskTotal,p.currency):'—'}</span>
+      <span class="cc-row-files"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>${projFiles.length} file</span>
     </div>
   </div>`;
 }
@@ -3957,7 +3922,7 @@ function renderCompleted() {
   const q=(document.getElementById('searchQCompleted')?.value||'').toLowerCase();
   const list=projects.filter(p=>p.status==='paid'&&(p.name.toLowerCase().includes(q)||p.client.toLowerCase().includes(q)));
   const el=document.getElementById('completed-grid'); if(!el) return;
-  el.innerHTML=list.length?list.map(p=>completedCard(p)).join(''):`<div class="empty" style="grid-column:1/-1"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="et">Belum ada proyek yang completed</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Proyek akan muncul di sini saat status task diubah ke <b>Paid</b></div></div>`;
+  el.innerHTML=list.length?list.map(p=>completedCard(p)).join(''):`<div class="empty"><div class="ei" style="color:var(--muted)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="et">Belum ada proyek yang completed</div><div style="font-size:12px;color:var(--muted);margin-top:4px">Proyek akan muncul di sini saat status task diubah ke <b>Paid</b></div></div>`;
 }
 
 function renderClients() {
