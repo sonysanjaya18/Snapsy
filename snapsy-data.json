@@ -1,6 +1,38 @@
 {
   "projects": [
     {
+      "id": "p_1786577291573",
+      "client": "tes",
+      "name": "sss",
+      "price": "",
+      "currency": "IDR",
+      "status": "need-work",
+      "startDate": "2026-08-12",
+      "deadline": "",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-08-12T23:28:11.573Z",
+      "projectType": "print",
+      "printJob": {
+        "material": "",
+        "size": "",
+        "qty": "",
+        "qtyUnit": "pcs",
+        "finishing": [],
+        "finishingNote": "",
+        "printStatus": "menunggu-file",
+        "approvalStatus": "belum",
+        "approvalNote": "",
+        "vendorName": "",
+        "vendorCost": "",
+        "vendorEta": "",
+        "deliveryMethod": "ambil-sendiri",
+        "deliveryAddress": ""
+      }
+    },
+    {
       "id": "p_1785898829639",
       "client": "Racha",
       "name": "Compli Brand",
@@ -1364,6 +1396,14 @@
     }
   ],
   "clients": [
+    {
+      "id": "c_1786577291573",
+      "name": "tes",
+      "phone": "",
+      "email": "",
+      "currency": "IDR",
+      "status": "aktif"
+    },
     {
       "id": "c_1785294944042",
       "name": "Joan",
@@ -5229,5 +5269,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-12T23:27:13.706Z"
+  "_savedAt": "2026-08-12T23:28:13.083Z"
 }
