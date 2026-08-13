@@ -1,36 +1,19 @@
 {
   "projects": [
     {
-      "id": "p_1786577291573",
-      "client": "tes",
-      "name": "sss",
+      "id": "p_1786586613652",
+      "client": "Joan",
+      "name": "Callis Grill",
       "price": "",
-      "currency": "IDR",
+      "currency": "USD",
       "status": "need-work",
-      "startDate": "2026-08-12",
-      "deadline": "",
+      "startDate": "2026-08-13",
+      "deadline": "2026-08-15",
       "notes": "",
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-08-12T23:28:11.573Z",
-      "projectType": "print",
-      "printJob": {
-        "material": "",
-        "size": "",
-        "qty": "",
-        "qtyUnit": "pcs",
-        "finishing": [],
-        "finishingNote": "",
-        "printStatus": "menunggu-file",
-        "approvalStatus": "belum",
-        "approvalNote": "",
-        "vendorName": "",
-        "vendorCost": "",
-        "vendorEta": "",
-        "deliveryMethod": "ambil-sendiri",
-        "deliveryAddress": ""
-      }
+      "createdAt": "2026-08-13T02:03:33.652Z"
     },
     {
       "id": "p_1785898829639",
@@ -1396,14 +1379,6 @@
     }
   ],
   "clients": [
-    {
-      "id": "c_1786577291573",
-      "name": "tes",
-      "phone": "",
-      "email": "",
-      "currency": "IDR",
-      "status": "aktif"
-    },
     {
       "id": "c_1785294944042",
       "name": "Joan",
@@ -5269,5 +5244,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-12T23:32:07.913Z"
+  "_savedAt": "2026-08-13T02:03:35.165Z"
 }
