@@ -3388,7 +3388,7 @@
       "projId": "p_1786586613652",
       "name": "Pouch Packaging 2 Side Design",
       "done": false,
-      "price": "",
+      "price": "42",
       "taskStatus": "todo",
       "createdAt": "2026-08-13T02:03:44.810Z"
     }
@@ -5253,5 +5253,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-13T02:03:57.886Z"
+  "_savedAt": "2026-08-13T02:04:40.594Z"
 }
