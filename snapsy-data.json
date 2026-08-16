@@ -49,7 +49,7 @@
       "name": "Bosman in Belmore",
       "price": "",
       "currency": "USD",
-      "status": "need-to-pay",
+      "status": "paid",
       "startDate": "2026-08-02",
       "deadline": "2026-08-04",
       "notes": "",
@@ -156,7 +156,8 @@
         ],
         "isMulti": true,
         "createdAt": "2026-08-10T01:47:16.485Z"
-      }
+      },
+      "paidAt": "2026-08-16T23:06:43.256Z"
     },
     {
       "id": "p_1785376499504",
@@ -5253,5 +5254,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-13T02:04:56.732Z"
+  "_savedAt": "2026-08-16T23:06:44.765Z"
 }
