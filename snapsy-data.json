@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1787007087193",
+      "client": "Racha",
+      "name": "Kingsmen Business Card",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-08-17",
+      "deadline": "",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-08-17T22:51:27.193Z"
+    },
+    {
       "id": "p_1786586613652",
       "client": "Joan",
       "name": "Callis Grill",
@@ -5254,5 +5269,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-17T00:03:57.403Z"
+  "_savedAt": "2026-08-17T22:51:28.706Z"
 }
