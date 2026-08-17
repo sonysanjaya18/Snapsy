@@ -6,7 +6,7 @@
       "name": "Callis Grill",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-08-13",
       "deadline": "2026-08-15",
       "notes": "",
@@ -3390,7 +3390,7 @@
       "name": "Pouch Packaging 2 Side Design",
       "done": false,
       "price": "42",
-      "taskStatus": "todo",
+      "taskStatus": "review",
       "createdAt": "2026-08-13T02:03:44.810Z"
     }
   ],
@@ -5254,5 +5254,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-16T23:06:44.765Z"
+  "_savedAt": "2026-08-17T00:03:57.403Z"
 }
