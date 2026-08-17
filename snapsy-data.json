@@ -6,7 +6,7 @@
       "name": "Kingsmen Business Card",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-08-17",
       "deadline": "",
       "notes": "",
@@ -3407,6 +3407,15 @@
       "price": "42",
       "taskStatus": "review",
       "createdAt": "2026-08-13T02:03:44.810Z"
+    },
+    {
+      "id": "t_1787007098311",
+      "projId": "p_1787007087193",
+      "name": "Keilor Business Card",
+      "done": false,
+      "price": "11",
+      "taskStatus": "review",
+      "createdAt": "2026-08-17T22:51:38.311Z"
     }
   ],
   "files": [
@@ -5269,5 +5278,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-17T22:51:28.706Z"
+  "_savedAt": "2026-08-17T22:52:27.488Z"
 }
