@@ -6,7 +6,7 @@
       "name": "Spudhole",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "revision",
       "startDate": "2026-08-18",
       "deadline": "",
       "notes": "",
@@ -3431,6 +3431,15 @@
       "price": "11",
       "taskStatus": "review",
       "createdAt": "2026-08-17T22:51:38.311Z"
+    },
+    {
+      "id": "t_1787091169253",
+      "projId": "p_1787091140664",
+      "name": "Menu Update",
+      "done": false,
+      "price": "11",
+      "taskStatus": "review",
+      "createdAt": "2026-08-18T22:12:49.253Z"
     }
   ],
   "files": [
@@ -5293,5 +5302,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-18T22:12:22.173Z"
+  "_savedAt": "2026-08-18T22:13:29.956Z"
 }
