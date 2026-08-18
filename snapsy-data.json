@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1787091140664",
+      "client": "Mahmoud",
+      "name": "Spudhole",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-08-18",
+      "deadline": "",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-08-18T22:12:20.664Z"
+    },
+    {
       "id": "p_1787007087193",
       "client": "Racha",
       "name": "Kingsmen Business Card",
@@ -5278,5 +5293,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-08-17T22:53:27.860Z"
+  "_savedAt": "2026-08-18T22:12:22.173Z"
 }
