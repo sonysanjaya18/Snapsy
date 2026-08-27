@@ -4612,7 +4612,7 @@ function qtCard(qt) {
       <span class="badge b-qs-${qt.status}">${stLbl}</span>
     </div>
     <div class="qt-row"><span class="qt-label">${isUSD?'Items':'Item'}</span><span>${qt.items.length} layanan</span></div>
-    <div class="qt-row"><span class="qt-label">Total</span><span class="price-text">${fPrice(qt.total, qt.currency)}</span></div>
+    <div class="qt-row"><span class="qt-label">Total</span><span class="price-text">${fInvPrice(qt.total, qt.currency)}</span></div>
     <div class="qt-footer">
       <span>${fDate(qt.createdAt)}</span>
       ${validPill}
@@ -4634,7 +4634,7 @@ function openQtDetail(id) {
   document.getElementById('qtd-created').textContent   = fDate(qt.createdAt);
   document.getElementById('qtd-valid').textContent     = qt.validUntil ? fDate(qt.validUntil) : '—';
   document.getElementById('qtd-currency').textContent  = qt.currency || 'IDR';
-  document.getElementById('qtd-total').textContent     = fPrice(qt.total, qt.currency);
+  document.getElementById('qtd-total').textContent     = fInvPrice(qt.total, qt.currency);
 
   const notesEl = document.getElementById('qtd-notes');
   if (qt.notes) { notesEl.textContent = qt.notes; notesEl.style.display='block'; }
@@ -4671,7 +4671,7 @@ function openQtDetail(id) {
       <td style="color:var(--muted);width:28px;vertical-align:top;padding-top:12px">${i+1}</td>
       <td><div style="font-weight:600">${escHtml(it.name)}</div>${descHtml}</td>
       <td style="color:var(--muted);vertical-align:top;padding-top:12px">${it.qty}</td>
-      <td style="vertical-align:top;padding-top:12px">${fPrice(it.price * it.qty, qt.currency)}</td>
+      <td style="vertical-align:top;padding-top:12px">${fInvPrice(it.price * it.qty, qt.currency)}</td>
     </tr>${breakdownRow}`;
   }).join('');
 
@@ -4760,14 +4760,14 @@ function buildQtWAMessage(qt) {
     msg += `*Quotation ${qt.num}*\n\n`;
     msg += `${DIV}\n`;
     qt.items.forEach((it,i) => {
-      msg += `${i+1}. ${it.name}\n   ${it.qty} x ${fPrice(it.price,'USD')} = ${fPrice(it.price*it.qty,'USD')}\n`;
+      msg += `${i+1}. ${it.name}\n   ${it.qty} x ${fInvPrice(it.price,'USD')} = ${fInvPrice(it.price*it.qty,'USD')}\n`;
       if (it.printMeta) {
         const pm = it.printMeta;
         msg += `   (${pm.sheets} sheets ${pm.paperLabel}, ${pm.perSheet} pcs/sheet = ${pm.totalPcs} pcs total, for your order of ${pm.qtyOrdered} pcs)\n`;
       }
     });
     msg += `${DIV}\n`;
-    msg += `*Total: ${fPrice(qt.total,'USD')}*\n`;
+    msg += `*Total: ${fInvPrice(qt.total,'USD')}*\n`;
     if (qt.validUntil) msg += `\nValid until: ${fDate(qt.validUntil)}\n`;
     if (qt.notes) msg += `\n${qt.notes}\n`;
     msg += `\nPlease let us know if you agree with the price above so we can proceed. We look forward to your confirmation!\n`;
@@ -4919,7 +4919,7 @@ function buildQtPDFHTML(qt) {
     }
     rowsHtml += '</td>';
     rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:center;font-size:12px;color:#666">'+qty+'</td>';
-    rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:right;font-weight:700;font-size:13px;color:#1a1a1a;white-space:nowrap">'+fPrice(price*qty, qt.currency)+'</td>';
+    rowsHtml += '<td style="padding:9px 14px;border-bottom:1px solid #ebebeb;text-align:right;font-weight:700;font-size:13px;color:#1a1a1a;white-space:nowrap">'+fInvPrice(price*qty, qt.currency)+'</td>';
     rowsHtml += '</tr>';
   });
 
@@ -4966,7 +4966,7 @@ function buildQtPDFHTML(qt) {
   // Total
   html += '<div style="display:flex;justify-content:flex-end;padding:14px 28px;border-top:2px solid #111">';
   html += '<div style="min-width:220px;display:flex;justify-content:space-between;font-size:18px;font-weight:900;color:#111">';
-  html += '<span>'+lang.total+'</span><span>'+fPrice(qt.total, qt.currency)+'</span>';
+  html += '<span>'+lang.total+'</span><span>'+fInvPrice(qt.total, qt.currency)+'</span>';
   html += '</div></div>';
 
   // Footer
