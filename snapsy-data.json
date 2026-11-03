@@ -4128,7 +4128,7 @@
       "projId": "p_1789345383448",
       "name": "Communitie& Venue Partnership",
       "done": false,
-      "price": "20",
+      "price": "15",
       "taskStatus": "inprogress",
       "createdAt": "2026-09-14T00:24:06.088Z"
     },
@@ -4137,7 +4137,7 @@
       "projId": "p_1789345383448",
       "name": "Council & Place Partnership",
       "done": false,
-      "price": "20",
+      "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-09-14T00:24:23.286Z"
     },
@@ -7031,5 +7031,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-10-16T00:22:10.920Z"
+  "_savedAt": "2026-11-03T22:19:50.988Z"
 }
