@@ -336,17 +336,18 @@
         }
       ],
       "lastInvoice": {
-        "invNum": "SNP-67JBUQ",
-        "invDate": "2026-10-14",
+        "invNum": "SNP-XR1LM5",
+        "invDate": "2026-11-03",
         "payment": "https://www.paypal.me/sonysanjaya18",
         "note": "",
         "currency": "USD",
         "total": 30,
         "taskIds": [
-          "t_1789345395347"
+          "t_1789345446088",
+          "t_1789345463286"
         ],
-        "isMulti": true,
-        "createdAt": "2026-10-14T06:04:50.088Z"
+        "isMulti": false,
+        "createdAt": "2026-11-03T22:20:06.596Z"
       }
     },
     {
@@ -4129,7 +4130,7 @@
       "name": "Communitie& Venue Partnership",
       "done": false,
       "price": "15",
-      "taskStatus": "inprogress",
+      "taskStatus": "invoiced",
       "createdAt": "2026-09-14T00:24:06.088Z"
     },
     {
@@ -4138,7 +4139,7 @@
       "name": "Council & Place Partnership",
       "done": false,
       "price": "15",
-      "taskStatus": "todo",
+      "taskStatus": "invoiced",
       "createdAt": "2026-09-14T00:24:23.286Z"
     },
     {
@@ -7031,5 +7032,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-03T22:19:50.988Z"
+  "_savedAt": "2026-11-03T22:20:21.563Z"
 }
