@@ -319,7 +319,7 @@
       "name": "Bossman",
       "price": "",
       "currency": "USD",
-      "status": "invoice-sent",
+      "status": "need-to-pay",
       "startDate": "2026-09-14",
       "deadline": "",
       "notes": "",
@@ -4128,9 +4128,9 @@
       "id": "t_1789345446088",
       "projId": "p_1789345383448",
       "name": "Communitie& Venue Partnership",
-      "done": false,
+      "done": true,
       "price": "15",
-      "taskStatus": "invoiced",
+      "taskStatus": "paid",
       "createdAt": "2026-09-14T00:24:06.088Z"
     },
     {
@@ -7032,5 +7032,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-03T22:20:50.068Z"
+  "_savedAt": "2026-11-04T01:57:42.926Z"
 }
