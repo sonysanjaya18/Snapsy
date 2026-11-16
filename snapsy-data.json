@@ -4455,7 +4455,7 @@
       "projId": "p_1794871322292",
       "name": "Voucher Design",
       "done": false,
-      "price": "",
+      "price": "5",
       "taskStatus": "todo",
       "createdAt": "2026-11-16T23:23:44.529Z"
     }
@@ -7079,5 +7079,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-16T23:24:03.399Z"
+  "_savedAt": "2026-11-16T23:24:28.593Z"
 }
