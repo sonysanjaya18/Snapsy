@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1794871322292",
+      "client": "Gabriela",
+      "name": "Mounties Christmas Fest",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-11-16",
+      "deadline": "",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-11-16T23:22:02.292Z"
+    },
+    {
       "id": "p_1791938631806",
       "client": "Mahmoud",
       "name": "Menu Update",
@@ -7037,5 +7052,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-04T02:00:25.208Z"
+  "_savedAt": "2026-11-16T23:22:03.805Z"
 }
