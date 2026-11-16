@@ -4437,7 +4437,7 @@
       "projId": "p_1794871322292",
       "name": "Flyer Design",
       "done": false,
-      "price": "",
+      "price": "15",
       "taskStatus": "todo",
       "createdAt": "2026-11-16T23:22:12.449Z"
     },
@@ -7070,5 +7070,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-16T23:23:05.123Z"
+  "_savedAt": "2026-11-16T23:23:35.836Z"
 }
