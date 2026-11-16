@@ -4431,6 +4431,24 @@
       "price": "16",
       "taskStatus": "paid",
       "createdAt": "2026-10-16T00:21:42.500Z"
+    },
+    {
+      "id": "t_1794871332449",
+      "projId": "p_1794871322292",
+      "name": "Flyer Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-11-16T23:22:12.449Z"
+    },
+    {
+      "id": "t_1794871354597",
+      "projId": "p_1794871322292",
+      "name": "Social Media Size",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-11-16T23:22:34.597Z"
     }
   ],
   "files": [
@@ -7052,5 +7070,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-16T23:22:03.805Z"
+  "_savedAt": "2026-11-16T23:22:36.112Z"
 }
