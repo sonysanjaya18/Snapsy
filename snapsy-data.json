@@ -6,7 +6,7 @@
       "name": "Mounties Christmas Fest",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "need-to-pay",
       "startDate": "2026-11-16",
       "deadline": "",
       "notes": "",
@@ -4436,27 +4436,27 @@
       "id": "t_1794871332449",
       "projId": "p_1794871322292",
       "name": "Flyer Design",
-      "done": false,
+      "done": true,
       "price": "15",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-11-16T23:22:12.449Z"
     },
     {
       "id": "t_1794871354597",
       "projId": "p_1794871322292",
       "name": "Social Media Size",
-      "done": false,
+      "done": true,
       "price": "20",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-11-16T23:22:34.597Z"
     },
     {
       "id": "t_1794871424529",
       "projId": "p_1794871322292",
       "name": "Voucher Design",
-      "done": false,
+      "done": true,
       "price": "5",
-      "taskStatus": "todo",
+      "taskStatus": "done",
       "createdAt": "2026-11-16T23:23:44.529Z"
     }
   ],
@@ -7079,5 +7079,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-16T23:24:28.593Z"
+  "_savedAt": "2026-11-16T23:25:07.098Z"
 }
