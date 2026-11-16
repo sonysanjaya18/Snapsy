@@ -4446,9 +4446,18 @@
       "projId": "p_1794871322292",
       "name": "Social Media Size",
       "done": false,
-      "price": "",
+      "price": "20",
       "taskStatus": "todo",
       "createdAt": "2026-11-16T23:22:34.597Z"
+    },
+    {
+      "id": "t_1794871424529",
+      "projId": "p_1794871322292",
+      "name": "Voucher Design",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-11-16T23:23:44.529Z"
     }
   ],
   "files": [
@@ -7070,5 +7079,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-16T23:23:35.836Z"
+  "_savedAt": "2026-11-16T23:24:03.399Z"
 }
