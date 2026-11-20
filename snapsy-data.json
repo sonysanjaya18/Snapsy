@@ -1,6 +1,21 @@
 {
   "projects": [
     {
+      "id": "p_1795137610309",
+      "client": "George",
+      "name": "Quick Task",
+      "price": "",
+      "currency": "USD",
+      "status": "need-work",
+      "startDate": "2026-11-20",
+      "deadline": "",
+      "notes": "",
+      "driveRootId": null,
+      "driveCliId": null,
+      "driveProjId": null,
+      "createdAt": "2026-11-20T01:20:10.309Z"
+    },
+    {
       "id": "p_1794871322292",
       "client": "Gabriela",
       "name": "Mounties Christmas Fest",
@@ -7079,5 +7094,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-16T23:25:07.098Z"
+  "_savedAt": "2026-11-20T01:20:11.822Z"
 }
