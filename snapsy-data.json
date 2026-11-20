@@ -6,7 +6,7 @@
       "name": "Quick Task",
       "price": "",
       "currency": "USD",
-      "status": "need-work",
+      "status": "need-to-pay",
       "startDate": "2026-11-20",
       "deadline": "",
       "notes": "",
@@ -4478,10 +4478,19 @@
       "id": "t_1795137626280",
       "projId": "p_1795137610309",
       "name": "7X Poster A4",
-      "done": false,
-      "price": "",
-      "taskStatus": "todo",
+      "done": true,
+      "price": "42",
+      "taskStatus": "done",
       "createdAt": "2026-11-20T01:20:26.280Z"
+    },
+    {
+      "id": "t_1795137664634",
+      "projId": "p_1795137610309",
+      "name": "Menu banner",
+      "done": true,
+      "price": "11",
+      "taskStatus": "done",
+      "createdAt": "2026-11-20T01:21:04.634Z"
     }
   ],
   "files": [
@@ -7103,5 +7112,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-20T01:20:40.117Z"
+  "_savedAt": "2026-11-20T01:21:24.196Z"
 }
