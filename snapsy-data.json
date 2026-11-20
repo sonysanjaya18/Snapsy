@@ -4473,6 +4473,15 @@
       "price": "5",
       "taskStatus": "done",
       "createdAt": "2026-11-16T23:23:44.529Z"
+    },
+    {
+      "id": "t_1795137626280",
+      "projId": "p_1795137610309",
+      "name": "7X Poster A4",
+      "done": false,
+      "price": "",
+      "taskStatus": "todo",
+      "createdAt": "2026-11-20T01:20:26.280Z"
     }
   ],
   "files": [
@@ -7094,5 +7103,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-20T01:20:11.822Z"
+  "_savedAt": "2026-11-20T01:20:40.117Z"
 }
