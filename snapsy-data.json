@@ -13,7 +13,21 @@
       "driveRootId": null,
       "driveCliId": null,
       "driveProjId": null,
-      "createdAt": "2026-11-20T01:20:10.309Z"
+      "createdAt": "2026-11-20T01:20:10.309Z",
+      "lastInvoice": {
+        "invNum": "SNP-V92JYB",
+        "invDate": "2026-11-20",
+        "payment": "https://www.paypal.me/sonysanjaya18",
+        "note": "",
+        "currency": "USD",
+        "total": 53,
+        "taskIds": [
+          "t_1795137626280",
+          "t_1795137664634"
+        ],
+        "isMulti": false,
+        "createdAt": "2026-11-20T01:22:14.318Z"
+      }
     },
     {
       "id": "p_1794871322292",
@@ -4480,7 +4494,7 @@
       "name": "7X Poster A4",
       "done": true,
       "price": "42",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-11-20T01:20:26.280Z"
     },
     {
@@ -4489,7 +4503,7 @@
       "name": "Menu banner",
       "done": true,
       "price": "11",
-      "taskStatus": "done",
+      "taskStatus": "invoiced",
       "createdAt": "2026-11-20T01:21:04.634Z"
     }
   ],
@@ -7112,5 +7126,5 @@
       "measurementId": "G-HWJ083JXYC"
     }
   },
-  "_savedAt": "2026-11-20T01:21:24.196Z"
+  "_savedAt": "2026-11-20T01:22:55.953Z"
 }
